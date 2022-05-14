@@ -39,6 +39,128 @@
 
         public const string PART_2_TASK_16_3 = "Компоненты бинарного файла – целые числа.\n" +
             "Поменять местами первый компонент с последним, второй – с предпоследним и т.д.\n\n\n";
-    } 
+    }
+
+    class MyQuestion
+    {
+        public const string QUESTION_READ_FILE = "Прочитать данные из файла [y/n]? ";
+        public const string QUESTION_SHOW_CALC = "Показывать ход вычислений [y/n]? ";
+
+        public bool isQuestion(string textQuestion)
+        {
+            Console.WriteLine("\n" + textQuestion);
+            return Console.ReadLine()?.ToLower() != "n";
+        }
+    }
+
+    class MyFiles
+    {
+        const string DEFAULT_READ_FILE = "data.txt";
+        
+        bool setReadFile()
+        {
+            bool isExist = false;
+
+            while (!isExist)
+            {
+                Console.WriteLine("Введите имя файла с учетом регистра (расширение не обязательно): ");
+
+                string fileName = Console.ReadLine();
+
+                if (fileName == "")
+                    fileName = DEFAULT_READ_FILE;
+
+                isExist = File.Exists(fileName);
+
+                if (!isExist)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Файла: {fileName} - не существует!");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    FileInfo fileInfo = new FileInfo(fileName);
+                    
+                    if(fileInfo.Length == 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Файла: {fileName} - пуст!");
+                        Console.ResetColor();
+
+                        isExist = false;
+                    }
+                }
+            }
+
+            return isExist;
+        }
+
+        void printFileInfo(string fileName)
+        {
+            FileInfo fileInfo = new FileInfo(fileName);
+            
+            if (fileInfo.Exists)
+            {
+                Console.WriteLine($"Имя файла: {fileInfo.Name}");
+                Console.WriteLine($"Время создания: {fileInfo.CreationTime}");
+                Console.WriteLine($"Размер: {fileInfo.Length}");
+            }
+        }
+    }
+
+
+    public class Part_2_Task_6_1
+    {
+
+        public void init()
+        {
+
+        }
+    }
+
+    class Class1
+    {
+        static void Main(string[] args)
+        {
+
+            Console.WriteLine("Ларионов Никита Юрьевич. гр. 110з\n");
+
+            bool isGo = true;
+
+
+            while (isGo)
+            {
+                Console.WriteLine("\nВведите номер задачи: ");
+
+                Console.WriteLine("\n1) " + TasksInfo.PART_1_TASK_6_1);
+
+                Console.WriteLine("\nДля выхода введите \"0\": ");
+
+                string selectStr = Console.ReadLine();
+
+                switch (selectStr)
+                {
+                    case "1":
+                        Part_2_Task_6_1 task = new Part_2_Task_6_1();
+                        task.init() ;
+                        break;
+
+                    case "0":
+                        isGo = false;
+                        break;
+
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nНекорректные данные!");
+                        Console.ResetColor();
+                        break;
+
+                }
+            }
+
+        }
+
+    }
 
 }
