@@ -437,6 +437,11 @@
 
                 Console.WriteLine("\n1) " + TasksInfo.PART_1_TASK_6_1 + "\n");
 
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("\ns) Настройка директории с исходными файлами\n" +
+                    "(значение сохраняется только на текущий сеанс работы программы)\n\n");
+                
+                Console.ResetColor();
                 Console.WriteLine("\nДля выхода введите \"0\": ");
 
                 string selectStr = Console.ReadLine();
