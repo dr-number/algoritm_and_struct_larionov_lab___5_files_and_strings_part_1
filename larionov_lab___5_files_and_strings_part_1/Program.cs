@@ -67,18 +67,63 @@
         
         private
         const string DEFAULT_READ_FILE = "data.txt";
+        string DIR_FILE = Environment.CurrentDirectory;
 
         public const string MESSAGE_ERROR_PROCESSING_FILE = "Ошибка обработки файла!";
-        public
-        string setReadFile()
+
+        public void setDidectoryFile()
+        {
+            string result = DIR_FILE;
+            bool isGo = true;
+
+            Console.WriteLine("Введите директорию в которой лежат файлы с данными: ");
+            Console.WriteLine("Для завершения настройки введите \"0\"\n");
+
+            Console.WriteLine("Текущие параметры папки:\n");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(DIR_FILE);
+            Console.ResetColor();
+
+            while (isGo)
+            {
+                result = Console.ReadLine();
+
+                if (result == "0")
+                {
+                    if(DIR_FILE != result)
+                    {
+                        DIR_FILE = result;
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Папка успешно изменена!");
+                        Console.ResetColor();
+                    }
+                    isGo = false;
+                }
+                else
+                {
+                    if (!Directory.Exists(result))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine($"Папка: {result} - не существует!");
+                        Console.ResetColor();
+                    }
+                }
+            }
+        }
+
+        public string setReadFile()
         {
             string fileName = "";
             bool isExist = false;
 
             while (!isExist)
             {
-                Console.WriteLine("Введите имя файла с учетом регистра (расширение не обязательно): ");
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE);
+                Console.ResetColor();
 
+                Console.WriteLine("Введите (путь) имя файла с учетом регистра (расширение не обязательно): ");
                 fileName = Console.ReadLine();
 
                 if (fileName == "")
@@ -401,6 +446,11 @@
                     case "1":
                         Part_2_Task_6_1 task = new Part_2_Task_6_1();
                         task.init() ;
+                        break;
+
+                    case "s":
+                        MyFiles myFiles = new MyFiles();
+                        myFiles.setDidectoryFile();
                         break;
 
                     case "0":
