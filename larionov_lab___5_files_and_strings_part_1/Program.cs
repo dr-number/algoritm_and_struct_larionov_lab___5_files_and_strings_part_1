@@ -76,39 +76,37 @@
             string result = DIR_FILE;
             bool isGo = true;
 
-            Console.WriteLine("Введите директорию в которой лежат файлы с данными: ");
-            Console.WriteLine("Для завершения настройки введите \"0\"\n");
-
-            Console.WriteLine("Текущие параметры папки:\n");
+            Console.WriteLine("\nТекущие параметры папки:");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine(DIR_FILE);
             Console.ResetColor();
+
+            Console.WriteLine("\nВведите директорию в которой лежат файлы с данными ");
+            Console.WriteLine("Для завершения настройки введите \"0\": ");
 
             while (isGo)
             {
                 result = Console.ReadLine();
 
-                if (result == "0")
-                {
-                    if(DIR_FILE != result)
-                    {
-                        DIR_FILE = result;
-
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Папка успешно изменена!");
-                        Console.ResetColor();
-                    }
-                    isGo = false;
-                }
-                else
+                if (result != "0")
                 {
                     if (!Directory.Exists(result))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"Папка: {result} - не существует!");
-                        Console.ResetColor();
                     }
+                    else
+                    {
+                        DIR_FILE = result;
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Папка успешно изменена!");
+                        isGo = false;
+                    }
+
+                    Console.ResetColor();
                 }
+                else
+                    isGo = false;
             }
         }
 
@@ -444,7 +442,7 @@
                 Console.ResetColor();
                 Console.WriteLine("\nДля выхода введите \"0\": ");
 
-                string selectStr = Console.ReadLine();
+                string selectStr = Console.ReadLine().ToLower();
 
                 switch (selectStr)
                 {
