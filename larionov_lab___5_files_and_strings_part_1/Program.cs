@@ -59,17 +59,19 @@
         
         private
         const string DEFAULT_READ_FILE = "data.txt";
-        
+
+        public const string MESSAGE_ERROR_PROCESSING_FILE = "Ошибка обработки файла!";
         public
-        bool setReadFile()
+        string setReadFile()
         {
+            string fileName = "";
             bool isExist = false;
 
             while (!isExist)
             {
                 Console.WriteLine("Введите имя файла с учетом регистра (расширение не обязательно): ");
 
-                string fileName = Console.ReadLine();
+                fileName = Console.ReadLine();
 
                 if (fileName == "")
                     fileName = DEFAULT_READ_FILE;
@@ -97,10 +99,10 @@
                 }
             }
 
-            return isExist;
+            return fileName;
         }
 
-        void printFileInfo(string fileName)
+        public void printFileInfo(string fileName)
         {
             FileInfo fileInfo = new FileInfo(fileName);
             
@@ -110,6 +112,13 @@
                 Console.WriteLine($"Время создания: {fileInfo.CreationTime}");
                 Console.WriteLine($"Размер: {fileInfo.Length}");
             }
+        }
+
+        public void printError(string message = MESSAGE_ERROR_PROCESSING_FILE)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
         }
     }
 
@@ -127,29 +136,93 @@
     {
         public const bool SELECT_FILE = false;
         public const bool SELECT_KEYBOARD = true;
+        public struct data
+        {
+            public bool select;
+            public string fileName;
+        }
 
         public
-        bool selectInputData()
+        data selectInputData()
         {
+            string fileName;
+            data result;
 
             MyQuestion myQuestion = new MyQuestion();
+            MyFiles myFiles = new MyFiles();
 
             while (true)
             {
                 if (!myQuestion.isQuestion(MyQuestion.QUESTION_READ_FILE))
-                    return SELECT_KEYBOARD;
+                {
+                    result.select = SELECT_KEYBOARD;
+                    result.fileName = "";
+                    return result;
+                }
 
-                MyFiles myFiles = new MyFiles();
+                fileName = myFiles.setReadFile();
 
-                if (!myFiles.setReadFile())
+                if (fileName != "")
+                {
+                    result.select = SELECT_FILE;
+                    result.fileName = fileName;
+                    return result;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка чтения файла!");
+                Console.ResetColor();
+
+            }
+
+            return result;
+        }
+    }
+
+    class MyStrings
+    {
+        public string getFirstString(string text)
+        {
+            SelectData selectData = new SelectData();
+            MyFiles myFiles = new MyFiles();
+
+            string inputString = "";
+            SelectData.data inputData;
+
+            bool isGo = true;
+
+            while (true)
+            {
+                inputData = selectData.selectInputData();
+
+                if (inputData.select == SelectData.SELECT_KEYBOARD)
+                {
+                    Console.WriteLine(text);
+                    inputString = Console.ReadLine();
+                }
+                else
+                {
+                    try
+                    {
+                        StreamReader file = new StreamReader(inputData.fileName);
+                        inputString = file.ReadLine();
+                        file.Close();
+                    }
+                    catch (Exception e)
+                    {
+                        myFiles.printError();
+                    }
+                }
+
+                if(inputString.Replace(" ", "") == "")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Ошибка чтения файла!");
+                    Console.WriteLine("Найденная строка пуста или содержит одни пробелы!");
                     Console.ResetColor();
                 }
                 else
-                    return SELECT_FILE;
-               
+                    return inputString;
+
             }
         }
     }
@@ -161,15 +234,10 @@
         {
             Console.WriteLine(TasksInfo.PART_1_TASK_6_1);
 
-            SelectData selectData = new SelectData();
+            MyStrings myStrings = new MyStrings();
+            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE}\": ");
 
-            string inputData;
 
-            if(selectData.selectInputData() == SelectData.SELECT_KEYBOARD)
-            {
-                Console.WriteLine($"Введите дату в формате \"{FORMAT_DATE}\"");
-                inputData = Console.ReadLine();
-            }
         }
     }
 
