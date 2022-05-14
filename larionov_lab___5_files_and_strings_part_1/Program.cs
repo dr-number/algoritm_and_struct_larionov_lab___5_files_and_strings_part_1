@@ -251,22 +251,40 @@
 
     public class Part_2_Task_6_1
     {
-        private const string FORMAT_DATE = "дд.мм.гггг";
-
+        private string FORMAT_DATE = "dd.MM.yyyy";
+        private string FORMAT_DATE_TEXT = "дд.мм.гггг";
+        private string DateToStr(DateTime dDate)
+        {
+            return dDate.ToString(FORMAT_DATE);
+        }
 
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_1_TASK_6_1);
 
             MyStrings myStrings = new MyStrings();
-            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE}\": ");
+            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ");
 
             MyPrint myPrint = new MyPrint();
             myPrint.printString("\n" + MyPrint.INITIAL_DATA, str);
 
-            DateTime.ParseExact(str, "dd.MM.yyyy");
+            DateTime dDate;
 
+            if (DateTime.TryParse(str, out dDate))
+            {
+                String.Format($"{FORMAT_DATE}", dDate);
 
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Введенная дата корректна!");
+
+                dDate.AddDays(1);
+                myPrint.printString("Cледующая по порядку дата:", DateToStr(dDate));
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Введенная дата не корректна!");
+            }
         }
     }
 
