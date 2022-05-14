@@ -266,7 +266,7 @@
             string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ");
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printString("\n" + MyPrint.INITIAL_DATA, str);
+            myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
 
             DateTime dDate;
 
@@ -277,7 +277,7 @@
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Введенная дата корректна!");
 
-                dDate.AddDays(1);
+                dDate = dDate.AddDays(1);
                 myPrint.printString("Cледующая по порядку дата:", DateToStr(dDate));
             }
             else
