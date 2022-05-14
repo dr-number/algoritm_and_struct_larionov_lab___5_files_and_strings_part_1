@@ -299,8 +299,9 @@
         private bool isDatePlasOne(string sDate)
         {
             DateTime dDate;
+            bool isCorrectPoint = sDate.Where(x => x == '.').Count() == 2;
 
-            if (DateTime.TryParse(sDate, out dDate))
+            if (isCorrectPoint && DateTime.TryParse(sDate, out dDate))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("Дата корректна!");
