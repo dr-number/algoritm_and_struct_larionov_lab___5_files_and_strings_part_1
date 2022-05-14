@@ -46,12 +46,20 @@
         public const string QUESTION_READ_FILE = "Прочитать данные из файла [y/n]? ";
         public const string QUESTION_SHOW_CALC = "Показывать ход вычислений [y/n]? ";
 
-        public
-        bool isQuestion(string textQuestion)
+        public bool isQuestion(string textQuestion)
         {
             Console.WriteLine("\n" + textQuestion);
             return Console.ReadLine()?.ToLower() != "n";
         }
+
+        public bool isProbably(string option)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"Возможно, имелось в виду: \"{option}\" [y/n]? ");
+            return Console.ReadLine()?.ToLower() != "n";
+        }
+
+
     }
 
     class MyFiles
@@ -181,6 +189,22 @@
 
     class MyStrings
     {
+        public string trim(string str)
+        {
+            return str.Replace(" ", "");
+        }
+
+        public string getOnlyDigit(string str)
+        {
+            int size = str.Length;
+            string result = "";
+
+            for(int i = 0; i < size; ++i)
+                if (str[i] - '0' >= 0 && str[i] - '0' <= 9)
+                    result += str[i];
+
+            return result;
+        }
         public string getFirstString(string text)
         {
             SelectData selectData = new SelectData();
@@ -214,7 +238,7 @@
                     }
                 }
 
-                if(inputString.Replace(" ", "") == "")
+                if(trim(inputString) == "")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Найденная строка пуста или содержит одни пробелы!");
@@ -253,9 +277,45 @@
     {
         private string FORMAT_DATE = "dd.MM.yyyy";
         private string FORMAT_DATE_TEXT = "дд.мм.гггг";
+ 
         private string DateToStr(DateTime dDate)
         {
             return dDate.ToString(FORMAT_DATE);
+        }
+
+        private string getOptionDigit(string s)
+        {
+            int size = s.Length;
+            string result = "";
+
+            if (size == 6) // 1.1.2000
+                result = "0" + s[0] + ".0" + s[1] + "." + s[2] + s[3] + s[4] + s[5];
+            else if (size == 7) // 1.11.2000
+                result = "0" + s[0] + "." + s[1] + s[2] + "." + s[3] + s[4] + s[5] + s[6];
+
+            return result;
+        }
+
+        private bool isDatePlasOne(string sDate)
+        {
+            DateTime dDate;
+
+            if (DateTime.TryParse(sDate, out dDate))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Дата корректна!");
+
+                String.Format($"{FORMAT_DATE}", dDate);
+                dDate = dDate.AddDays(1);
+
+                MyPrint myPrint = new MyPrint();
+                myPrint.printString("Cледующая по порядку дата:", DateToStr(dDate));
+                return true;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Дата не корректна!");
+            return false;
         }
 
         public void init()
@@ -268,23 +328,43 @@
             MyPrint myPrint = new MyPrint();
             myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
 
-            DateTime dDate;
+            if (isDatePlasOne(str))
+                return;
 
-            if (DateTime.TryParse(str, out dDate))
+
+            string correctingData = myStrings.getOnlyDigit(str);
+            int size = correctingData.Length;
+
+            if(size != 8)
             {
-                String.Format($"{FORMAT_DATE}", dDate);
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Введенная дата корректна!");
+                string optionDigit = getOptionDigit(correctingData);
 
-                dDate = dDate.AddDays(1);
-                myPrint.printString("Cледующая по порядку дата:", DateToStr(dDate));
+                if (optionDigit != "")
+                {
+                    MyQuestion question = new MyQuestion();
+
+                    if (question.isProbably(optionDigit))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("Некорректная дата: ");
+
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write(str + " ");
+
+                        Console.ForegroundColor = ConsoleColor.Yellow;
+                        Console.Write("заменена на: ");
+
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write(optionDigit + "\n\n");
+
+                        isDatePlasOne(optionDigit);
+                       
+                    }
+                }
+                    
             }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Введенная дата не корректна!");
-            }
+
         }
     }
 
