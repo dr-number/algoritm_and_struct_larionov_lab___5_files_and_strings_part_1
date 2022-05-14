@@ -1,5 +1,21 @@
 ﻿namespace larionov_lab___5_files_and_strings_part1
 {
+
+    class Dirs
+    {
+        public const string PART_1_TASK_6_1 = "Part_1_Task_6_1";
+        public const string PART_1_TASK_6_2 = "Part_1_Task_6_2";
+        public const string PART_1_TASK_16_1 = "Part_1_Task_16_1";
+        public const string PART_1_TASK_16_2 = "Part_1_Task_16_2";
+
+        public const string PART_2_TASK_6_1 = "Part_2_Task_6_1";
+        public const string PART_2_TASK_6_2 = "Part_2_Task_6_2";
+        public const string PART_2_TASK_6_3 = "Part_2_Task_6_3";
+
+        public const string PART_2_TASK_16_1 = "Part_2_Task_16_1";
+        public const string PART_2_TASK_16_2 = "Part_2_Task_16_2";
+        public const string PART_2_TASK_16_3 = "Part_2_Task_16_3";
+    }
     class TasksInfo
     {
         public const string PART_1_TASK_6_1 = "Дана строка, содержащая дату в формате \"дд.мм.гггг\".\n" +
@@ -66,8 +82,7 @@
     {
         
         private
-        const string DEFAULT_READ_FILE = "data.txt";
-        string DIR_FILE = Environment.CurrentDirectory;
+        static string DIR_FILE = Environment.CurrentDirectory;
 
         public const string MESSAGE_ERROR_PROCESSING_FILE = "Ошибка обработки файла!";
 
@@ -110,7 +125,7 @@
             }
         }
 
-        public string setReadFile()
+        public string setReadFile(string defaultReadFile)
         {
             string fileName = "";
             bool isExist = false;
@@ -125,7 +140,7 @@
                 fileName = Console.ReadLine();
 
                 if (fileName == "")
-                    fileName = DEFAULT_READ_FILE;
+                    fileName = defaultReadFile;
 
                 isExist = File.Exists(fileName);
 
@@ -194,7 +209,7 @@
         }
 
         public
-        data selectInputData()
+        data selectInputData(string defaultReadFile)
         {
             string fileName;
             data result;
@@ -211,7 +226,7 @@
                     return result;
                 }
 
-                fileName = myFiles.setReadFile();
+                fileName = myFiles.setReadFile(defaultReadFile);
 
                 if (fileName != "")
                 {
@@ -248,7 +263,7 @@
 
             return result;
         }
-        public string getFirstString(string text)
+        public string getFirstString(string text, string defaultReadFile)
         {
             SelectData selectData = new SelectData();
             MyFiles myFiles = new MyFiles();
@@ -260,7 +275,7 @@
 
             while (true)
             {
-                inputData = selectData.selectInputData();
+                inputData = selectData.selectInputData(defaultReadFile);
 
                 if (inputData.select == SelectData.SELECT_KEYBOARD)
                 {
@@ -372,6 +387,7 @@
 
         public void init()
         {
+            
             Console.WriteLine(TasksInfo.PART_1_TASK_6_1);
 
             MyStrings myStrings = new MyStrings();
