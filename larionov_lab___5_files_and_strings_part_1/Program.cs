@@ -1,21 +1,5 @@
 ﻿namespace larionov_lab___5_files_and_strings_part1
 {
-
-    class Dirs
-    {
-        public const string PART_1_TASK_6_1 = "Part_1_Task_6_1";
-        public const string PART_1_TASK_6_2 = "Part_1_Task_6_2";
-        public const string PART_1_TASK_16_1 = "Part_1_Task_16_1";
-        public const string PART_1_TASK_16_2 = "Part_1_Task_16_2";
-
-        public const string PART_2_TASK_6_1 = "Part_2_Task_6_1";
-        public const string PART_2_TASK_6_2 = "Part_2_Task_6_2";
-        public const string PART_2_TASK_6_3 = "Part_2_Task_6_3";
-
-        public const string PART_2_TASK_16_1 = "Part_2_Task_16_1";
-        public const string PART_2_TASK_16_2 = "Part_2_Task_16_2";
-        public const string PART_2_TASK_16_3 = "Part_2_Task_16_3";
-    }
     class TasksInfo
     {
         public const string PART_1_TASK_6_1 = "Дана строка, содержащая дату в формате \"дд.мм.гггг\".\n" +
@@ -80,7 +64,12 @@
 
     class MyFiles
     {
-        
+        public const string EXP = ".txt";
+        public const string FILE_PART_1_TASK_6_1 = "Part_1_Task_6_1" + EXP;
+        public const string FILE_PART_1_TASK_6_2 = "Part_1_Task_6_2" + EXP;
+        public const string FILE_PART_1_TASK_16_1 = "Part_1_Task_16_1" + EXP;
+        public const string FILE_PART_1_TASK_16_2 = "Part_1_Task_16_2" + EXP;
+
         private
         static string DIR_FILE = Environment.CurrentDirectory;
 
@@ -133,10 +122,15 @@
             while (!isExist)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\" + defaultReadFile + "\\");
+                Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\");
                 Console.ResetColor();
 
-                Console.WriteLine("\nВведите (путь) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию " + defaultReadFile + ": ");
+                Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(defaultReadFile);
+                Console.ResetColor();
+                Console.Write("]: ");
+
                 fileName = Console.ReadLine();
 
                 if (fileName == "")
@@ -165,19 +159,46 @@
                 }
             }
 
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\nОбрабатываемый файл: ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            string file = DIR_FILE + "\\" + fileName;
+            Console.WriteLine(file + "\n");
+
+            Console.ResetColor();
+            printFileInfo(file);
+
             return fileName;
         }
 
         public void printFileInfo(string fileName)
         {
             FileInfo fileInfo = new FileInfo(fileName);
+
+            if (!fileInfo.Exists)
+                return;
             
-            if (fileInfo.Exists)
-            {
-                Console.WriteLine($"Имя файла: {fileInfo.Name}");
-                Console.WriteLine($"Время создания: {fileInfo.CreationTime}");
-                Console.WriteLine($"Размер: {fileInfo.Length}");
-            }
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Имя файла: ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(fileInfo.Name + "\n");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Время создания: ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(fileInfo.CreationTime + "\n");
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("Размер: ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(fileInfo.Length + " байт\n");
+
+            Console.ResetColor();
         }
 
         public void printError(string message = MESSAGE_ERROR_PROCESSING_FILE)
@@ -389,7 +410,7 @@
         {
 
             MyStrings myStrings = new MyStrings();
-            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ", Dirs.PART_1_TASK_6_1);
+            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ", MyFiles.FILE_PART_1_TASK_6_1);
 
             MyPrint myPrint = new MyPrint();
             myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
