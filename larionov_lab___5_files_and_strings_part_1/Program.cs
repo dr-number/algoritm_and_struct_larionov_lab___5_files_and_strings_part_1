@@ -133,10 +133,10 @@
             while (!isExist)
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE);
+                Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\" + defaultReadFile + "\\");
                 Console.ResetColor();
 
-                Console.WriteLine("Введите (путь) имя файла с учетом регистра (расширение не обязательно): ");
+                Console.WriteLine("\nВведите (путь) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию " + defaultReadFile + ": ");
                 fileName = Console.ReadLine();
 
                 if (fileName == "")
@@ -387,11 +387,9 @@
 
         public void init()
         {
-            
-            Console.WriteLine(TasksInfo.PART_1_TASK_6_1);
 
             MyStrings myStrings = new MyStrings();
-            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ");
+            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ", Dirs.PART_1_TASK_6_1);
 
             MyPrint myPrint = new MyPrint();
             myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
