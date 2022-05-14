@@ -46,7 +46,8 @@
         public const string QUESTION_READ_FILE = "Прочитать данные из файла [y/n]? ";
         public const string QUESTION_SHOW_CALC = "Показывать ход вычислений [y/n]? ";
 
-        public bool isQuestion(string textQuestion)
+        public
+        bool isQuestion(string textQuestion)
         {
             Console.WriteLine("\n" + textQuestion);
             return Console.ReadLine()?.ToLower() != "n";
@@ -55,8 +56,11 @@
 
     class MyFiles
     {
+        
+        private
         const string DEFAULT_READ_FILE = "data.txt";
         
+        public
         bool setReadFile()
         {
             bool isExist = false;
@@ -109,13 +113,63 @@
         }
     }
 
+    class MyInput
+    {
+        public
+        string inputText(string title)
+        {
+            Console.WriteLine(title);
+            return Console.ReadLine();
+        }
+    }
+
+    class SelectData
+    {
+        public const bool SELECT_FILE = false;
+        public const bool SELECT_KEYBOARD = true;
+
+        public
+        bool selectInputData()
+        {
+
+            MyQuestion myQuestion = new MyQuestion();
+
+            while (true)
+            {
+                if (!myQuestion.isQuestion(MyQuestion.QUESTION_READ_FILE))
+                    return SELECT_KEYBOARD;
+
+                MyFiles myFiles = new MyFiles();
+
+                if (!myFiles.setReadFile())
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Ошибка чтения файла!");
+                    Console.ResetColor();
+                }
+                else
+                    return SELECT_FILE;
+               
+            }
+        }
+    }
 
     public class Part_2_Task_6_1
     {
-
+        private const string FORMAT_DATE = "дд.мм.гггг";
         public void init()
         {
+            Console.WriteLine(TasksInfo.PART_1_TASK_6_1);
 
+            SelectData selectData = new SelectData();
+
+            string inputData;
+
+            if(selectData.selectInputData() == SelectData.SELECT_KEYBOARD)
+            {
+                Console.WriteLine($"Введите дату в формате \"{FORMAT_DATE}\"");
+                inputData = Console.ReadLine();
+            }
         }
     }
 
