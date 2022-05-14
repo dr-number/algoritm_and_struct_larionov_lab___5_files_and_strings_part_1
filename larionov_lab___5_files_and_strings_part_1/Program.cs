@@ -310,11 +310,14 @@
 
                 MyPrint myPrint = new MyPrint();
                 myPrint.printString("Cледующая по порядку дата:", DateToStr(dDate));
+                Console.ResetColor();
                 return true;
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Дата не корректна!");
+            Console.ResetColor();
+
             return false;
         }
 
@@ -359,7 +362,13 @@
                         Console.Write(optionDigit + "\n\n");
 
                         isDatePlasOne(optionDigit);
-                       
+
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Дата не корректна!");
+                        Console.ResetColor();
                     }
                 }
                     
