@@ -292,6 +292,8 @@
                 result = "0" + s[0] + ".0" + s[1] + "." + s[2] + s[3] + s[4] + s[5];
             else if (size == 7) // 1.11.2000
                 result = "0" + s[0] + "." + s[1] + s[2] + "." + s[3] + s[4] + s[5] + s[6];
+            else if (size == 8) // 11.11.2000
+                result = "" + s[0] + s[1] + "." + s[2] + s[3] + "." + s[4] + s[5] + s[6] + s[7];
 
             return result;
         }
@@ -300,6 +302,9 @@
         {
             DateTime dDate;
             bool isCorrectPoint = sDate.Where(x => x == '.').Count() == 2;
+
+            if (sDate.IndexOf("..") != -1)
+                isCorrectPoint = false;
 
             if (isCorrectPoint && DateTime.TryParse(sDate, out dDate))
             {
@@ -337,45 +342,38 @@
 
 
             string correctingData = myStrings.getOnlyDigit(str);
-            int size = correctingData.Length;
+            string optionDigit = getOptionDigit(correctingData);
 
-            if(size != 8)
+            if (optionDigit == "")
+                return;
+            
+            MyQuestion question = new MyQuestion();
+
+            if (question.isProbably(optionDigit))
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("Некорректная дата: ");
 
-                string optionDigit = getOptionDigit(correctingData);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(str + " ");
 
-                if (optionDigit != "")
-                {
-                    MyQuestion question = new MyQuestion();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write("заменена на: ");
 
-                    if (question.isProbably(optionDigit))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("Некорректная дата: ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(optionDigit + "\n\n");
 
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write(str + " ");
+                isDatePlasOne(optionDigit);
 
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write("заменена на: ");
-
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(optionDigit + "\n\n");
-
-                        isDatePlasOne(optionDigit);
-
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Дата не корректна!");
-                        Console.ResetColor();
-                    }
-                }
-                    
             }
-
-        }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Дата не корректна!");
+                Console.ResetColor();
+            }
+                     
+        } 
     }
 
     class Class1
