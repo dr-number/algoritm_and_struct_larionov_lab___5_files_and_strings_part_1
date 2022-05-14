@@ -227,15 +227,44 @@
         }
     }
 
+    class MyPrint
+    {
+        public const string INITIAL_DATA = "Исходные данные: ";
+        public void printString(string title, string data, string subData = "")
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(title + " ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(data + " ");
+
+            if(subData != "")
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Write(subData);
+            }
+
+            Console.Write("\n");
+            Console.ResetColor();
+        }
+    }
+
     public class Part_2_Task_6_1
     {
         private const string FORMAT_DATE = "дд.мм.гггг";
+
+
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_1_TASK_6_1);
 
             MyStrings myStrings = new MyStrings();
             string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE}\": ");
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString(MyPrint.INITIAL_DATA, str);
+
+            //DateTime.ParseExact(str, "dd.MM.yyyy", CultureInfo.InvariantCulture);
 
 
         }
