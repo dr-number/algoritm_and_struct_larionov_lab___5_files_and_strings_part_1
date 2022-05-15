@@ -500,6 +500,17 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
+    public class Part_1_Task_16_2 { 
+
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_1_TASK_16_2);
+
+            MyStrings myStrings = new MyStrings();
+            string str = myStrings.getFirstString("Введите строку: ", MyFiles.FILE_PART_1_TASK_16_2, ".");
+        }
+    }
+
     class Class1
     {
         static void Main(string[] args)
@@ -517,7 +528,9 @@ namespace larionov_lab___5_files_and_strings_part1
                 Console.WriteLine("\n1) " + TasksInfo.PART_1_TASK_6_1);
 
                 Console.WriteLine("\n3) " + TasksInfo.PART_1_TASK_16_1);
-                
+
+                Console.WriteLine("\n4) " + TasksInfo.PART_1_TASK_16_2);
+
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("\ns) Настройка директории с исходными файлами\n" +
@@ -534,6 +547,11 @@ namespace larionov_lab___5_files_and_strings_part1
                 }
                 else if (selectStr == "3") {
                     Part_1_Task_16_1 task = new Part_1_Task_16_1();
+                    task.init();
+                }
+                else if (selectStr == "4")
+                {
+                    Part_1_Task_16_2 task = new Part_1_Task_16_2();
                     task.init();
                 }
                 else if (selectStr == "s") {
