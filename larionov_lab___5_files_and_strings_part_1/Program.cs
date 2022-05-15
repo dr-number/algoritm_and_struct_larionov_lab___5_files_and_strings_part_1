@@ -473,6 +473,12 @@ namespace larionov_lab___5_files_and_strings_part1
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_1_TASK_6_2);
+
+            MyStrings myStrings = new MyStrings();
+            string str = myStrings.getFirstString("Введите строку: ", MyFiles.FILE_PART_1_TASK_6_2, ".");
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
         }
     }
 
