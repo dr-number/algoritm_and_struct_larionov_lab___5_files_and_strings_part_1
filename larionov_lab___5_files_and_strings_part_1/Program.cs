@@ -116,48 +116,42 @@
         public string setReadFile(string defaultReadFile)
         {
             string fileName = "";
-            bool isExist = false;
 
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\");
             Console.ResetColor();
 
-            while (!isExist)
+            Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(defaultReadFile);
+            Console.ResetColor();
+            Console.Write("]: ");
+
+            fileName = Console.ReadLine();
+
+            if (fileName == "")
+                fileName = defaultReadFile;
+
+            if (!File.Exists(fileName))
             {
-                Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write(defaultReadFile);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Файла: {fileName} - не существует!");
                 Console.ResetColor();
-                Console.Write("]: ");
 
-                fileName = Console.ReadLine();
-
-                if (fileName == "")
-                    fileName = defaultReadFile;
-
-                isExist = File.Exists(fileName);
-
-                if (!isExist)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Файла: {fileName} - не существует!");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    FileInfo fileInfo = new FileInfo(fileName);
-                    
-                    if(fileInfo.Length == 0)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Файла: {fileName} - пуст!");
-                        Console.ResetColor();
-
-                        isExist = false;
-                    }
-                }
+                return "";
             }
+            
+            FileInfo fileInfo = new FileInfo(fileName);
+                    
+            if(fileInfo.Length == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Файла: {fileName} - пуст!");
+                Console.ResetColor();
 
+                return "";
+            }
+            
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\nОбрабатываемый файл: ");
 
@@ -261,10 +255,6 @@
                     result.fileName = fileName;
                     return result;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка чтения файла!");
-                Console.ResetColor();
 
             }
 
