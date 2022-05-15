@@ -352,14 +352,16 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             bool result = false;
-            StreamWriter? file = null;
+            StreamReader? file = null;
 
             try
             {
-                file = new StreamWriter(path);
+                file = new StreamReader(path);
 
                 string allStr;
                 string[] arrayStr;
+
+                string write;
 
                 while (file.EndOfStream != true)
                 {
@@ -369,7 +371,10 @@ namespace larionov_lab___5_files_and_strings_part1
                         arrayStr = allStr.Split(endSymbol);
 
                         foreach (var item in arrayStr)
-                            methodForStr.DynamicInvoke();
+                        {
+                            write = (string) methodForStr.DynamicInvoke();
+                           
+                        }
 
 
                     }
