@@ -350,6 +350,7 @@
     class MyPrint
     {
         public const string INITIAL_DATA = "Исходные данные: ";
+        public const string FINAL_RESULT = "Конечный результат: ";
         public void printString(string title, string data, string subData = "")
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -369,7 +370,7 @@
         }
     }
 
-    public class Part_2_Task_6_1
+    public class Part_1_Task_6_1
     {
         private string FORMAT_DATE = "dd.MM.yyyy";
         private string FORMAT_DATE_TEXT = "дд.мм.гггг";
@@ -473,6 +474,26 @@
         } 
     }
 
+    public class Part_1_Task_16_1
+    {
+        private string correctingStr(string str)
+        {
+            return new String(str.Where(Char.IsLetter).ToArray());
+        }
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_1_TASK_16_1);
+
+            MyStrings myStrings = new MyStrings();
+            string str = myStrings.getFirstString("Введите строку: ", MyFiles.FILE_PART_1_TASK_16_1, ".");
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
+
+            myPrint.printString("\n" + MyPrint.FINAL_RESULT, correctingStr(str), "\n");
+        }
+    }
+
     class Class1
     {
         static void Main(string[] args)
@@ -489,6 +510,9 @@
 
                 Console.WriteLine("\n1) " + TasksInfo.PART_1_TASK_6_1 + "\n");
 
+                Console.WriteLine("\n3) " + TasksInfo.PART_1_TASK_16_1 + "\n");
+                
+
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("\ns) Настройка директории с исходными файлами\n" +
                     "(значение сохраняется только на текущий сеанс работы программы)\n\n");
@@ -498,28 +522,26 @@
 
                 string selectStr = Console.ReadLine().ToLower();
 
-                switch (selectStr)
+                if (selectStr == "1") {
+                    Part_1_Task_6_1 task = new Part_1_Task_6_1();
+                    task.init();
+                }
+                else if (selectStr == "3") {
+                    Part_1_Task_16_1 task = new Part_1_Task_16_1();
+                    task.init();
+                }
+                else if (selectStr == "s") {
+                    MyFiles myFiles = new MyFiles();
+                    myFiles.setDidectoryFile();
+                }
+                else if (selectStr == "0")
                 {
-                    case "1":
-                        Part_2_Task_6_1 task = new Part_2_Task_6_1();
-                        task.init() ;
-                        break;
-
-                    case "s":
-                        MyFiles myFiles = new MyFiles();
-                        myFiles.setDidectoryFile();
-                        break;
-
-                    case "0":
-                        isGo = false;
-                        break;
-
-                    default:
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nНекорректные данные!");
-                        Console.ResetColor();
-                        break;
-
+                    isGo = false;
+                }
+                else { 
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\nНекорректные данные!");
+                    Console.ResetColor();
                 }
             }
 
