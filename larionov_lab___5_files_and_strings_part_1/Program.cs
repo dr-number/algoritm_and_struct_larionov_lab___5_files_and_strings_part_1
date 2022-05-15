@@ -9,7 +9,7 @@ namespace larionov_lab___5_files_and_strings_part1
             "содержащую следующую по порядку дату.\n";
 
         public const string PART_1_TASK_6_2 = "Дана строка символов до точки.\n" +
-            "Записать новую строку из слов заданной, содержащих букву \"М\".\n";
+            "Записать новую строку из слов заданной, содержащих букву \"М\" (Кириллица).\n";
 
         public const string PART_1_TASK_16_1 = "Дана символьная строка. Удалить из нее все символы, не являющиеся буквами.\n";
 
@@ -514,8 +514,10 @@ namespace larionov_lab___5_files_and_strings_part1
             string findSymbol = DEFAULT_SYMBOL;
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
-            myPrint.printString("Найти слова содержашие букву", $"\"{findSymbol}\"", "\n");
+            myPrint.printString("\n" + MyPrint.INITIAL_DATA, str);
+            myPrint.printString("Общее колличество слов:", str.Split(" ").Length.ToString());
+
+            myPrint.printString("\nНайти слова содержашие букву", $"\"{findSymbol}\"");
 
             if(isReg)
                 myPrint.printString("Выполнить поиск", "с учетом регистра", "\n");
