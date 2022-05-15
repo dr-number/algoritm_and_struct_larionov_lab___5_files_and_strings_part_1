@@ -140,7 +140,7 @@
                 if (!isExist)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Файла: {fileName} - не существует!\n");
+                    Console.WriteLine($"Файла: {fileName} - не существует!");
                     Console.ResetColor();
                 }
                 else
@@ -150,7 +150,7 @@
                     if(fileInfo.Length == 0)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Файла: {fileName} - пуст!\n");
+                        Console.WriteLine($"Файла: {fileName} - пуст!");
                         Console.ResetColor();
 
                         isExist = false;
