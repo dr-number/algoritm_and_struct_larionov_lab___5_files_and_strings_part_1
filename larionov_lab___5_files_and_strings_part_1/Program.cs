@@ -500,8 +500,21 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
-    public class Part_1_Task_16_2 { 
+    public class Part_1_Task_16_2 {
 
+        private char[] DEFAULT_DELIMITERS = { ' ', ',', '.', ':', ';' };
+        private void PrintSplint(string str, char[] delimiterChars)
+        {
+            string[] array = str.Split(delimiterChars);
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("Количество слов:", array.Length.ToString());
+
+            foreach (var item in array)
+            {
+                Console.WriteLine(item);
+            }
+        }
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_1_TASK_16_2);
