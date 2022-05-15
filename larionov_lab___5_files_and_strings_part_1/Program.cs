@@ -278,7 +278,7 @@ namespace larionov_lab___5_files_and_strings_part1
             int size = str.Length;
             string result = "";
 
-            for(int i = 0; i < size; ++i)
+            for (int i = 0; i < size; ++i)
                 if (str[i] - '0' >= 0 && str[i] - '0' <= 9)
                     result += str[i];
 
@@ -305,15 +305,20 @@ namespace larionov_lab___5_files_and_strings_part1
                 }
                 else
                 {
+                    StreamReader? file = null;
+
                     try
                     {
-                        StreamReader file = new StreamReader(inputData.fileName);
+                        file = new StreamReader(inputData.fileName);
                         inputString = file.ReadLine();
-                        file.Close();
                     }
                     catch (Exception e)
                     {
                         myFiles.printError();
+                    }
+                    finally
+                    {
+                        file?.Close();
                     }
                 }
 
@@ -323,21 +328,68 @@ namespace larionov_lab___5_files_and_strings_part1
                     {
                         int index = inputString.IndexOf(endSymbol);
 
-                        if(index != -1)
+                        if (index != -1)
                             inputString = inputString.Substring(0, index);
                     }
                 }
 
                 if (trim(inputString) == "")
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("Найденная строка пуста или содержит одни пробелы!");
-                    Console.ResetColor();
-                }
+                    myFiles.printError("Найденная строка пуста или содержит одни пробелы!");
                 else
                     return inputString;
 
             }
+        }
+
+        public bool correctingFile(string path, string endSymbol, Delegate methodForStr)
+        {
+            MyFiles myFiles = new MyFiles();
+
+            if (!File.Exists(path))
+            {
+                myFiles.printError($"Файла {path} - не существует!");
+                return false;
+            }
+
+            bool result = false;
+            StreamWriter? file = null;
+
+            try
+            {
+                file = new StreamWriter(path);
+
+                string allStr;
+                string[] arrayStr;
+
+                while (file.EndOfStream != true)
+                {
+                    allStr = file.ReadLine();
+
+                    if (endSymbol != "") {
+                        arrayStr = allStr.Split(endSymbol);
+
+                        foreach (var item in arrayStr)
+                            methodForStr.DynamicInvoke();
+
+
+                    }
+
+                }
+
+                result = true;
+            }
+            catch (Exception e)
+            {
+                myFiles.printError();
+                result = false;
+            }
+            finally
+            {
+                file?.Close();
+            }
+
+            return result;
+
         }
     }
 
@@ -652,6 +704,15 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
+
+    public class Part_2_Task_6_1
+    {
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
+        }
+    }
+
     class Class1
     {
         static void Main(string[] args)
@@ -660,7 +721,6 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine("Ларионов Никита Юрьевич. гр. 110з\n");
 
             bool isGo = true;
-
 
             while (isGo)
             {
@@ -671,6 +731,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 Console.WriteLine("\n3) " + TasksInfo.PART_1_TASK_16_1);
                 Console.WriteLine("\n4) " + TasksInfo.PART_1_TASK_16_2);
+
+                Console.WriteLine("\n5) " + TasksInfo.PART_2_TASK_6_1);
 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
