@@ -203,7 +203,9 @@
 
         public bool isReadDataFileUpSymbol(string symbol)
         {
-            Console.WriteLine($"Прочитать данные из файла до первого символа \"{symbol}\"");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\nПрочитать данные из файла до первого символа \"{symbol}\" [y/n]?: ");
+            Console.ResetColor();
             return Console.ReadLine()?.ToLower() != "n";
         }
         
@@ -466,8 +468,11 @@
 
     public class Part_1_Task_16_1
     {
-        private string correctingStr(string str)
+        private string correctingStr(string str, string ignoreSymbol)
         {
+            if(!ignoreSymbol.Equals(""))
+                return new String(str.Where(c => Char.IsLetter(c) || c.Equals(ignoreSymbol)).ToArray());
+
             return new String(str.Where(Char.IsLetter).ToArray());
         }
         public void init()
@@ -480,7 +485,12 @@
             MyPrint myPrint = new MyPrint();
             myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
 
-            myPrint.printString("\n" + MyPrint.FINAL_RESULT, correctingStr(str), "\n");
+            MyQuestion myQuestion = new MyQuestion();
+            bool isSaveSpace = myQuestion.isQuestion("Оставить пробелы в строке? [y/n]: ");
+
+            string ignoreSymbol = isSaveSpace ? " " : "";
+
+            myPrint.printString("\n" + MyPrint.FINAL_RESULT, correctingStr(str, ignoreSymbol), "\n");
         }
     }
 
