@@ -518,28 +518,31 @@ namespace larionov_lab___5_files_and_strings_part1
 
             return result;
         }
+
+        string deleteRepeat(string str)
+        {
+            return new string(str.ToCharArray().Distinct().ToArray());
+        }
         private void PrintSplint(string str, string delimiterChars)
         {
             string[] array = str.Split(delimiterChars.ToCharArray());
 
-            MyPrint myPrint = new MyPrint();
-            myPrint.printString("Количество слов:", array.Length.ToString());
+            int count = 0;
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Данные после обработки: \n");
 
             foreach (var item in array)
-                Console.WriteLine(item);
+                if (item != "")
+                {
+                    Console.WriteLine(item);
+                    ++count;
+                }
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("\nКоличество слов:", count.ToString());
         }
 
-        string deleteRepeat(string s)
-        {
-            string p;
-            do
-            {
-                p = s;
-                s = Regex.Replace(s, @"(.)\1+", "");
-            } while (s != p);
-
-            return s;
-        }
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_1_TASK_16_2);
@@ -559,13 +562,15 @@ namespace larionov_lab___5_files_and_strings_part1
             if(myQuestion.isQuestion("Добавить другие разделители? [y/n]: "))
             {
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("Введите разделители через пробел: ");
+                Console.WriteLine("Введите разделители (через пробел): ");
                 Console.ResetColor();
 
                 delimiters = deleteRepeat(delimiters + Console.ReadLine().Replace(" ", ""));
 
                 myPrint.printString("\nОбновленные разделители:", getDelimitersInfo(delimiters), "\n");
             }
+
+            PrintSplint(str, delimiters);
         }
     }
 
