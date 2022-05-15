@@ -720,8 +720,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_6_1
     {
-        private const string DEFAULT_DELIMITERS = ".!?";
-        private const string DEFAULT_DELETE_SYMBOLS = ",-:;";
+        private const string DEFAULT_ENDS = ".!?";
+        private const string DEFAULT_DELIMITERS = ",-:;";
 
         private string deleteFromStr(string str, string deleteSymbols)
         {
@@ -729,17 +729,24 @@ namespace larionov_lab___5_files_and_strings_part1
         }
         private bool fun(string info)
         {
-            Console.Write(info);
+            string tmp = deleteFromStr(info, DEFAULT_DELIMITERS);
+            tmp = Regex.Replace(tmp, @"\s+", " ").Trim(); // удаляем лишние пробелы (двойные, в начале и в конце)
 
-            info = deleteFromStr(info, DEFAULT_DELIMITERS);
-            string[] array = info.Split(DEFAULT_DELIMITERS.ToCharArray());
+            string[] array = tmp.Split(" ");
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($" ({array.Length})\n");
+            if (array.Length != 1)
+            {
+                int size = array.Length;
+                Console.Write(info);
 
-            Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write($" ({size})\n");
 
-            return true;
+                Console.ResetColor();
+                return true;
+            }
+
+            return false;
         }
 
         public void init()
