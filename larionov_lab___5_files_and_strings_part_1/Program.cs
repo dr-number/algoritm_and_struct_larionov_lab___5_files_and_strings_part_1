@@ -481,13 +481,13 @@ namespace larionov_lab___5_files_and_strings_part1
             bool isRegistr, isNoRegistr;
 
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("\nДанные после обработки: \n");
+            Console.Write("\nДанные после обработки: ");
 
             Console.ForegroundColor = ConsoleColor.Green;
 
             foreach (var item in array)
             {
-                isNoRegistr = !isReg && item.ToLower().Contains(symbol);
+                isNoRegistr = !isReg && item.ToLower().Contains(symbol.ToLower());
                 isRegistr = isReg && item.Contains(symbol);
 
                 if (isRegistr || isNoRegistr)
@@ -498,7 +498,8 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printString("\nСтрока после обработки:", result);
+            Console.WriteLine(result);
+
             myPrint.printString("Количество слов:", count.ToString());
         }
 
