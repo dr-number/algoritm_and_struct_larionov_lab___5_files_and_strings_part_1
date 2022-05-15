@@ -59,7 +59,6 @@
             return Console.ReadLine()?.ToLower() != "n";
         }
 
-
     }
 
     class MyFiles
@@ -207,6 +206,13 @@
             Console.WriteLine(message);
             Console.ResetColor();
         }
+
+        public bool isReadDataFileUpSymbol(string symbol)
+        {
+            Console.WriteLine($"Прочитать данные из файла до первого символа \"{symbol}\"");
+            return Console.ReadLine()?.ToLower() != "n";
+        }
+        
     }
 
     class MyInput
@@ -284,7 +290,7 @@
 
             return result;
         }
-        public string getFirstString(string text, string defaultReadFile)
+        public string getFirstString(string text, string defaultReadFile, string endSymbol)
         {
             SelectData selectData = new SelectData();
             MyFiles myFiles = new MyFiles();
@@ -317,7 +323,18 @@
                     }
                 }
 
-                if(trim(inputString) == "")
+                if (endSymbol != "")
+                {
+                    if (myFiles.isReadDataFileUpSymbol(endSymbol))
+                    {
+                        int index = inputString.IndexOf(endSymbol);
+
+                        if(index != -1)
+                            inputString = inputString.Substring(0, index);
+                    }
+                }
+
+                if (trim(inputString) == "")
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Найденная строка пуста или содержит одни пробелы!");
@@ -409,8 +426,10 @@
         public void init()
         {
 
+            Console.WriteLine(TasksInfo.PART_1_TASK_6_1);
+
             MyStrings myStrings = new MyStrings();
-            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ", MyFiles.FILE_PART_1_TASK_6_1);
+            string str = myStrings.getFirstString($"Введите дату в формате \"{FORMAT_DATE_TEXT}\": ", MyFiles.FILE_PART_1_TASK_6_1, "");
 
             MyPrint myPrint = new MyPrint();
             myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
