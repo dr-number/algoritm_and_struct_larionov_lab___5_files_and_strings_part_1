@@ -779,6 +779,11 @@ namespace larionov_lab___5_files_and_strings_part1
                     Part_1_Task_16_2 task = new Part_1_Task_16_2();
                     task.init();
                 }
+                else if (selectStr == "5")
+                {
+                    Part_2_Task_6_1 task = new Part_2_Task_6_1();
+                    task.init();
+                }
                 else if (selectStr == "s") {
                     MyFiles myFiles = new MyFiles();
                     myFiles.setDidectoryFile();
