@@ -502,25 +502,70 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_1_Task_16_2 {
 
-        private char[] DEFAULT_DELIMITERS = { ' ', ',', '.', ':', ';' };
-        private void PrintSplint(string str, char[] delimiterChars)
+        private const string DEFAULT_DELIMITERS = ",.:; ";
+
+        private string getDelimitersInfo(string delimiters)
         {
-            string[] array = str.Split(delimiterChars);
+            string result = "";
+
+            foreach (var item in delimiters)
+            {
+                if (item == ' ')
+                    result += "(пробел) ";
+                else
+                    result = result + item + " ";
+            }
+
+            return result;
+        }
+        private void PrintSplint(string str, string delimiterChars)
+        {
+            string[] array = str.Split(delimiterChars.ToCharArray());
 
             MyPrint myPrint = new MyPrint();
             myPrint.printString("Количество слов:", array.Length.ToString());
 
             foreach (var item in array)
-            {
                 Console.WriteLine(item);
-            }
+        }
+
+        string deleteRepeat(string s)
+        {
+            string p;
+            do
+            {
+                p = s;
+                s = Regex.Replace(s, @"(.)\1+", "");
+            } while (s != p);
+
+            return s;
         }
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_1_TASK_16_2);
 
+            string delimiters = DEFAULT_DELIMITERS;
+
             MyStrings myStrings = new MyStrings();
-            string str = myStrings.getFirstString("Введите строку: ", MyFiles.FILE_PART_1_TASK_16_2, ".");
+            string str = myStrings.getFirstString("Введите строку: ", MyFiles.FILE_PART_1_TASK_16_2, "");
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("\n" + MyPrint.INITIAL_DATA, str, "\n");
+
+            myPrint.printString("\nРазделители:", getDelimitersInfo(delimiters), "\n");
+
+            MyQuestion myQuestion = new MyQuestion();
+            
+            if(myQuestion.isQuestion("Добавить другие разделители? [y/n]: "))
+            {
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("Введите разделители через пробел: ");
+                Console.ResetColor();
+
+                delimiters = deleteRepeat(delimiters + Console.ReadLine().Replace(" ", ""));
+
+                myPrint.printString("\nОбновленные разделители:", getDelimitersInfo(delimiters), "\n");
+            }
         }
     }
 
