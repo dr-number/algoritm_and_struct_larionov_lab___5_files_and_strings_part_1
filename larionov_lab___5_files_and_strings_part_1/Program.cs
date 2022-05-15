@@ -66,10 +66,15 @@ namespace larionov_lab___5_files_and_strings_part1
     class MyFiles
     {
         public const string EXP = ".txt";
+
         public const string FILE_PART_1_TASK_6_1 = "Part_1_Task_6_1" + EXP;
         public const string FILE_PART_1_TASK_6_2 = "Part_1_Task_6_2" + EXP;
+
         public const string FILE_PART_1_TASK_16_1 = "Part_1_Task_16_1" + EXP;
         public const string FILE_PART_1_TASK_16_2 = "Part_1_Task_16_2" + EXP;
+
+
+        public const string FILE_PART_2_TASK_6_1 = "Part_2_Task_6_1" + EXP;
 
         private
         static string DIR_FILE = Environment.CurrentDirectory;
@@ -341,15 +346,13 @@ namespace larionov_lab___5_files_and_strings_part1
             }
         }
 
-        public bool correctingFile(string path, string endSymbol, Delegate methodForStr)
+        public bool correctingFile(string defaultFile, Delegate methodForStr, string endSymbol)
         {
             MyFiles myFiles = new MyFiles();
+            string path = myFiles.setReadFile(defaultFile);
 
-            if (!File.Exists(path))
-            {
-                myFiles.printError($"Файла {path} - не существует!");
+            if(path == "")
                 return false;
-            }
 
             bool result = false;
             StreamReader? file = null;
@@ -372,10 +375,10 @@ namespace larionov_lab___5_files_and_strings_part1
 
                         foreach (var item in arrayStr)
                         {
-                            write = (string) methodForStr.DynamicInvoke();
+                            //write = (string) 
+                                methodForStr.DynamicInvoke(item);
                            
                         }
-
 
                     }
 
@@ -712,9 +715,18 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_6_1
     {
+        private bool fun(string info)
+        {
+            Console.WriteLine(info);
+            return true;
+        }
+
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
+
+            MyStrings myStrings = new MyStrings();
+            myStrings.correctingFile(MyFiles.FILE_PART_2_TASK_6_1, new Func<string, bool>(fun), ".");
         }
     }
 
