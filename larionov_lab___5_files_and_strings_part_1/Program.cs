@@ -118,12 +118,12 @@
             string fileName = "";
             bool isExist = false;
 
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\");
+            Console.ResetColor();
+
             while (!isExist)
             {
-                Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\");
-                Console.ResetColor();
-
                 Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write(defaultReadFile);
@@ -140,7 +140,7 @@
                 if (!isExist)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Файла: {fileName} - не существует!");
+                    Console.WriteLine($"Файла: {fileName} - не существует!\n");
                     Console.ResetColor();
                 }
                 else
@@ -150,7 +150,7 @@
                     if(fileInfo.Length == 0)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Файла: {fileName} - пуст!");
+                        Console.WriteLine($"Файла: {fileName} - пуст!\n");
                         Console.ResetColor();
 
                         isExist = false;
@@ -508,14 +508,14 @@
             {
                 Console.WriteLine("\nВведите номер задачи: ");
 
-                Console.WriteLine("\n1) " + TasksInfo.PART_1_TASK_6_1 + "\n");
+                Console.WriteLine("\n1) " + TasksInfo.PART_1_TASK_6_1);
 
-                Console.WriteLine("\n3) " + TasksInfo.PART_1_TASK_16_1 + "\n");
+                Console.WriteLine("\n3) " + TasksInfo.PART_1_TASK_16_1);
                 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
                 Console.WriteLine("\ns) Настройка директории с исходными файлами\n" +
-                    "(значение сохраняется только на текущий сеанс работы программы)\n\n");
+                    "(значение сохраняется только на текущий сеанс работы программы)\n");
                 
                 Console.ResetColor();
                 Console.WriteLine("\nДля выхода введите \"0\": ");
