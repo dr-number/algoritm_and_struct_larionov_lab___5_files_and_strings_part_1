@@ -480,7 +480,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
             bool isRegistr, isNoRegistr;
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("\nДанные после обработки: \n");
 
             Console.ForegroundColor = ConsoleColor.Green;
@@ -498,7 +498,8 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printString("\nКоличество слов:", count.ToString());
+            myPrint.printString("\nСтрока после обработки:", result);
+            myPrint.printString("Количество слов:", count.ToString());
         }
 
         public void init()
