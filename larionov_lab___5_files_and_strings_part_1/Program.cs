@@ -468,6 +468,14 @@ namespace larionov_lab___5_files_and_strings_part1
         } 
     }
 
+    public class Part_1_Task_6_2
+    {
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_1_TASK_6_2);
+        }
+    }
+
     public class Part_1_Task_16_1
     {
         private string deleteDoubleSpace(string str)
@@ -530,7 +538,9 @@ namespace larionov_lab___5_files_and_strings_part1
             int count = 0;
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Данные после обработки: \n");
+            Console.WriteLine("\nДанные после обработки: \n");
+
+            Console.ForegroundColor = ConsoleColor.Green;
 
             foreach (var item in array)
                 if (item != "")
@@ -589,9 +599,9 @@ namespace larionov_lab___5_files_and_strings_part1
                 Console.WriteLine("\nВведите номер задачи: ");
 
                 Console.WriteLine("\n1) " + TasksInfo.PART_1_TASK_6_1);
+                Console.WriteLine("\n2) " + TasksInfo.PART_1_TASK_6_2);
 
                 Console.WriteLine("\n3) " + TasksInfo.PART_1_TASK_16_1);
-
                 Console.WriteLine("\n4) " + TasksInfo.PART_1_TASK_16_2);
 
 
@@ -606,6 +616,11 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 if (selectStr == "1") {
                     Part_1_Task_6_1 task = new Part_1_Task_6_1();
+                    task.init();
+                }
+                else if (selectStr == "2")
+                {
+                    Part_1_Task_6_2 task = new Part_1_Task_6_2();
                     task.init();
                 }
                 else if (selectStr == "3") {
