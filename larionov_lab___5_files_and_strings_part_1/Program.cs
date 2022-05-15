@@ -1,4 +1,6 @@
-﻿namespace larionov_lab___5_files_and_strings_part1
+﻿using System.Text.RegularExpressions;
+
+namespace larionov_lab___5_files_and_strings_part1
 {
     class TasksInfo
     {
@@ -468,10 +470,15 @@
 
     public class Part_1_Task_16_1
     {
-        private string correctingStr(string str, string ignoreSymbol)
+        private string deleteDoubleSpace(string str)
         {
-            if(!ignoreSymbol.Equals(""))
-                return new String(str.Where(c => Char.IsLetter(c) || c.Equals(ignoreSymbol)).ToArray());
+            return Regex.Replace(str, @"\s+", " ");
+        }
+
+        private string correctingStr(string str, bool isSaveSpace)
+        {
+            if(isSaveSpace)
+                return deleteDoubleSpace(new String(str.Where(c => Char.IsLetter(c) || Char.IsWhiteSpace(c)).ToArray()));
 
             return new String(str.Where(Char.IsLetter).ToArray());
         }
@@ -488,9 +495,8 @@
             MyQuestion myQuestion = new MyQuestion();
             bool isSaveSpace = myQuestion.isQuestion("Оставить пробелы в строке? [y/n]: ");
 
-            string ignoreSymbol = isSaveSpace ? " " : "";
 
-            myPrint.printString("\n" + MyPrint.FINAL_RESULT, correctingStr(str, ignoreSymbol), "\n");
+            myPrint.printString("\n" + MyPrint.FINAL_RESULT, correctingStr(str, isSaveSpace), "\n");
         }
     }
 
