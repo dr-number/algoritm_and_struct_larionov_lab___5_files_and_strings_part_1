@@ -366,22 +366,27 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 string write;
 
-                while (file.EndOfStream != true)
+                if (endSymbol != "")
                 {
-                    allStr = file.ReadLine();
-
-                    if (endSymbol != "") {
+                    while (file.EndOfStream != true)
+                    {
+                        allStr = file.ReadLine();
                         arrayStr = allStr.Split(endSymbol);
 
                         foreach (var item in arrayStr)
                         {
-                            //write = (string) 
-                                methodForStr.DynamicInvoke(item);
-                           
+                            methodForStr.DynamicInvoke(item);
+
                         }
 
                     }
-
+                }
+                else
+                {
+                    while (file.EndOfStream != true)
+                    {
+                        methodForStr.DynamicInvoke(file.ReadLine());
+                    }
                 }
 
                 result = true;
@@ -715,9 +720,25 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_6_1
     {
+        private const string DEFAULT_DELIMITERS = ".!?";
+        private const string DEFAULT_DELETE_SYMBOLS = ",-:;";
+
+        private string deleteFromStr(string str, string deleteSymbols)
+        {
+            return String.Join("", str.Split(deleteSymbols.ToCharArray()));
+        }
         private bool fun(string info)
         {
-            Console.WriteLine(info);
+            Console.Write(info);
+
+            info = deleteFromStr(info, DEFAULT_DELIMITERS);
+            string[] array = info.Split(DEFAULT_DELIMITERS.ToCharArray());
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($" ({array.Length})\n");
+
+            Console.ResetColor();
+
             return true;
         }
 
