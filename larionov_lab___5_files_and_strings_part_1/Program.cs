@@ -370,7 +370,6 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.Write("\n");
             Console.ResetColor();
         }
-
         public void MyPause()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
