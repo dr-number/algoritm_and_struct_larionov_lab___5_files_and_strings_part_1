@@ -66,6 +66,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
     class MyFiles
     {
+        public const string EXP_TMP = ".tmp";
         public const string EXP = ".txt";
 
         public const string FILE_PART_1_TASK_6_1 = "Part_1_Task_6_1" + EXP;
@@ -679,7 +680,7 @@ namespace larionov_lab___5_files_and_strings_part1
             return String.Join("", str.Split(deleteSymbols.ToCharArray()));
         }
 
-        private void printStringWithCount(string str, bool isNewLine)
+        private void writeStringWithCount(StreamWriter file, string str, bool isNewLine)
         {
 
             string tmp = deleteFromStr(str, DEFAULT_DELIMITERS);
@@ -688,21 +689,28 @@ namespace larionov_lab___5_files_and_strings_part1
             string[] array = tmp.Split(" ");
 
             if (array.Length == 1)
+            {
+                file.Write("\r\n");
                 return;
+            }
 
             int size = array.Length;
+            string sizeStr = " (" + size + ")";
+
             Console.Write(str + ".");
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write($" ({size})");
+            Console.Write(sizeStr);
 
             if (isNewLine)
                 Console.Write("\n");
 
             Console.ResetColor();
+
+            file.Write(str + "." + sizeStr);
         }
 
-        private int getCountWords(FileStream file, string str, string endSymbols)
+        private int getCountWords(StreamWriter file, string str, string endSymbols)
         {
             char[] ends = endSymbols.ToCharArray();
             string[] partStr = str.Split(ends);
@@ -712,64 +720,50 @@ namespace larionov_lab___5_files_and_strings_part1
             bool isEndLine = size < 1;
 
             foreach (var item in partStr)
-                printStringWithCount(item, isEndLine);
+                writeStringWithCount(file, item, isEndLine);
 
             Console.Write("\n");
 
             return size;
         }
 
-        public bool correctingFile(string defaultFile, string endSymbol)
+        public void init()
         {
+            const string DEFAULT_END_SYMBOL = ".";
+
+            Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
+            
             MyFiles myFiles = new MyFiles();
-            string path = myFiles.setReadFile(defaultFile);
+            string path = myFiles.setReadFile(MyFiles.FILE_PART_2_TASK_6_1);
 
             if (path == "")
-                return false;
-
-            bool result = false;
-
-            FileStream? fSrteam = null;
-            StreamReader? fReader = null;
+                return;
 
             string line;
 
             try
             {
-                using (fSrteam = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    using (fReader = new StreamReader(fSrteam /*, Encoding.GetEncoding(1252)*/))
-                    {
-                        while (!fReader.EndOfStream)
-                        {
-                            line = fReader.ReadLine();
-                            getCountWords(fSrteam, line, ".");
-                        }
+                string tmpFile = path + MyFiles.EXP_TMP;
+                File.Move(path, tmpFile);
 
-                            //ProcessLine(fReader.ReadLine());
-                    }
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+                {
+
+                    using (StreamWriter fWriter = new StreamWriter(fs))
+                        using (StreamReader fReader = new StreamReader(tmpFile))
+                            while (!fReader.EndOfStream)
+                            {
+                                line = fReader.ReadLine();
+                                getCountWords(fWriter, line, DEFAULT_END_SYMBOL);
+                            }
                 }
 
-                result = true;
+                File.Delete(tmpFile);
             }
             catch (Exception e)
             {
-                myFiles.printError();
-                result = false;
+                myFiles.printError(e.Message);
             }
-            finally
-            {
-                fSrteam?.Close();
-                fReader?.Close();
-            }
-
-            return result;
-        }
-        public void init()
-        {
-            Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
-            
-            correctingFile(MyFiles.FILE_PART_2_TASK_6_1, ".");
 
 
         }
