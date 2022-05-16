@@ -346,75 +346,6 @@ namespace larionov_lab___5_files_and_strings_part1
 
             }
         }
-
-        public bool correctingFile(string defaultFile, Delegate methodForStr, string endSymbol)
-        {
-            MyFiles myFiles = new MyFiles();
-            string path = myFiles.setReadFile(defaultFile);
-
-            if(path == "")
-                return false;
-
-            bool result = false;
-            FileStream? file = null;
-
-            try
-            {
-                int c = 0;
-                string symbol, part = "";
-
-                byte[] buf = new byte[1];
-                int sizeBuf = buf.Length;
-
-                file = new FileStream(path, FileMode.Open);
-
-                while((c = file.Read(buf, 0, sizeBuf)) > 0)
-                {
-                    symbol = Encoding.UTF8.GetString(buf, 0, c);
-                    part += symbol;
-
-                    if (symbol == "\r")
-                    {
-                        methodForStr.DynamicInvoke(file, part + "\n", endSymbol);
-                        part = "";
-                    }
-                    
-                } 
-            }
-            catch (IOException e)
-            {
-                myFiles.printError();
-                result = false;
-            }
-            finally
-            {
-                file?.Close();
-            }
-
-
-            /*
-            try
-            {
-                file = new StreamReader(path);
-
-                while (file.EndOfStream != true)
-                    methodForStr.DynamicInvoke(file, file.ReadLine(), endSymbol);
-
-                result = true;
-            }
-            catch (Exception e)
-            {
-                myFiles.printError();
-                result = false;
-            }
-            finally
-            {
-                file?.Close();
-            }
-            */
-
-            return result;
-        }
     }
 
     class MyPrint
@@ -750,6 +681,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
         private void printStringWithCount(string str, bool isNewLine)
         {
+
             string tmp = deleteFromStr(str, DEFAULT_DELIMITERS);
             tmp = Regex.Replace(tmp, @"\s+", " ").Trim(); // удаляем лишние пробелы (двойные, в начале и в конце)
 
@@ -769,27 +701,77 @@ namespace larionov_lab___5_files_and_strings_part1
 
             Console.ResetColor();
         }
-        private bool fun(FileStream file, string str, string endSymbols)
+
+        private int getCountWords(FileStream file, string str, string endSymbols)
         {
             char[] ends = endSymbols.ToCharArray();
             string[] partStr = str.Split(ends);
 
-            bool isEndLine = partStr.Length < 1;
+            int size = partStr.Length;
+
+            bool isEndLine = size < 1;
 
             foreach (var item in partStr)
                 printStringWithCount(item, isEndLine);
 
             Console.Write("\n");
 
-            return false;
+            return size;
         }
 
+        public bool correctingFile(string defaultFile, string endSymbol)
+        {
+            MyFiles myFiles = new MyFiles();
+            string path = myFiles.setReadFile(defaultFile);
+
+            if (path == "")
+                return false;
+
+            bool result = false;
+
+            FileStream? fSrteam = null;
+            StreamReader? fReader = null;
+
+            string line;
+
+            try
+            {
+                using (fSrteam = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+                {
+                    using (fReader = new StreamReader(fSrteam /*, Encoding.GetEncoding(1252)*/))
+                    {
+                        while (!fReader.EndOfStream)
+                        {
+                            line = fReader.ReadLine();
+                            getCountWords(fSrteam, line, ".");
+                        }
+
+                            //ProcessLine(fReader.ReadLine());
+                    }
+                }
+
+                result = true;
+            }
+            catch (Exception e)
+            {
+                myFiles.printError();
+                result = false;
+            }
+            finally
+            {
+                fSrteam?.Close();
+                fReader?.Close();
+            }
+
+            return result;
+        }
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
+            
+            correctingFile(MyFiles.FILE_PART_2_TASK_6_1, ".");
 
-            MyStrings myStrings = new MyStrings();
-            myStrings.correctingFile(MyFiles.FILE_PART_2_TASK_6_1, new Func<FileStream, string, string, bool>(fun), ".");
+
         }
     }
 
