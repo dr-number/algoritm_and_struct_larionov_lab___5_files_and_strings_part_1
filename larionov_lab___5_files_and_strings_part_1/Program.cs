@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using System.Text;
 
 namespace larionov_lab___5_files_and_strings_part1
 {
@@ -359,27 +360,24 @@ namespace larionov_lab___5_files_and_strings_part1
 
             try
             {
-                int i = 0;
-                string part = "";
+                int c = 0;
+                string symbol, part = "";
+
+                byte[] buf = new byte[1];
+                int sizeBuf = buf.Length;
 
                 file = new FileStream(path, FileMode.Open);
 
-                while(true)
+                while((c = file.Read(buf, 0, sizeBuf)) > 0)
                 {
-                    i = file.ReadByte();
+                    symbol = Encoding.UTF8.GetString(buf, 0, c);
+                    part += symbol;
 
-                    if (i != -1)
+                    if (symbol == "\r")
                     {
-                        part += (char) i;
-
-                        if ((char)i == '\0')
-                        {
-                            methodForStr.DynamicInvoke(file, part, endSymbol);
-                            part = "";
-                        }
+                        methodForStr.DynamicInvoke(file, part + "\n", endSymbol);
+                        part = "";
                     }
-                    else
-                        break;
                     
                 } 
             }
@@ -771,7 +769,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
             Console.ResetColor();
         }
-        private bool fun(StreamReader file, string str, string endSymbols)
+        private bool fun(FileStream file, string str, string endSymbols)
         {
             char[] ends = endSymbols.ToCharArray();
             string[] partStr = str.Split(ends);
@@ -791,7 +789,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
 
             MyStrings myStrings = new MyStrings();
-            myStrings.correctingFile(MyFiles.FILE_PART_2_TASK_6_1, new Func<StreamReader, string, string, bool>(fun), ".");
+            myStrings.correctingFile(MyFiles.FILE_PART_2_TASK_6_1, new Func<FileStream, string, string, bool>(fun), ".");
         }
     }
 
