@@ -92,7 +92,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ResetColor();
 
             Console.WriteLine("\nВведите директорию в которой лежат файлы с данными ");
-            Console.WriteLine("Для завершения настройки введите \"0\": ");
+            Console.Write("Для завершения настройки введите \"0\": ");
 
             while (isGo)
             {
@@ -785,7 +785,7 @@ namespace larionov_lab___5_files_and_strings_part1
                     "(значение сохраняется только на текущий сеанс работы программы)\n");
                 
                 Console.ResetColor();
-                Console.WriteLine("\nДля выхода введите \"0\": ");
+                Console.Write("\nДля выхода введите \"0\": ");
 
                 string selectStr = Console.ReadLine().ToLower();
 
