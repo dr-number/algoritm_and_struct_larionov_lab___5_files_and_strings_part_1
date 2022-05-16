@@ -361,33 +361,8 @@ namespace larionov_lab___5_files_and_strings_part1
             {
                 file = new StreamReader(path);
 
-                string allStr;
-                string[] arrayStr;
-
-                string write;
-
-                if (endSymbol != "")
-                {
-                    while (file.EndOfStream != true)
-                    {
-                        allStr = file.ReadLine();
-                        arrayStr = allStr.Split(endSymbol);
-
-                        foreach (var item in arrayStr)
-                        {
-                            methodForStr.DynamicInvoke(item);
-
-                        }
-
-                    }
-                }
-                else
-                {
-                    while (file.EndOfStream != true)
-                    {
-                        methodForStr.DynamicInvoke(file.ReadLine());
-                    }
-                }
+                while (file.EndOfStream != true)
+                    methodForStr.DynamicInvoke(file, file.ReadLine(), endSymbol);
 
                 result = true;
             }
@@ -427,6 +402,8 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.Write("\n");
             Console.ResetColor();
         }
+
+
     }
 
     public class Part_1_Task_6_1
@@ -727,24 +704,39 @@ namespace larionov_lab___5_files_and_strings_part1
         {
             return String.Join("", str.Split(deleteSymbols.ToCharArray()));
         }
-        private bool fun(string info)
+
+        private void printStringWithCount(string str, bool isNewLine)
         {
-            string tmp = deleteFromStr(info, DEFAULT_DELIMITERS);
+            string tmp = deleteFromStr(str, DEFAULT_DELIMITERS);
             tmp = Regex.Replace(tmp, @"\s+", " ").Trim(); // удаляем лишние пробелы (двойные, в начале и в конце)
 
             string[] array = tmp.Split(" ");
 
-            if (array.Length != 1)
-            {
-                int size = array.Length;
-                Console.Write(info);
+            if (array.Length == 1)
+                return;
 
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write($" ({size})\n");
+            int size = array.Length;
+            Console.Write(str + ".");
 
-                Console.ResetColor();
-                return true;
-            }
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write($" ({size})");
+
+            if (isNewLine)
+                Console.Write("\n");
+
+            Console.ResetColor();
+        }
+        private bool fun(StreamReader file, string str, string endSymbols)
+        {
+            char[] ends = endSymbols.ToCharArray();
+            string[] partStr = str.Split(ends);
+
+            bool isEndLine = partStr.Length < 1;
+
+            foreach (var item in partStr)
+                printStringWithCount(item, isEndLine);
+
+            Console.Write("\n");
 
             return false;
         }
@@ -754,7 +746,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
 
             MyStrings myStrings = new MyStrings();
-            myStrings.correctingFile(MyFiles.FILE_PART_2_TASK_6_1, new Func<string, bool>(fun), ".");
+            myStrings.correctingFile(MyFiles.FILE_PART_2_TASK_6_1, new Func<StreamReader, string, string, bool>(fun), ".");
         }
     }
 
