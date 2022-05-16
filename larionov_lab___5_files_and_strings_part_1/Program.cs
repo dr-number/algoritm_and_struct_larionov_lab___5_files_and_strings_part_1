@@ -403,7 +403,14 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ResetColor();
         }
 
+        public void MyPause()
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("\nДля продолжения нажмите любую клавишу...");
+            Console.ReadLine();
 
+            Console.ResetColor();
+        }
     }
 
     public class Part_1_Task_6_1
@@ -754,6 +761,7 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         static void Main(string[] args)
         {
+            MyPrint myPrint = new MyPrint();
 
             Console.WriteLine("Ларионов Никита Юрьевич. гр. 110з\n");
 
@@ -817,6 +825,8 @@ namespace larionov_lab___5_files_and_strings_part1
                     Console.WriteLine("\nНекорректные данные!");
                     Console.ResetColor();
                 }
+
+                myPrint.MyPause();
             }
 
         }
