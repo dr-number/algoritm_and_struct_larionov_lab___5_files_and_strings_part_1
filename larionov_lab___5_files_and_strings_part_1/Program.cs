@@ -355,8 +355,46 @@ namespace larionov_lab___5_files_and_strings_part1
                 return false;
 
             bool result = false;
-            StreamReader? file = null;
+            FileStream? file = null;
 
+            try
+            {
+                int i = 0;
+                string part = "";
+
+                file = new FileStream(path, FileMode.Open);
+
+                while(true)
+                {
+                    i = file.ReadByte();
+
+                    if (i != -1)
+                    {
+                        part += (char) i;
+
+                        if ((char)i == '\0')
+                        {
+                            methodForStr.DynamicInvoke(file, part, endSymbol);
+                            part = "";
+                        }
+                    }
+                    else
+                        break;
+                    
+                } 
+            }
+            catch (IOException e)
+            {
+                myFiles.printError();
+                result = false;
+            }
+            finally
+            {
+                file?.Close();
+            }
+
+
+            /*
             try
             {
                 file = new StreamReader(path);
@@ -375,9 +413,9 @@ namespace larionov_lab___5_files_and_strings_part1
             {
                 file?.Close();
             }
+            */
 
             return result;
-
         }
     }
 
