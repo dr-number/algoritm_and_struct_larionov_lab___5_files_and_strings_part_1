@@ -77,6 +77,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
 
         public const string FILE_PART_2_TASK_6_1 = "Part_2_Task_6_1" + EXP;
+        public const string FILE_PART_2_TASK_6_2 = "Part_2_Task_6_2" + EXP;
 
         private
         static string DIR_FILE = Environment.CurrentDirectory;
@@ -217,7 +218,49 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ResetColor();
             return Console.ReadLine()?.ToLower() != "n";
         }
-        
+
+        public bool getText(string defaultReadFile, Delegate method, string param, Delegate methodEnd = null) //params object[] parameters)
+        {
+
+            MyFiles myFiles = new MyFiles();
+            string path = myFiles.setReadFile(defaultReadFile);
+
+            if (path == "")
+                return false;
+
+            string line = "";
+
+            try
+            {
+                string tmpFile = path + MyFiles.EXP_TMP;
+                File.Move(path, tmpFile);
+
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+                {
+
+                    using (StreamWriter fWriter = new StreamWriter(fs))
+                        using (StreamReader fReader = new StreamReader(tmpFile))
+                            while (!fReader.EndOfStream)
+                            {
+                                line = fReader.ReadLine();
+                                method.DynamicInvoke(fWriter, line, param);
+                            }
+
+                }
+
+                if (methodEnd != null)
+                    methodEnd.DynamicInvoke();
+
+               File.Delete(tmpFile);
+                return true;
+            }
+            catch (Exception e)
+            {
+                myFiles.printError(e.Message);
+                return false;
+            }
+        }
+
     }
 
     class MyInput
@@ -733,38 +776,63 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine(TasksInfo.PART_2_TASK_6_1);
             
             MyFiles myFiles = new MyFiles();
-            string path = myFiles.setReadFile(MyFiles.FILE_PART_2_TASK_6_1);
+            myFiles.getText(MyFiles.FILE_PART_2_TASK_6_1, new Func<StreamWriter, string, string, int>(getCountWords), DEFAULT_END_SYMBOL);
+        }
+    }
 
-            if (path == "")
-                return;
+    public class Part_2_Task_6_2
+    {
+        private const string DEFAULT_SEPARATOR = " ";
+        private string separator = DEFAULT_SEPARATOR;
 
-            string line;
+        List<List<int>> matrix = new List<List<int>>();
+   
+        private bool isCorrectMatrix()
+        {
+            return matrix.Count > 0;
+        }
 
-            try
-            {
-                string tmpFile = path + MyFiles.EXP_TMP;
-                File.Move(path, tmpFile);
+        private bool correctingMatrix()
+        {
+            //сброс матрицы после завершния
+            Console.WriteLine("Матрица прочитана!");
+            return true;
+        }
 
-                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+        private int readMatrix(StreamWriter file, string str, string endSymbols)
+        {
+            string[] array = str.Split(separator);
+
+            int countCol = array.Length;
+
+            List<int> row = new List<int>();
+
+            int num;
+            for (int j = 0; j < countCol; ++j) {
+
+                try
                 {
-
-                    using (StreamWriter fWriter = new StreamWriter(fs))
-                        using (StreamReader fReader = new StreamReader(tmpFile))
-                            while (!fReader.EndOfStream)
-                            {
-                                line = fReader.ReadLine();
-                                getCountWords(fWriter, line, DEFAULT_END_SYMBOL);
-                            }
+                    int.TryParse(array[j], out num);
+                    row.Add(num);
                 }
-
-                File.Delete(tmpFile);
-            }
-            catch (Exception e)
-            {
-                myFiles.printError(e.Message);
+                catch { 
+                }
             }
 
+            matrix.Add(row);
 
+
+            return 0;
+        }
+
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_2_TASK_6_2);
+
+            MyFiles myFiles = new MyFiles();
+            myFiles.getText(MyFiles.FILE_PART_2_TASK_6_2, 
+                new Func<StreamWriter, string, string, int>(readMatrix), "",
+                new Func<bool>(correctingMatrix));
         }
     }
 
@@ -789,6 +857,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 Console.WriteLine("\n4) " + TasksInfo.PART_1_TASK_16_2);
 
                 Console.WriteLine("\n5) " + TasksInfo.PART_2_TASK_6_1);
+                Console.WriteLine("\n6) " + TasksInfo.PART_2_TASK_6_2);
 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -821,6 +890,11 @@ namespace larionov_lab___5_files_and_strings_part1
                 else if (selectStr == "5")
                 {
                     Part_2_Task_6_1 task = new Part_2_Task_6_1();
+                    task.init();
+                }
+                else if (selectStr == "6")
+                {
+                    Part_2_Task_6_2 task = new Part_2_Task_6_2();
                     task.init();
                 }
                 else if (selectStr == "s") {
