@@ -291,7 +291,7 @@ namespace larionov_lab___5_files_and_strings_part1
             {
                 using (StreamWriter fWrite = new StreamWriter(pathOut, false, Encoding.UTF8))
                     for(int i = 0; i < size; i++)
-                        fWrite.Write(array[i]);
+                        fWrite.Write(array[i] + "\n");
 
                 return true;
             } 
@@ -1019,12 +1019,12 @@ namespace larionov_lab___5_files_and_strings_part1
             if (myFiles.writeStrings(MyFiles.FILE_PART_2_TASK_6_2, matrixToStr(size)))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Измененная матрица успешно записана в файл!");
+                Console.WriteLine("\nИзмененная матрица успешно записана в файл!");
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Ошибка! Измененная матрица не записана в файл!");
+                Console.WriteLine("\nОшибка! Измененная матрица не записана в файл!");
             }
         }
     }
