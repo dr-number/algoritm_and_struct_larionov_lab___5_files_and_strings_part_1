@@ -1083,7 +1083,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 if (item == "")
                     continue;
 
-                word = item + ".";
+                word = item.Trim() + ".";
 
                 if (isPalindrom(item))
                 {
