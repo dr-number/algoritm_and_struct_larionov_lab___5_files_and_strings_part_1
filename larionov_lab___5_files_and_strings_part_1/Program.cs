@@ -1154,7 +1154,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_16_2
     {
-        List<string> gpa = new List<string>();
+        private int count = 0;
         const string TITLE_GPA = "Cредний балл";
 
         private string[] MySplint(string str)
@@ -1162,22 +1162,30 @@ namespace larionov_lab___5_files_and_strings_part1
             return str.Replace("\t", "").Replace(" ", "").Split("|");
         }
 
+        private double getGPA(string str)
+        {
+            double result = 4.56;
+            return Math.Round(result, 2);
+        }
+
         private int scanTable(StreamWriter file, string str, string endSymbols)
         {
 
-            if (gpa.Count == 0)
+            if (count == 0)
             {
-                //Обработка шапки
                 Console.ForegroundColor = ConsoleColor.Yellow;
-
-                str += " " + TITLE_GPA;
-                Console.Write(str);
-
-                file.WriteLine(str + " " + TITLE_GPA + " |\n");
-
-                gpa.Add(TITLE_GPA);
-                return 1;
+                str += " " + TITLE_GPA + " |";
             }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                str += " " + getGPA(str) + " |";
+            }
+
+            Console.Write(str + "\n");
+
+            file.WriteLine(str);
+            ++count;
 
             return 1;
         }
