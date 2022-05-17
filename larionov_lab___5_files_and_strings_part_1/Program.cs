@@ -519,9 +519,9 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ResetColor();
         }
 
-        public void printFinalInformation(bool isError, string textOk = WRITE_OK, string textError = WRITE_ERROR)
+        public void printFinalInformation(bool isOk, string textOk = WRITE_OK, string textError = WRITE_ERROR)
         {
-            if (!isError)
+            if (!isOk)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(textOk);
@@ -1101,7 +1101,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
             return writeStr;
         }
-            public void init()
+
+        public void init()
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_16_1);
 
@@ -1162,7 +1163,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 Console.WriteLine("\n6) " + TasksInfo.PART_2_TASK_6_2);
 
 
-                Console.WriteLine("\n7) " + TasksInfo.PART_2_TASK_16_1);
+                Console.WriteLine("\n8) " + TasksInfo.PART_2_TASK_16_1);
 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
