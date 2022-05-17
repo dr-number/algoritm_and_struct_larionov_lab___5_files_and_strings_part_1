@@ -589,7 +589,7 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         public const int MIN = -1000;
         public const int MAX = 1000;
-        public const int PERIOD_PRINT = 20;
+        public const int PERIOD_PRINT = 25;
         public const int COUNT_NUMBERS = 1024;
 
         public bool createBin(string originalFile)
@@ -606,6 +606,10 @@ namespace larionov_lab___5_files_and_strings_part1
             bool isOk = myFiles.createRandomBinFile(originalFile, COUNT_NUMBERS, MIN, MAX, PERIOD_PRINT);
 
             myPrint.printFinalInformation(isOk);
+
+            if(isOk)
+                myFiles.printFileInfo(originalFile);
+
             return isOk;
         }
     }
