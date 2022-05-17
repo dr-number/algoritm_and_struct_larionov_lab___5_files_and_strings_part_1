@@ -272,14 +272,17 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             if (!isOk)
-            {
-                //"Восстанавливаем" файл и исходными данными
-                File.Move(tmpFile, tmpFile + EXP_TMP);
-                File.Delete(path);
-                File.Move(tmpFile + EXP_TMP, path);
-            }
+                recoverOriginalFile(path, tmpFile);
+   
             return isOk;
 
+        }
+
+        public void recoverOriginalFile(string pathOriginal, string pathTmp)
+        {
+            File.Move(pathTmp, pathTmp + EXP_TMP);
+            File.Delete(pathOriginal);
+            File.Move(pathTmp + EXP_TMP, pathOriginal);
         }
 
         public bool writeStrings(string pathOut, string strings)
@@ -440,6 +443,9 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         public const string INITIAL_DATA = "Исходные данные: ";
         public const string FINAL_RESULT = "Конечный результат: ";
+
+        public const string WRITE_OK = "\nТребуемые данные успешно записаны в файл!";
+        public const string WRITE_ERROR = "\nОшибка! Данные не записаны в файл!";
         public void printString(string title, string data, string subData = "")
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -511,6 +517,19 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ReadLine();
 
             Console.ResetColor();
+        }
+
+        public void printFinalInformation(bool isError, string textOk = WRITE_OK, string textError = WRITE_ERROR)
+        {
+            if (!isError)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(textOk);
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(textError);
         }
     }
 
@@ -963,8 +982,11 @@ namespace larionov_lab___5_files_and_strings_part1
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_6_2);
 
+            const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_6_2;
+            const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
+
             MyFiles myFiles = new MyFiles();
-            bool isResult = myFiles.getText(MyFiles.FILE_PART_2_TASK_6_2, new Func<StreamWriter, string, string, int>(readMatrix), "");
+            bool isResult = myFiles.getText(ORIGINAL_FILE, new Func<StreamWriter, string, string, int>(readMatrix), "");
 
             if (!isResult)
             {
@@ -1011,17 +1033,11 @@ namespace larionov_lab___5_files_and_strings_part1
 
             string write = matrixToStr(size);
 
-            if (myFiles.writeStrings(MyFiles.FILE_PART_2_TASK_6_2, matrixToStr(size)))
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\nИзмененная матрица успешно записана в файл!");
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nОшибка! Измененная матрица не записана в файл!");
-            }
+            bool isOk = myFiles.writeStrings(MyFiles.FILE_PART_2_TASK_6_2, matrixToStr(size));
+            myPrint.printFinalInformation(isOk);
 
+            if(!isOk)
+                myFiles.recoverOriginalFile(ORIGINAL_FILE, TMP_FILE);
         }
     }
 
@@ -1067,12 +1083,33 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 return 1;
         }
+
+        string arrayToWrite()
+        {
+            int count = result.Count;
+            string item, writeStr = "";
+
+            MyPrint myPrint = new MyPrint();
+
+            for (int i = 0; i < count; ++i)
+            {
+                item = result[i] + ".\n";
+                myPrint.printString((i + 1) + ")", item);
+
+                writeStr += item;
+            }
+
+            return writeStr;
+        }
             public void init()
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_16_1);
 
+            const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_16_1;
+            const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
+
             MyFiles myFiles = new MyFiles();
-            bool isResult = myFiles.getText(MyFiles.FILE_PART_2_TASK_16_1, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
+            bool isResult = myFiles.getText(ORIGINAL_FILE, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
 
             if (!isResult)
             {
@@ -1092,26 +1129,11 @@ namespace larionov_lab___5_files_and_strings_part1
             myPrint.printString("Количество фраз-полинтропов:", count.ToString(), "\n");
 
 
-            string item = "", writeStr = "";
+            bool isOk = myFiles.writeStrings(ORIGINAL_FILE, arrayToWrite());
+            myPrint.printFinalInformation(isOk);
 
-            for (int i = 0; i < count; ++i)
-            {
-                item = result[i] + ".\n";
-                myPrint.printString((i + 1) + ")", item);
-
-                writeStr += item;
-            }
-
-            if (myFiles.writeStrings(MyFiles.FILE_PART_2_TASK_16_1, writeStr))
-            {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\nФразы-полинтропы успешно записаны в файл!");
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\nОшибка! Фразы-полинтропы не записаны в файл!");
-            }
+            if (!isOk)
+                myFiles.recoverOriginalFile(ORIGINAL_FILE, TMP_FILE);
 
         }
     }
