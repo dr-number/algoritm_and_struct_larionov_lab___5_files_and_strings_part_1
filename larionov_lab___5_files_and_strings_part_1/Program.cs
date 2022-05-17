@@ -1154,8 +1154,29 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_16_2
     {
+        List<string> GPA = new List<string>();
+        private void printHeader(StreamWriter file, string str)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            const string TITLE_GPA = " Cредний балл |";
+
+            str += TITLE_GPA;
+            string[] array = str.Replace(" |", "").Split(" | ");
+
+            foreach (string item in array)
+                Console.Write($" {item} | \t");
+
+            file.WriteLine(TITLE_GPA + "\n");
+            GPA.Add(TITLE_GPA);
+
+        }
         private int scanTable(StreamWriter file, string str, string endSymbols)
         {
+            if (GPA.Count == 0)
+            {
+                printHeader(file, str);
+                return 1;
+            }
 
             return 1;
         }
