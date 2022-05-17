@@ -219,7 +219,7 @@ namespace larionov_lab___5_files_and_strings_part1
             return Console.ReadLine()?.ToLower() != "n";
         }
 
-        public bool getText(string defaultReadFile, Delegate method, string param, Delegate methodEnd = null) //params object[] parameters)
+        public bool getText(string defaultReadFile, Delegate method, string param) //params object[] parameters)
         {
 
             MyFiles myFiles = new MyFiles();
@@ -232,6 +232,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
             try
             {
+                bool isOk = true;
+
                 string tmpFile = path + MyFiles.EXP_TMP;
                 File.Move(path, tmpFile);
 
@@ -243,16 +245,25 @@ namespace larionov_lab___5_files_and_strings_part1
                             while (!fReader.EndOfStream)
                             {
                                 line = fReader.ReadLine();
-                                method.DynamicInvoke(fWriter, line, param);
+
+                                if ((int)method.DynamicInvoke(fWriter, line, param) == -1)
+                                {
+                                    isOk = false;
+                                    break;
+                                }
+
                             }
 
                 }
 
-                if (methodEnd != null)
-                    methodEnd.DynamicInvoke();
-
-               File.Delete(tmpFile);
-                return true;
+                if (isOk)
+                {
+                    File.Delete(tmpFile);
+                    return true;
+                }
+               
+                //File.Move(tmpFile, path);
+                return false;
             }
             catch (Exception e)
             {
@@ -413,6 +424,53 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.Write("\n");
             Console.ResetColor();
         }
+
+        private void printStringArray(List<List<int>> array, int m)
+        {
+
+            if (array.Count == 0)
+                return;
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("[{0}]\t ", m);
+
+            int countCol = array.Count;
+
+            for (int j = 0; j < countCol; ++j)
+            {
+                if(j == m)
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                else
+                    Console.ForegroundColor = ConsoleColor.White;
+
+                Console.Write("{0}\t", array[m][j]);
+            }
+
+            Console.Write("\n");
+        }
+        public void printArray(List<List<int>> array)
+        {
+            int countRow = array.Count;
+
+            if (countRow == 0)
+                return;
+
+            int countCol = array.Count;
+
+            printString("Строк:", countRow.ToString());
+            printString("Столбцов:", countCol.ToString(), "\n");
+
+            string header = " \t";
+
+            for (int j = 0; j < countCol; j++)
+                header += $"[{j}]\t";
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine(header);
+
+            for (int i = 0; i < countRow; i++)
+                printStringArray(array, i);
+        }
         public void MyPause()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -422,6 +480,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ResetColor();
         }
     }
+
 
     public class Part_1_Task_6_1
     {
@@ -782,28 +841,40 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_6_2
     {
+
         private const string DEFAULT_SEPARATOR = " ";
         private string separator = DEFAULT_SEPARATOR;
 
-        List<List<int>> matrix = new List<List<int>>();
-   
-        private bool isCorrectMatrix()
-        {
-            return matrix.Count > 0;
-        }
+        private static MyMatrixData matrix;
 
-        private bool correctingMatrix()
+        public struct MyMatrixData
         {
-            //сброс матрицы после завершния
-            Console.WriteLine("Матрица прочитана!");
-            return true;
-        }
+            public List<List<int>> data;
+            public int size;
+            public bool isCorrect;
+            public void clear()
+            {
+                data = null;
+                size = 0;
+                isCorrect = false;
+            }
+        };
 
         private int readMatrix(StreamWriter file, string str, string endSymbols)
         {
             string[] array = str.Split(separator);
-
             int countCol = array.Length;
+
+            if (matrix.data == null)
+            {
+                matrix.data = new List<List<int>>();
+                matrix.size = countCol;
+            }
+            else if (matrix.size != countCol)
+            {
+                matrix.isCorrect = false;
+                return -1;
+            }
 
             List<int> row = new List<int>();
 
@@ -815,14 +886,33 @@ namespace larionov_lab___5_files_and_strings_part1
                     int.TryParse(array[j], out num);
                     row.Add(num);
                 }
-                catch { 
+                catch {
+                    matrix.isCorrect = false;
+                    return -1;
                 }
             }
 
-            matrix.Add(row);
+            matrix.data.Add(row);
 
+            matrix.isCorrect = true;
+            return 1;
+        }
 
-            return 0;
+        private void changeMainDiagonal(int size, int lastElement)
+        {
+            for (int i = 0; i < size; ++i)
+                for (int j = 0; j < size; ++j)
+                    if (i == j)
+                    {
+                        matrix.data[i][j] = lastElement;
+                        break;
+                    }
+        }
+
+        private void writeMatrix(string pathOut)
+        {
+            using (StreamWriter fReader = new StreamWriter(pathOut))
+         
         }
 
         public void init()
@@ -830,9 +920,52 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine(TasksInfo.PART_2_TASK_6_2);
 
             MyFiles myFiles = new MyFiles();
-            myFiles.getText(MyFiles.FILE_PART_2_TASK_6_2, 
-                new Func<StreamWriter, string, string, int>(readMatrix), "",
-                new Func<bool>(correctingMatrix));
+            bool isResult = myFiles.getText(MyFiles.FILE_PART_2_TASK_6_2, new Func<StreamWriter, string, string, int>(readMatrix), "");
+
+            if (!isResult)
+            {
+                myFiles.printError("Ошибка чтения матрицы либо матрица не корректна!");
+                return;
+            }
+
+            if (matrix.data == null)
+            {
+                myFiles.printError("Матрица не корректна!");
+                return;
+            }
+
+            if (matrix.isCorrect == null || !matrix.isCorrect)
+            {
+                myFiles.printError("Матрица не корректна!");
+                matrix.clear();
+                return;
+            }
+
+            int size = matrix.data.Count;
+
+            if (size == 0)
+            {
+                myFiles.printError("Матрица пуста!");
+                matrix.clear();
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\nИсходная матрица:");
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printArray(matrix.data);
+
+            int lastElement = matrix.data[size - 1][size - 1];
+
+            myPrint.printString("\nПоследний элемент матрицы:", lastElement.ToString());
+
+            changeMainDiagonal(size, lastElement);
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("\nизмененная матрица:");
+
+            myPrint.printArray(matrix.data);
         }
     }
 
