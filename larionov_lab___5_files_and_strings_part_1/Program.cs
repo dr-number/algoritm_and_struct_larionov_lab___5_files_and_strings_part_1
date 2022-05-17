@@ -582,8 +582,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
     class Generation
     {
-        public const int MIN = -1000;
-        public const int MAX = 1000;
+        public const int MIN = -100;
+        public const int MAX = 100;
         public const int PERIOD_PRINT = 25;
         public const int COUNT_NUMBERS = 1024;
 
@@ -1128,6 +1128,13 @@ namespace larionov_lab___5_files_and_strings_part1
             public int max;
             public bool isCorrect;
         }
+
+        private struct CountMinMax
+        {
+            public int countMin;
+            public int countMax;
+            public bool isCorrect;
+        }
        
         private MinMax scanBin(string pathFile)
         {
@@ -1170,12 +1177,17 @@ namespace larionov_lab___5_files_and_strings_part1
             return result;
         }
 
-        private bool printMinMaxFormBin(string pathFile, MinMax interval, int periodStr)
+        private CountMinMax printMinMaxFormBin(string pathFile, MinMax interval, int periodStr)
         {
-            if(!interval.isCorrect)
-                return false;
+            CountMinMax result;
+            result.countMin = 0;
+            result.countMax = 0;
 
-            MinMax result;
+            if (!interval.isCorrect)
+            {
+                result.isCorrect = false;
+                return result;
+            }
 
             try
             {
@@ -1183,7 +1195,10 @@ namespace larionov_lab___5_files_and_strings_part1
                 {
                     int item;
                     int min = interval.min;
+                    int countMin = 0;
+
                     int max = interval.max;
+                    int countMax = 0;
 
                     int i = 0;
 
@@ -1192,9 +1207,15 @@ namespace larionov_lab___5_files_and_strings_part1
                         item = bin.ReadInt32();
 
                         if (item == min)
+                        {
                             Console.ForegroundColor = ConsoleColor.Red;
+                            ++countMin;
+                        }
                         else if (item == max)
+                        {
                             Console.ForegroundColor = ConsoleColor.Green;
+                            ++countMax;
+                        }
                         else
                             Console.ForegroundColor = ConsoleColor.White;
 
@@ -1206,17 +1227,21 @@ namespace larionov_lab___5_files_and_strings_part1
                             Console.Write("\n");
                     }
 
-                    return true;
+                    result.countMin = countMin;
+                    result.countMax = countMax;
+                    result.isCorrect = true;
+
+                    return result;
                 }
             }
             catch (Exception e)
             {
                 MyFiles myFiles = new MyFiles();
                 myFiles.printError(e.Message);
-
             }
 
-            return false;
+            result.isCorrect = false;
+            return result;
         }
         public void init()
         {
@@ -1232,26 +1257,33 @@ namespace larionov_lab___5_files_and_strings_part1
 
             MinMax interval = scanBin(ORIGINAL_FILE);
 
+            MyFiles myFiles = new MyFiles();
+
             if (!interval.isCorrect)
             {
-                MyFiles myFiles = new MyFiles();
+                myFiles.printError("Ошибка сканирования бинарного файла!");
+                return;
+            }
+
+            CountMinMax count = printMinMaxFormBin(ORIGINAL_FILE, interval, Generation.PERIOD_PRINT);
+
+            if (!count.isCorrect)
+            {
                 myFiles.printError("Ошибка сканирования бинарного файла!");
                 return;
             }
 
             Console.ResetColor();
 
-            Console.Write("\nМинимальный элемент бинарного файла: ");
+            Console.Write("\n\nМинимальный элемент бинарного файла: ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(interval.min);
+            Console.WriteLine(interval.min + " [" + count.countMin + " элемент(ов)]");
 
             Console.ResetColor();
 
             Console.Write("Максимальный элемент бинарного файла: ");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(interval.max);
-
-            printMinMaxFormBin(ORIGINAL_FILE, interval, Generation.PERIOD_PRINT);
+            Console.WriteLine(interval.max + " [" + count.countMax + " элемент(ов)]");
 
         }
     }
