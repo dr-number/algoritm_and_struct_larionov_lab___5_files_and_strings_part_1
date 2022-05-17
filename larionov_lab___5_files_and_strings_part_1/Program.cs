@@ -1154,27 +1154,31 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_16_2
     {
-        List<string> GPA = new List<string>();
-        private void printHeader(StreamWriter file, string str)
+        List<string> gpa = new List<string>();
+        const string TITLE_GPA = "Cредний балл";
+
+        private string[] MySplint(string str)
+        {
+            return str.Replace("\t", "").Replace(" ", "").Split("|");
+        }
+        private void printHeader(StreamWriter file, string[] str)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            const string TITLE_GPA = " Cредний балл |";
-
-            str += TITLE_GPA;
-            string[] array = str.Replace(" |", "").Split(" | ");
-
-            foreach (string item in array)
+            
+            foreach (string item in str)
                 Console.Write($" {item} | \t");
 
-            file.WriteLine(TITLE_GPA + "\n");
-            GPA.Add(TITLE_GPA);
+            file.WriteLine(" " + TITLE_GPA + " |\n");
+            gpa.Add(TITLE_GPA);
 
         }
         private int scanTable(StreamWriter file, string str, string endSymbols)
         {
-            if (GPA.Count == 0)
+
+            if (gpa.Count == 0)
             {
-                printHeader(file, str);
+                str += TITLE_GPA;
+                printHeader(file, MySplint(str));
                 return 1;
             }
 
