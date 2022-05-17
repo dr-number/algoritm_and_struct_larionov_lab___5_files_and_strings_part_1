@@ -222,19 +222,18 @@ namespace larionov_lab___5_files_and_strings_part1
         public bool getText(string defaultReadFile, Delegate method, string param) //params object[] parameters)
         {
 
-            MyFiles myFiles = new MyFiles();
-            string path = myFiles.setReadFile(defaultReadFile);
+            string path = setReadFile(defaultReadFile);
 
             if (path == "")
                 return false;
 
-            string line = "";
+            bool isOk = true;
+            string line = "", tmpFile = "";
 
             try
             {
-                bool isOk = true;
-
-                string tmpFile = path + MyFiles.EXP_TMP;
+  
+                tmpFile = path + EXP_TMP;
                 File.Move(path, tmpFile);
 
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
@@ -262,12 +261,43 @@ namespace larionov_lab___5_files_and_strings_part1
                     return true;
                 }
                
-                //File.Move(tmpFile, path);
-                return false;
             }
             catch (Exception e)
             {
-                myFiles.printError(e.Message);
+                printError(e.Message);
+                isOk = false;
+            }
+
+            if (!isOk)
+            {
+                //"Восстанавливаем" файл и исходными данными
+                File.Move(tmpFile, tmpFile + EXP_TMP);
+                File.Delete(path);
+                File.Move(tmpFile + EXP_TMP, path);
+            }
+            return isOk;
+
+        }
+
+        public bool writeStrings(string pathOut, string strings)
+        {
+            string[] array = strings.Split("\n");
+            int size = array.Length;
+
+            if(size == 0)
+                return false;
+
+            try
+            {
+                using (StreamWriter fWrite = new StreamWriter(pathOut, false, Encoding.UTF8))
+                    for(int i = 0; i < size; i++)
+                        fWrite.Write(array[i]);
+
+                return true;
+            } 
+            catch (Exception e)
+            {
+                printError(e.Message);
                 return false;
             }
         }
@@ -909,11 +939,28 @@ namespace larionov_lab___5_files_and_strings_part1
                     }
         }
 
-        private void writeMatrix(string pathOut)
+        private string matrixToStr(int size)
         {
-            using (StreamWriter fReader = new StreamWriter(pathOut))
-         
+            String result = "";
+
+            for(int i = 0; i < size; ++i)
+            {
+                for (int j = 0; j < size; ++j)
+                {
+                    result += matrix.data[i][j];
+
+                    if(j != size - 1)
+                        result += separator;
+                }
+
+                if (i != size - 1)
+                    result += "\n";
+            }
+
+
+            return result;
         }
+    
 
         public void init()
         {
@@ -966,6 +1013,8 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine("\nизмененная матрица:");
 
             myPrint.printArray(matrix.data);
+
+            string write = matrixToStr(size)
         }
     }
 
