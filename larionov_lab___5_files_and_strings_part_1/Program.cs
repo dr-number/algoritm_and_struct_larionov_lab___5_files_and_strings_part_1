@@ -1161,24 +1161,21 @@ namespace larionov_lab___5_files_and_strings_part1
         {
             return str.Replace("\t", "").Replace(" ", "").Split("|");
         }
-        private void printHeader(StreamWriter file, string[] str)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            
-            foreach (string item in str)
-                Console.Write($" {item} | \t");
 
-            file.WriteLine(" " + TITLE_GPA + " |\n");
-            gpa.Add(TITLE_GPA);
-
-        }
         private int scanTable(StreamWriter file, string str, string endSymbols)
         {
 
             if (gpa.Count == 0)
             {
-                str += TITLE_GPA;
-                printHeader(file, MySplint(str));
+                //Обработка шапки
+                Console.ForegroundColor = ConsoleColor.Yellow;
+
+                str += " " + TITLE_GPA;
+                Console.Write(str);
+
+                file.WriteLine(str + " " + TITLE_GPA + " |\n");
+
+                gpa.Add(TITLE_GPA);
                 return 1;
             }
 
