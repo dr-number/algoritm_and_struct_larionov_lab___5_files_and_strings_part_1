@@ -1060,9 +1060,12 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine(str);
 
             string[] array = str.Split(".");
-            int count = array.Length;
 
-            return 1;
+            foreach (string item in array)
+                if(isPalindrom(str))
+                    result.Add(item + ".");
+
+                return 1;
         }
             public void init()
         {
@@ -1070,6 +1073,46 @@ namespace larionov_lab___5_files_and_strings_part1
 
             MyFiles myFiles = new MyFiles();
             bool isResult = myFiles.getText(MyFiles.FILE_PART_2_TASK_16_1, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
+
+            if (!isResult)
+            {
+                myFiles.printError("Ошибка чтения текстового файла!");
+                return;
+            }
+
+            int count = result.Count;
+
+            if(count == 0)
+            {
+                myFiles.printError("Фраз-палиндромов не обнаружено!");
+                return;
+            }
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("Количество фраз-полинтропов:", count.ToString(), "\n");
+
+
+            string item = "", writeStr = "";
+
+            for (int i = 0; i < count; ++i)
+            {
+                item = result[i] + ".\n";
+                myPrint.printString((i + 1) + ")", item);
+
+                writeStr += item;
+            }
+
+            if (myFiles.writeStrings(MyFiles.FILE_PART_2_TASK_16_1, writeStr))
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\nФразы-полинтропы успешно записаны в файл!");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nОшибка! Фразы-полинтропы не записаны в файл!");
+            }
+
         }
     }
 
