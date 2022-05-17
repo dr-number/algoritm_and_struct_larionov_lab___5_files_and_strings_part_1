@@ -875,19 +875,13 @@ namespace larionov_lab___5_files_and_strings_part1
         private const string DEFAULT_SEPARATOR = " ";
         private string separator = DEFAULT_SEPARATOR;
 
-        private static MyMatrixData matrix;
+        private MyMatrixData matrix;
 
         public struct MyMatrixData
         {
             public List<List<int>> data;
             public int size;
             public bool isCorrect;
-            public void clear()
-            {
-                data = null;
-                size = 0;
-                isCorrect = false;
-            }
         };
 
         private int readMatrix(StreamWriter file, string str, string endSymbols)
@@ -984,7 +978,6 @@ namespace larionov_lab___5_files_and_strings_part1
             if (matrix.isCorrect == null || !matrix.isCorrect)
             {
                 myFiles.printError("Матрица не корректна!");
-                matrix.clear();
                 return;
             }
 
@@ -993,7 +986,6 @@ namespace larionov_lab___5_files_and_strings_part1
             if (size == 0)
             {
                 myFiles.printError("Матрица пуста!");
-                matrix.clear();
                 return;
             }
 
@@ -1026,6 +1018,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nОшибка! Измененная матрица не записана в файл!");
             }
+
         }
     }
 
