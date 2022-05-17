@@ -78,10 +78,12 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public const string FILE_PART_2_TASK_6_1 = "Part_2_Task_6_1" + EXP;
         public const string FILE_PART_2_TASK_6_2 = "Part_2_Task_6_2" + EXP;
+        public const string FILE_PART_2_TASK_6_3 = "Part_2_Task_6_3" + EXP;
 
 
         public const string FILE_PART_2_TASK_16_1 = "Part_2_Task_16_1" + EXP;
         public const string FILE_PART_2_TASK_16_2 = "Part_2_Task_16_2" + EXP;
+        public const string FILE_PART_2_TASK_16_3 = "Part_2_Task_16_3" + EXP;
 
         private
         static string DIR_FILE = Environment.CurrentDirectory;
@@ -1042,6 +1044,18 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
+    public class Part_2_Task_6_3
+    {
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_2_TASK_6_3);
+
+            const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_6_3;
+            const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
+        }
+    }
+
+
 
     public class Part_2_Task_16_1
     {
@@ -1252,6 +1266,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 Console.WriteLine("\n5) " + TasksInfo.PART_2_TASK_6_1);
                 Console.WriteLine("\n6) " + TasksInfo.PART_2_TASK_6_2);
+                Console.WriteLine("\n7) " + TasksInfo.PART_2_TASK_6_3);
 
 
                 Console.WriteLine("\n8) " + TasksInfo.PART_2_TASK_16_1);
