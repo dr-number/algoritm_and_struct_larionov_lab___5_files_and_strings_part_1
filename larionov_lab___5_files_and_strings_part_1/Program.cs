@@ -86,8 +86,8 @@ namespace larionov_lab___5_files_and_strings_part1
         public const string FILE_PART_2_TASK_16_2 = "Part_2_Task_16_2" + EXP;
         public const string FILE_PART_2_TASK_16_3 = "Part_2_Task_16_3" + EXP_BIN;
 
-        private
-        static string DIR_FILE = Environment.CurrentDirectory;
+        
+        public static string DIR_FILE = Environment.CurrentDirectory;
 
         public const string MESSAGE_ERROR_PROCESSING_FILE = "Ошибка обработки файла!";
 
@@ -149,6 +149,8 @@ namespace larionov_lab___5_files_and_strings_part1
             if (fileName == "")
                 fileName = defaultReadFile;
 
+            fileName = DIR_FILE + "\\" + fileName;
+
             if (!File.Exists(fileName))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -185,7 +187,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public void printFileInfo(string fileName)
         {
-            FileInfo fileInfo = new FileInfo(fileName);
+            FileInfo fileInfo = new FileInfo(DIR_FILE + "\\" + fileName);
 
             if (!fileInfo.Exists)
                 return;
@@ -229,7 +231,7 @@ namespace larionov_lab___5_files_and_strings_part1
         public bool getText(string defaultReadFile, Delegate method, string param) //params object[] parameters)
         {
 
-            string path = setReadFile(defaultReadFile);
+            string path = setReadFile(DIR_FILE + "\\" + defaultReadFile);
 
             if (path == "")
                 return false;
@@ -331,24 +333,17 @@ namespace larionov_lab___5_files_and_strings_part1
             if (fileName == "")
                 fileName = defaultFile;
 
+            fileName = DIR_FILE + "\\" + fileName;
+
             try
             {
                 using (BinaryWriter bin = new BinaryWriter(File.Open(fileName, FileMode.Create)))
                 {
-
-                    int number;
                     Random rnd = new Random();
 
                     for (int i = 0; i < countNumbers; i++)
-                    {
-                        number = rnd.Next(min, max);
-                        bin.Write(number);
+                        bin.Write(rnd.Next(min, max));
 
-                        Console.Write(number + " ");
-
-                        if (i % periodPrint == 0)
-                            Console.Write("\n");
-                    }
                 }
 
                 return true;
@@ -605,10 +600,13 @@ namespace larionov_lab___5_files_and_strings_part1
             MyFiles myFiles = new MyFiles();
             bool isOk = myFiles.createRandomBinFile(originalFile, COUNT_NUMBERS, MIN, MAX, PERIOD_PRINT);
 
-            myPrint.printFinalInformation(isOk);
-
-            if(isOk)
+            if (isOk)
+            {
+                Console.WriteLine("\n");
                 myFiles.printFileInfo(originalFile);
+            }
+
+            myPrint.printFinalInformation(isOk);
 
             return isOk;
         }
@@ -1123,6 +1121,54 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_6_3
     {
+
+        private struct MinMax
+        {
+            public int min;
+            public int max;
+            public bool isCorrect;
+        }
+       
+        private MinMax scanBin(string pathFile)
+        {
+            MinMax result;
+
+            try
+            {
+                using (BinaryReader bin = new BinaryReader(File.Open(pathFile, FileMode.Open)))
+                {
+                    int item;
+                    int min = int.MaxValue;
+                    int max = int.MinValue;
+
+                    while (bin.BaseStream.Position != bin.BaseStream.Length)
+                    {
+                        item = bin.ReadInt32();
+
+                        if(item < min)
+                            min = item;
+
+                        if(item > max)
+                            max = item;
+                    }
+
+                    result.min = min;
+                    result.max = max;
+                    result.isCorrect = true;
+                }
+            }
+            catch (Exception e)
+            {
+                MyFiles myFiles = new MyFiles();
+                myFiles.printError(e.Message);
+
+                result.isCorrect = false;
+                result.min = 0;
+                result.max = 0;
+            }
+
+            return result;
+        }
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_6_3);
@@ -1135,7 +1181,24 @@ namespace larionov_lab___5_files_and_strings_part1
             if (!generation.createBin(ORIGINAL_FILE))
                 return;
 
-            
+            MinMax result = scanBin(ORIGINAL_FILE);
+
+            if (!result.isCorrect)
+            {
+                MyFiles myFiles = new MyFiles();
+                myFiles.printError("Ошибка сканирования бинарного файла!");
+                return;
+            }
+
+            Console.Write("Минимальный элемент бинарного файла: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(result.min);
+
+            Console.ResetColor();
+
+            Console.Write("Максимальный элемент бинарного файла: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(result.max);
 
         }
     }
