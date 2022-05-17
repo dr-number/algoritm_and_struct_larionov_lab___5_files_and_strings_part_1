@@ -68,6 +68,7 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         public const string EXP_TMP = ".tmp";
         public const string EXP = ".txt";
+        public const string EXP_BIN = ".lar";
 
         public const string FILE_PART_1_TASK_6_1 = "Part_1_Task_6_1" + EXP;
         public const string FILE_PART_1_TASK_6_2 = "Part_1_Task_6_2" + EXP;
@@ -78,12 +79,12 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public const string FILE_PART_2_TASK_6_1 = "Part_2_Task_6_1" + EXP;
         public const string FILE_PART_2_TASK_6_2 = "Part_2_Task_6_2" + EXP;
-        public const string FILE_PART_2_TASK_6_3 = "Part_2_Task_6_3" + EXP;
+        public const string FILE_PART_2_TASK_6_3 = "Part_2_Task_6_3" + EXP_BIN;
 
 
         public const string FILE_PART_2_TASK_16_1 = "Part_2_Task_16_1" + EXP;
         public const string FILE_PART_2_TASK_16_2 = "Part_2_Task_16_2" + EXP;
-        public const string FILE_PART_2_TASK_16_3 = "Part_2_Task_16_3" + EXP;
+        public const string FILE_PART_2_TASK_16_3 = "Part_2_Task_16_3" + EXP_BIN;
 
         private
         static string DIR_FILE = Environment.CurrentDirectory;
@@ -307,6 +308,54 @@ namespace larionov_lab___5_files_and_strings_part1
             catch (Exception e)
             {
                 printError(e.Message);
+                return false;
+            }
+        }
+
+        public bool createRandomBinFile(string defaultFile, int countNumbers, int min, int max)
+        {
+            string fileName = "";
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("* - если путь не будет указан программа создаст бинарный файл в директории: \n" + DIR_FILE + "\\");
+            Console.ResetColor();
+
+            Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(defaultFile);
+            Console.ResetColor();
+            Console.Write("]: ");
+
+            fileName = Console.ReadLine();
+
+            if (fileName == "")
+                fileName = defaultFile;
+
+            try
+            {
+                using (BinaryWriter bin = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+                {
+
+                    int number;
+                    Random rnd = new Random();
+
+                    for (int i = 0; i < countNumbers; i++)
+                    {
+                        number = rnd.Next(min, max);
+                        bin.Write(number);
+
+                        Console.Write(number + " ");
+
+                        if (i % 10 == 0)
+                            Console.Write("\n");
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                printError(e.Message + "\n");
                 return false;
             }
         }
@@ -1052,6 +1101,23 @@ namespace larionov_lab___5_files_and_strings_part1
 
             const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_6_3;
             const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
+
+            int COUNT_NUMBERS = 1024;
+            int MIN = -1000; 
+            int MAX = 1000;
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Исходные данные:");
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("Количество элементов:", COUNT_NUMBERS.ToString());
+            myPrint.printString("Минимальный элемент:", MIN.ToString());
+            myPrint.printString("Максимальный элемент:", MAX.ToString(), "\n");
+
+            MyFiles myFiles = new MyFiles();
+            myFiles.createRandomBinFile(ORIGINAL_FILE, COUNT_NUMBERS, MIN, MAX);
+
+
         }
     }
 
@@ -1310,7 +1376,11 @@ namespace larionov_lab___5_files_and_strings_part1
                     Part_2_Task_6_2 task = new Part_2_Task_6_2();
                     task.init();
                 }
-                //////////////////
+                else if (selectStr == "7")
+                {
+                    Part_2_Task_6_3 task = new Part_2_Task_6_3();
+                    task.init();
+                }
                 else if (selectStr == "8")
                 {
                     Part_2_Task_16_1 task = new Part_2_Task_16_1();
