@@ -1174,12 +1174,12 @@ namespace larionov_lab___5_files_and_strings_part1
             if (count == 0)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                str += " " + TITLE_GPA + " |";
+                str += "  " + TITLE_GPA + " |";
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                str += " " + getGPA(str) + " |";
+                str += " \t\t" + getGPA(str) + " |";
             }
 
             Console.Write(str + "\n");
