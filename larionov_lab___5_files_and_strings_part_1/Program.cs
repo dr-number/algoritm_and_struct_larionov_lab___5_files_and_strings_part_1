@@ -81,6 +81,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
 
         public const string FILE_PART_2_TASK_16_1 = "Part_2_Task_16_1" + EXP;
+        public const string FILE_PART_2_TASK_16_2 = "Part_2_Task_16_2" + EXP;
 
         private
         static string DIR_FILE = Environment.CurrentDirectory;
@@ -1042,9 +1043,6 @@ namespace larionov_lab___5_files_and_strings_part1
     }
 
 
-
-
-
     public class Part_2_Task_16_1
     {
         List<string> result = new List<string>();
@@ -1154,6 +1152,32 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
+    public class Part_2_Task_16_2
+    {
+        private int scanTable(StreamWriter file, string str, string endSymbols)
+        {
+
+            return 1;
+        }
+
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_2_TASK_16_2);
+
+            const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_16_2;
+            const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
+
+            MyFiles myFiles = new MyFiles();
+            bool isResult = myFiles.getText(ORIGINAL_FILE, new Func<StreamWriter, string, string, int>(scanTable), "");
+
+            if (!isResult)
+            {
+                myFiles.printError("Ошибка чтения таблицы!");
+                return;
+            }
+        }
+    }
+
     class Class1
     {
         static void Main(string[] args)
@@ -1179,6 +1203,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
 
                 Console.WriteLine("\n8) " + TasksInfo.PART_2_TASK_16_1);
+                Console.WriteLine("\n9) " + TasksInfo.PART_2_TASK_16_2);
 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -1222,6 +1247,11 @@ namespace larionov_lab___5_files_and_strings_part1
                 else if (selectStr == "8")
                 {
                     Part_2_Task_16_1 task = new Part_2_Task_16_1();
+                    task.init();
+                }
+                else if (selectStr == "9")
+                {
+                    Part_2_Task_16_2 task = new Part_2_Task_16_2();
                     task.init();
                 }
                 else if (selectStr == "s") {
