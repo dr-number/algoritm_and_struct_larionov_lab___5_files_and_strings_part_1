@@ -79,6 +79,9 @@ namespace larionov_lab___5_files_and_strings_part1
         public const string FILE_PART_2_TASK_6_1 = "Part_2_Task_6_1" + EXP;
         public const string FILE_PART_2_TASK_6_2 = "Part_2_Task_6_2" + EXP;
 
+
+        public const string FILE_PART_2_TASK_16_1 = "Part_2_Task_16_1" + EXP;
+
         private
         static string DIR_FILE = Environment.CurrentDirectory;
 
@@ -1022,6 +1025,54 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
+
+
+
+
+    public class Part_2_Task_16_1
+    {
+        List<string> result = new List<string>();
+
+        public string Filter(string str)
+        {
+            Regex reg = new Regex("[^a-zA-Z1-9']");
+            return reg.Replace(str, "");
+        }
+
+        private bool isPalindrom(string str)
+        {
+            if(str == "") 
+                return false;
+
+            str = Filter(str).ToLower();
+
+            int size = str.Length / 2;
+
+            for(int i = 0; i < size; ++i)
+                if(str[i] != str[size - 1 - i])
+                    return false;
+
+            return true;
+        }
+
+        private int scanPalindrom(StreamWriter file, string str, string endSymbols)
+        {
+            Console.WriteLine(str);
+
+            string[] array = str.Split(".");
+            int count = array.Length;
+
+            return 1;
+        }
+            public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_2_TASK_16_1);
+
+            MyFiles myFiles = new MyFiles();
+            bool isResult = myFiles.getText(MyFiles.FILE_PART_2_TASK_16_1, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
+        }
+    }
+
     class Class1
     {
         static void Main(string[] args)
@@ -1044,6 +1095,9 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 Console.WriteLine("\n5) " + TasksInfo.PART_2_TASK_6_1);
                 Console.WriteLine("\n6) " + TasksInfo.PART_2_TASK_6_2);
+
+
+                Console.WriteLine("\n7) " + TasksInfo.PART_2_TASK_16_1);
 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -1081,6 +1135,12 @@ namespace larionov_lab___5_files_and_strings_part1
                 else if (selectStr == "6")
                 {
                     Part_2_Task_6_2 task = new Part_2_Task_6_2();
+                    task.init();
+                }
+                //////////////////
+                else if (selectStr == "8")
+                {
+                    Part_2_Task_16_1 task = new Part_2_Task_16_1();
                     task.init();
                 }
                 else if (selectStr == "s") {
