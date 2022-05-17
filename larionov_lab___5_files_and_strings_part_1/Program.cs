@@ -1169,6 +1169,55 @@ namespace larionov_lab___5_files_and_strings_part1
 
             return result;
         }
+
+        private bool printMinMaxFormBin(string pathFile, MinMax interval, int periodStr)
+        {
+            if(!interval.isCorrect)
+                return false;
+
+            MinMax result;
+
+            try
+            {
+                using (BinaryReader bin = new BinaryReader(File.Open(pathFile, FileMode.Open)))
+                {
+                    int item;
+                    int min = interval.min;
+                    int max = interval.max;
+
+                    int i = 0;
+
+                    while (bin.BaseStream.Position != bin.BaseStream.Length)
+                    {
+                        item = bin.ReadInt32();
+
+                        if (item == min)
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        else if (item == max)
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        else
+                            Console.ForegroundColor = ConsoleColor.White;
+
+                        Console.Write(item + " ");
+
+                        ++i;
+
+                        if (i % periodStr == 0)
+                            Console.Write("\n");
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception e)
+            {
+                MyFiles myFiles = new MyFiles();
+                myFiles.printError(e.Message);
+
+            }
+
+            return false;
+        }
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_6_3);
@@ -1181,24 +1230,28 @@ namespace larionov_lab___5_files_and_strings_part1
             if (!generation.createBin(ORIGINAL_FILE))
                 return;
 
-            MinMax result = scanBin(ORIGINAL_FILE);
+            MinMax interval = scanBin(ORIGINAL_FILE);
 
-            if (!result.isCorrect)
+            if (!interval.isCorrect)
             {
                 MyFiles myFiles = new MyFiles();
                 myFiles.printError("Ошибка сканирования бинарного файла!");
                 return;
             }
 
-            Console.Write("Минимальный элемент бинарного файла: ");
+            Console.ResetColor();
+
+            Console.Write("\nМинимальный элемент бинарного файла: ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(result.min);
+            Console.WriteLine(interval.min);
 
             Console.ResetColor();
 
             Console.Write("Максимальный элемент бинарного файла: ");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(result.max);
+            Console.WriteLine(interval.max);
+
+            printMinMaxFormBin(ORIGINAL_FILE, interval, Generation.PERIOD_PRINT);
 
         }
     }
