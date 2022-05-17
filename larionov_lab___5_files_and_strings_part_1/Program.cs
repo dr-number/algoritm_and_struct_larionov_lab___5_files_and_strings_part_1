@@ -1051,7 +1051,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public string Filter(string str)
         {
-            Regex reg = new Regex("[a-zA-Z1-9']");
+            Regex reg = new Regex("[^a-яА-яa-zA-Z1-9]");
             return reg.Replace(str, "");
         }
 
