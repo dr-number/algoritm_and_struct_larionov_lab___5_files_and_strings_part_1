@@ -1162,9 +1162,40 @@ namespace larionov_lab___5_files_and_strings_part1
             return str.Replace("\t", "").Replace(" ", "").Split("|");
         }
 
+        public string Filter(string str)
+        {
+            Regex reg = new Regex("[^1-9|]");
+            str = reg.Replace(str, "");
+
+            if(str != "")
+                str.Remove(str.Length - 1);
+
+            return str;
+        }
+
         private double getGPA(string str)
         {
-            double result = 4.56;
+            int n5 = 0, n4 = 0, n3 = 0, n2 = 0, n1 = 0;
+
+            string[] marks = Filter(str).Split("|");
+
+            foreach (string item in marks)
+                switch (item)
+                {
+                    case "5": ++n5; break;
+                    case "4": ++n4; break;
+                    case "3": ++n3; break;
+                    case "2": ++n2; break;
+                    case "1": ++n1; break;
+                }
+
+            int divider = n5 + n4 + n3 + n2 + n1;
+
+            if(divider == 0)
+                return 0.00;
+
+            double result = (n5 * 5 + n4 * 4 + n3 * 3 + n2 * 2 + n1) / divider;
+
             return Math.Round(result, 2);
         }
 
