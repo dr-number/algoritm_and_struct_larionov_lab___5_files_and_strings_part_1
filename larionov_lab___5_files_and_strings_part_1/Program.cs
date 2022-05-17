@@ -1157,11 +1157,6 @@ namespace larionov_lab___5_files_and_strings_part1
         private int count = 0;
         const string TITLE_GPA = "Cредний балл";
 
-        private string[] MySplint(string str)
-        {
-            return str.Replace("\t", "").Replace(" ", "").Split("|");
-        }
-
         public string Filter(string str)
         {
             Regex reg = new Regex("[^1-9|]");
@@ -1194,9 +1189,8 @@ namespace larionov_lab___5_files_and_strings_part1
             if(divider == 0)
                 return 0.00;
 
-            double result = (n5 * 5 + n4 * 4 + n3 * 3 + n2 * 2 + n1) / divider;
-
-            return Math.Round(result, 2);
+            double sum = n5 * 5 + n4 * 4 + n3 * 3 + n2 * 2 + n1;
+            return Math.Round(sum / divider, 2);
         }
 
         private int scanTable(StreamWriter file, string str, string endSymbols)
@@ -1210,7 +1204,7 @@ namespace larionov_lab___5_files_and_strings_part1
             else
             {
                 Console.ForegroundColor = ConsoleColor.White;
-                str += " \t\t" + getGPA(str) + " |";
+                str += " \t\t" + getGPA(str).ToString("#.00") + " |";
             }
 
             Console.Write(str + "\n");
@@ -1231,11 +1225,8 @@ namespace larionov_lab___5_files_and_strings_part1
             MyFiles myFiles = new MyFiles();
             bool isResult = myFiles.getText(ORIGINAL_FILE, new Func<StreamWriter, string, string, int>(scanTable), "");
 
-            if (!isResult)
-            {
-                myFiles.printError("Ошибка чтения таблицы!");
-                return;
-            }
+            MyPrint myPrint = new MyPrint();
+            myPrint.printFinalInformation(isResult);
         }
     }
 
