@@ -1048,6 +1048,7 @@ namespace larionov_lab___5_files_and_strings_part1
     public class Part_2_Task_16_1
     {
         List<string> result = new List<string>();
+        int countAllPhrases = 0;
 
         public string Filter(string str)
         {
@@ -1083,6 +1084,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 if (item == "")
                     continue;
 
+                ++countAllPhrases;
                 word = item.Trim() + ".";
 
                 if (isPalindrom(item))
@@ -1137,6 +1139,9 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             MyPrint myPrint = new MyPrint();
+            myPrint.printString("\nОбщее количество фраз:", countAllPhrases.ToString());
+            myPrint.printString("Общее количество простых фраз:", (countAllPhrases - count).ToString());
+
             myPrint.printString("\nКоличество фраз-полинтропов:", count.ToString(), "\n");
 
 
