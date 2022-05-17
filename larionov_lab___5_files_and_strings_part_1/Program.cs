@@ -68,7 +68,7 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         public const string EXP_TMP = ".tmp";
         public const string EXP = ".txt";
-        public const string EXP_BIN = ".lar";
+        public const string EXP_BIN = ".lar_110z";
 
         public const string FILE_PART_1_TASK_6_1 = "Part_1_Task_6_1" + EXP;
         public const string FILE_PART_1_TASK_6_2 = "Part_1_Task_6_2" + EXP;
@@ -312,7 +312,7 @@ namespace larionov_lab___5_files_and_strings_part1
             }
         }
 
-        public bool createRandomBinFile(string defaultFile, int countNumbers, int min, int max)
+        public bool createRandomBinFile(string defaultFile, int countNumbers, int min, int max, int periodPrint)
         {
             string fileName = "";
 
@@ -346,7 +346,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
                         Console.Write(number + " ");
 
-                        if (i % 10 == 0)
+                        if (i % periodPrint == 0)
                             Console.Write("\n");
                     }
                 }
@@ -585,6 +585,30 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
+    class Generation
+    {
+        public const int MIN = -1000;
+        public const int MAX = 1000;
+        public const int PERIOD_PRINT = 20;
+        public const int COUNT_NUMBERS = 1024;
+
+        public bool createBin(string originalFile)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("Исходные данные:");
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printString("Количество элементов:", COUNT_NUMBERS.ToString());
+            myPrint.printString("Минимальный элемент:", MIN.ToString());
+            myPrint.printString("Максимальный элемент:", MAX.ToString(), "\n");
+
+            MyFiles myFiles = new MyFiles();
+            bool isOk = myFiles.createRandomBinFile(originalFile, COUNT_NUMBERS, MIN, MAX, PERIOD_PRINT);
+
+            myPrint.printFinalInformation(isOk);
+            return isOk;
+        }
+    }
 
     public class Part_1_Task_6_1
     {
@@ -1102,21 +1126,12 @@ namespace larionov_lab___5_files_and_strings_part1
             const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_6_3;
             const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
 
-            int COUNT_NUMBERS = 1024;
-            int MIN = -1000; 
-            int MAX = 1000;
+            Generation generation = new Generation();
 
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Исходные данные:");
+            if (!generation.createBin(ORIGINAL_FILE))
+                return;
 
-            MyPrint myPrint = new MyPrint();
-            myPrint.printString("Количество элементов:", COUNT_NUMBERS.ToString());
-            myPrint.printString("Минимальный элемент:", MIN.ToString());
-            myPrint.printString("Максимальный элемент:", MAX.ToString(), "\n");
-
-            MyFiles myFiles = new MyFiles();
-            myFiles.createRandomBinFile(ORIGINAL_FILE, COUNT_NUMBERS, MIN, MAX);
-
+            
 
         }
     }
