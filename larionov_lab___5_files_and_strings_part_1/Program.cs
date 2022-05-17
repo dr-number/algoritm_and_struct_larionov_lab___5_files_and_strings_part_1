@@ -202,7 +202,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.Write("Размер: ");
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(fileInfo.Length + " байт\n");
+            Console.Write(fileInfo.Length + " байт\n\n");
 
             Console.ResetColor();
         }
@@ -521,7 +521,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public void printFinalInformation(bool isOk, string textOk = WRITE_OK, string textError = WRITE_ERROR)
         {
-            if (!isOk)
+            if (isOk)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(textOk);
@@ -1051,20 +1051,21 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public string Filter(string str)
         {
-            Regex reg = new Regex("[^a-zA-Z1-9']");
+            Regex reg = new Regex("[a-zA-Z1-9']");
             return reg.Replace(str, "");
         }
 
         private bool isPalindrom(string str)
         {
-            if(str == "") 
-                return false;
-
             str = Filter(str).ToLower();
 
-            int size = str.Length / 2;
+            if (str == "")
+                return false;
 
-            for(int i = 0; i < size; ++i)
+            int size = str.Length;
+            int half = size / 2;
+
+            for(int i = 0; i < half; ++i)
                 if(str[i] != str[size - 1 - i])
                     return false;
 
@@ -1073,32 +1074,41 @@ namespace larionov_lab___5_files_and_strings_part1
 
         private int scanPalindrom(StreamWriter file, string str, string endSymbols)
         {
-            Console.WriteLine(str);
-
+       
             string[] array = str.Split(".");
+            string word;
 
             foreach (string item in array)
-                if(isPalindrom(str))
-                    result.Add(item + ".");
+            {
+                if (item == "")
+                    continue;
 
-                return 1;
+                word = item + ".";
+
+                if (isPalindrom(item))
+                {
+                    result.Add(word);
+
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine(word);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine(word);
+                }
+            }
+
+            return 1;
         }
 
         string arrayToWrite()
         {
-            int count = result.Count;
-            string item, writeStr = "";
+            string writeStr = "";
 
-            MyPrint myPrint = new MyPrint();
-
-            for (int i = 0; i < count; ++i)
-            {
-                item = result[i] + ".\n";
-                myPrint.printString((i + 1) + ")", item);
-
-                writeStr += item;
-            }
-
+            foreach (string item in result)
+                writeStr += item + "\n";
+            
             return writeStr;
         }
 
@@ -1127,7 +1137,7 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printString("Количество фраз-полинтропов:", count.ToString(), "\n");
+            myPrint.printString("\nКоличество фраз-полинтропов:", count.ToString(), "\n");
 
 
             bool isOk = myFiles.writeStrings(ORIGINAL_FILE, arrayToWrite());
