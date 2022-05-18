@@ -340,10 +340,10 @@ namespace larionov_lab___5_files_and_strings_part1
             {
                 using (BinaryWriter bin = new BinaryWriter(File.Open(fileName, FileMode.Create)))
                 {
-                    Random rnd = new Random();
+                    Random random = new Random();
 
                     for (int i = 0; i < countNumbers; i++)
-                        bin.Write(rnd.Next(min, max));
+                        bin.Write(random.Next(min, max));
                 }
 
                 return fileName;
@@ -639,11 +639,12 @@ namespace larionov_lab___5_files_and_strings_part1
             if (!myQuestion.isQuestion(MyQuestion.QUESTION_CREATE_RANDOM_NUMBER_BIN))
                 return myFiles.setReadFile(defaultReadFile);
             
-
+            Random random = new Random();
             MyInput myInput = new MyInput();
+
             int count = myInput.inputNumber($"Введите колличество элементов в файле [по умолчанию {DEFAULT_COUNT_NUMBERS}]: ", MIN_COUNT_NUMBERS, MAX_COUNT_NUMBERS, DEFAULT_COUNT_NUMBERS);
-            int min = myInput.inputNumber($"Минимальный элемент (для случайной генерации) [по умолчанию {DEFAULT_MIN}]: ", 0, MIN, DEFAULT_MIN);
-            int max = myInput.inputNumber($"Максимальный элемент (для случайной генерации) [по умолчанию {DEFAULT_MAX}]: ", 0, MAX, DEFAULT_MAX);
+            int min = myInput.inputNumber($"Минимальный элемент (для случайной генерации) [по умолчанию случайная генерация]: ", 0, MIN, random.Next(MIN, 0));
+            int max = myInput.inputNumber($"Максимальный элемент (для случайной генерации) [по умолчанию случайная генерация]: ", 0, MAX, random.Next(0, MAX));
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\nИсходные данные:");
