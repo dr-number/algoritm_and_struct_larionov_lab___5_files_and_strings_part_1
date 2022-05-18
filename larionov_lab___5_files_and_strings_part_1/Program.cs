@@ -689,7 +689,7 @@ namespace larionov_lab___5_files_and_strings_part1
         public const int PERIOD_PRINT = 25;
 
         public const int DEFAULT_COUNT_NUMBERS = 256;
-        public const int MIN_COUNT_NUMBERS = 20;
+        public const int MIN_COUNT_NUMBERS = 10;
         public const int MAX_COUNT_NUMBERS = 1024 * 6;
 
         public string createBin(string defaultReadFile)
