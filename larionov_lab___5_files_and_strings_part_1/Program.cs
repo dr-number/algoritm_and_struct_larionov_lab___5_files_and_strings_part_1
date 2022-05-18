@@ -188,7 +188,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public void printFileInfo(string fileName)
         {
-            FileInfo fileInfo = new FileInfo(DIR_FILE + "\\" + fileName);
+            FileInfo fileInfo = new FileInfo(fileName);
 
             if (!fileInfo.Exists)
                 return;
@@ -344,7 +344,6 @@ namespace larionov_lab___5_files_and_strings_part1
 
                     for (int i = 0; i < countNumbers; i++)
                         bin.Write(rnd.Next(min, max));
-
                 }
 
                 return fileName;
@@ -638,41 +637,23 @@ namespace larionov_lab___5_files_and_strings_part1
             MyQuestion myQuestion = new MyQuestion();
 
             if (!myQuestion.isQuestion(MyQuestion.QUESTION_CREATE_RANDOM_NUMBER_BIN))
-            {
-                string file = myFiles.setReadFile(defaultReadFile);
-
-                if(file != "")
-                    myFiles.printFileInfo(file);
-
-                return file;
-            }
+                return myFiles.setReadFile(defaultReadFile);
+            
 
             MyInput myInput = new MyInput();
             int count = myInput.inputNumber($"Введите колличество элементов в файле [по умолчанию {DEFAULT_COUNT_NUMBERS}]: ", MIN_COUNT_NUMBERS, MAX_COUNT_NUMBERS, DEFAULT_COUNT_NUMBERS);
-            int min = myInput.inputNumber($"Минимальный элемент [по умолчанию {DEFAULT_MIN}]: ", 0, MIN, DEFAULT_MIN);
-            int max = myInput.inputNumber($"Максимальный элемент [по умолчанию {DEFAULT_MAX}]: ", 0, MAX, DEFAULT_MAX);
+            int min = myInput.inputNumber($"Минимальный элемент (для случайной генерации) [по умолчанию {DEFAULT_MIN}]: ", 0, MIN, DEFAULT_MIN);
+            int max = myInput.inputNumber($"Максимальный элемент (для случайной генерации) [по умолчанию {DEFAULT_MAX}]: ", 0, MAX, DEFAULT_MAX);
 
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine("Исходные данные:");
+            Console.WriteLine("\nИсходные данные:");
 
             MyPrint myPrint = new MyPrint();
             myPrint.printString("Количество элементов:", count.ToString());
             myPrint.printString("Минимальный элемент:", min.ToString());
             myPrint.printString("Максимальный элемент:", max.ToString(), "\n");
 
-            string originalFile = myFiles.createRandomBinFile(defaultReadFile, count, min, max, PERIOD_PRINT);
-
-            bool isOk = originalFile != "";
-
-            if (isOk)
-            {
-                Console.WriteLine("\n");
-                myFiles.printFileInfo(originalFile);
-            }
-
-            myPrint.printFinalInformation(isOk);
-
-            return originalFile;
+            return myFiles.createRandomBinFile(defaultReadFile, count, min, max, PERIOD_PRINT);
         }
     }
 
@@ -1332,6 +1313,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 return;
             }
 
+            Console.WriteLine("\n");
             CountMinMax count = printMinMaxFormBin(originalFile, interval, Generation.PERIOD_PRINT);
 
             if (!count.isCorrect)
@@ -1339,6 +1321,12 @@ namespace larionov_lab___5_files_and_strings_part1
                 myFiles.printError("Ошибка сканирования бинарного файла!");
                 return;
             }
+
+            Console.WriteLine("\n");
+            myFiles.printFileInfo(originalFile);
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printFinalInformation(true);
 
             Console.ResetColor();
 
