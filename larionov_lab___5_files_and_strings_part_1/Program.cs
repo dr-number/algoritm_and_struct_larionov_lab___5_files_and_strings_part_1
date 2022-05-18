@@ -1695,6 +1695,25 @@ namespace larionov_lab___5_files_and_strings_part1
             }
         }
 
+        private int reverseBin(BinaryWriter fWriter, int read, bool ignore)
+        {
+            try
+            {
+
+                fWriter.Seek(0, SeekOrigin.Begin);
+                fWriter.Write(read);
+
+                return 1;
+            }
+            catch (Exception e)
+            {
+                MyFiles myFiles = new MyFiles();
+                myFiles.printError(e.Message);
+            }
+
+            return -1;
+        }
+
         public void init()
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_16_3);
@@ -1706,6 +1725,21 @@ namespace larionov_lab___5_files_and_strings_part1
 
             if (originalFile == "")
                 return;
+
+            printBin(originalFile, Generation.PERIOD_PRINT);
+
+            Console.WriteLine("\n");
+
+            MyFiles myFiles = new MyFiles();
+            myFiles.printFileInfo(originalFile);
+
+            bool isOk = myFiles.getBin(originalFile, new Func<BinaryWriter, int, bool, int>(reverseBin), Generation.PERIOD_PRINT);
+
+            if (!isOk)
+            {
+                myFiles.printError("Ошибка изменения бинарного файла!");
+                return;
+            }
 
             printBin(originalFile, Generation.PERIOD_PRINT);
         }
