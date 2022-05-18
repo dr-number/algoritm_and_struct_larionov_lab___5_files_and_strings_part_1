@@ -355,6 +355,63 @@ namespace larionov_lab___5_files_and_strings_part1
             }
         }
 
+
+        public bool getBin(string path, Delegate method, int periodPrint)
+        {
+
+            bool isOk = true;
+            string tmpFile = "";
+
+            try
+            {
+
+                tmpFile = path + EXP_TMP;
+                File.Move(path, tmpFile);
+
+                using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
+                {
+                    int i = 0;
+                    bool isPrintNewString;
+
+                    using (BinaryWriter fWriter = new BinaryWriter(fs))
+                        using (BinaryReader fReader = new BinaryReader(fs))
+                            while (fReader.BaseStream.Position != fReader.BaseStream.Length)
+                            {
+
+                            isPrintNewString = i % periodPrint == 0;
+
+                                if ((int)method.DynamicInvoke(fWriter, fReader.ReadInt32(), isPrintNewString) == -1)
+                                {
+                                    isOk = false;
+                                    break;
+                                }
+
+                                ++i;
+
+                            }
+
+                }
+
+                if (isOk)
+                {
+                    File.Delete(tmpFile);
+                    return true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                printError(e.Message);
+                isOk = false;
+            }
+
+            if (!isOk)
+                recoverOriginalFile(path, tmpFile);
+
+            return isOk;
+
+        }
+
     }
 
     class MyInput
@@ -1169,7 +1226,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
     public class Part_2_Task_6_3
     {
-
+        private CountMinMax countMinMax;
+        private MinMax interval;
         private struct MinMax
         {
             public int min;
@@ -1225,62 +1283,38 @@ namespace larionov_lab___5_files_and_strings_part1
             return result;
         }
 
-        private CountMinMax printMinMaxFormBin(string pathFile, MinMax interval, int periodStr)
+        private int deleteMinMaxFormBin(BinaryWriter fWriter, int read, bool isPrintNewString)
         {
-            CountMinMax result;
-            result.countMin = 0;
-            result.countMax = 0;
-
             if (!interval.isCorrect)
-            {
-                result.isCorrect = false;
-                return result;
-            }
+                return -1;
 
             try
             {
-                using (BinaryReader bin = new BinaryReader(File.Open(pathFile, FileMode.Open)))
+
+                if (read == interval.min)
                 {
-                    int item;
-                    int min = interval.min;
-                    int countMin = 0;
-
-                    int max = interval.max;
-                    int countMax = 0;
-
-                    int i = 0;
-
-                    while (bin.BaseStream.Position != bin.BaseStream.Length)
-                    {
-                        item = bin.ReadInt32();
-
-                        if (item == min)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            ++countMin;
-                        }
-                        else if (item == max)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            ++countMax;
-                        }
-                        else
-                            Console.ForegroundColor = ConsoleColor.White;
-
-                        Console.Write(item + " ");
-
-                        ++i;
-
-                        if (i % periodStr == 0)
-                            Console.Write("\n");
-                    }
-
-                    result.countMin = countMin;
-                    result.countMax = countMax;
-                    result.isCorrect = true;
-
-                    return result;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    ++countMinMax.countMin;
                 }
+                else if (read == interval.max)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    ++countMinMax.countMax;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    fWriter.Write(read);
+                }
+
+                Console.Write(read + " ");
+
+                if (isPrintNewString)
+                    Console.Write("\n");
+             
+                countMinMax.isCorrect = true;
+
+                return 1;
             }
             catch (Exception e)
             {
@@ -1288,11 +1322,15 @@ namespace larionov_lab___5_files_and_strings_part1
                 myFiles.printError(e.Message);
             }
 
-            result.isCorrect = false;
-            return result;
+            countMinMax.isCorrect = false;
+            return -1;
         }
         public void init()
         {
+            countMinMax.countMin = 0;
+            countMinMax.countMax = 0;
+            countMinMax.isCorrect = false;
+
             Console.WriteLine(TasksInfo.PART_2_TASK_6_3);
 
             const string DEFAULT_FILE = MyFiles.FILE_PART_2_TASK_6_3;
@@ -1304,7 +1342,7 @@ namespace larionov_lab___5_files_and_strings_part1
             if (originalFile == "")
                 return;
 
-            MinMax interval = scanBin(originalFile);
+            interval = scanBin(originalFile);
 
             MyFiles myFiles = new MyFiles();
 
@@ -1315,11 +1353,16 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             Console.WriteLine("\n");
-            CountMinMax count = printMinMaxFormBin(originalFile, interval, Generation.PERIOD_PRINT);
+            bool isOk = myFiles.getBin(originalFile, new Func<BinaryWriter, int, bool, int>(deleteMinMaxFormBin), Generation.PERIOD_PRINT);
 
-            if (!count.isCorrect)
+            if (!countMinMax.isCorrect)
             {
                 myFiles.printError("Ошибка сканирования бинарного файла!");
+                return;
+            }
+
+            if (!isOk) {
+                myFiles.printError("Ошибка изменения бинарного файла!");
                 return;
             }
 
@@ -1333,13 +1376,13 @@ namespace larionov_lab___5_files_and_strings_part1
 
             Console.Write("\n\nМинимальный элемент бинарного файла: ");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(interval.min + " [" + count.countMin + " элемент(ов)]");
+            Console.WriteLine(interval.min + " [" + countMinMax.countMin + " элемент(ов)]");
 
             Console.ResetColor();
 
             Console.Write("Максимальный элемент бинарного файла: ");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(interval.max + " [" + count.countMax + " элемент(ов)]");
+            Console.WriteLine(interval.max + " [" + countMinMax.countMax + " элемент(ов)]");
 
         }
     }
