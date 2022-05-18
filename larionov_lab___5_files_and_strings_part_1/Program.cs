@@ -135,8 +135,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public string setReadFile(string defaultReadFile)
         {
-            string fileName = "";
-
+            
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\");
             Console.ResetColor();
@@ -147,7 +146,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ResetColor();
             Console.Write("]: ");
 
-            fileName = Console.ReadLine();
+            string fileName = Console.ReadLine();
 
             if (fileName == "")
                 fileName = defaultReadFile;
@@ -179,11 +178,10 @@ namespace larionov_lab___5_files_and_strings_part1
 
             Console.ForegroundColor = ConsoleColor.Green;
 
-            string file = DIR_FILE + "\\" + fileName;
-            Console.WriteLine(file + "\n");
+            Console.WriteLine(fileName + "\n");
 
             Console.ResetColor();
-            printFileInfo(file);
+            printFileInfo(fileName);
 
             return fileName;
         }
