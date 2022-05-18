@@ -48,6 +48,7 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         public const string QUESTION_READ_FILE = "Прочитать данные из файла [y/n]? ";
         public const string QUESTION_SHOW_CALC = "Показывать ход вычислений [y/n]? ";
+        public const string QUESTION_CREATE_RANDOM_NUMBER_BIN = "Создать бинарный файл со случайными числовыми данными [y/n]? ";
 
         public bool isQuestion(string textQuestion)
         {
@@ -314,7 +315,7 @@ namespace larionov_lab___5_files_and_strings_part1
             }
         }
 
-        public bool createRandomBinFile(string defaultFile, int countNumbers, int min, int max, int periodPrint)
+        public string createRandomBinFile(string defaultReadFile, int countNumbers, int min, int max, int periodPrint)
         {
             string fileName = "";
 
@@ -324,14 +325,14 @@ namespace larionov_lab___5_files_and_strings_part1
 
             Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(defaultFile);
+            Console.Write(defaultReadFile);
             Console.ResetColor();
             Console.Write("]: ");
 
             fileName = Console.ReadLine();
 
             if (fileName == "")
-                fileName = defaultFile;
+                fileName = defaultReadFile;
 
             fileName = DIR_FILE + "\\" + fileName;
 
@@ -346,12 +347,12 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 }
 
-                return true;
+                return fileName;
             }
             catch (Exception e)
             {
                 printError(e.Message + "\n");
-                return false;
+                return "";
             }
         }
 
@@ -364,6 +365,41 @@ namespace larionov_lab___5_files_and_strings_part1
         {
             Console.WriteLine(title);
             return Console.ReadLine();
+        }
+
+        public int inputNumber(string text, int min, int max, int defaultValue)
+        {
+
+            string xStr = "";
+            bool isNumber = false;
+            int x = 0;
+
+            while (true)
+            {
+                Console.ResetColor();
+                Console.Write(text);
+
+                xStr = Console.ReadLine();
+                isNumber = int.TryParse(xStr, out x);
+
+                if (xStr == "")
+                    return defaultValue;
+
+                if (!isNumber)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"{xStr} - не число\n");
+                }
+                else if (x < min || x > max)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine($"Введите число в промежутке от {min} до {max} включительно!\n");
+                }
+                else
+                    break;
+            }
+
+            return x;
         }
     }
 
@@ -582,23 +618,55 @@ namespace larionov_lab___5_files_and_strings_part1
 
     class Generation
     {
-        public const int MIN = -100;
-        public const int MAX = 100;
-        public const int PERIOD_PRINT = 25;
-        public const int COUNT_NUMBERS = 1024;
+        public const int MIN = -1000;
+        public const int DEFAULT_MIN = -100;
 
-        public bool createBin(string originalFile)
+        public const int MAX = 1000;
+        public const int DEFAULT_MAX = 100;
+
+        public const int DEFAULT_PERIOD_PRINT = 25;
+        public const int MIN_PERIOD_PRINT = 10;
+        public const int MAX_PERIOD_PRINT = 50;
+
+        public const int DEFAULT_COUNT_NUMBERS = 1024;
+        public const int MIN_COUNT_NUMBERS = 512;
+        public const int MAX_COUNT_NUMBERS = 1024 * 6;
+
+        public string createBin(string defaultReadFile)
         {
+            string resultPath = "";
+
+            MyFiles myFiles = new MyFiles();
+            MyQuestion myQuestion = new MyQuestion();
+
+            if (!myQuestion.isQuestion(MyQuestion.QUESTION_CREATE_RANDOM_NUMBER_BIN))
+            {
+                string file = myFiles.setReadFile(defaultReadFile);
+
+                if(file != "")
+                    myFiles.printFileInfo(file);
+
+                return file;
+            }
+
+            MyInput myInput = new MyInput();
+            int count = myInput.inputNumber($"Введите колличество элементов в файле [по умолчанию {DEFAULT_COUNT_NUMBERS}]: ", MIN_COUNT_NUMBERS, MAX_COUNT_NUMBERS, DEFAULT_COUNT_NUMBERS);
+            int min = myInput.inputNumber($"Минимальный элемент [по умолчанию {DEFAULT_MIN}]: ", 0, MIN, DEFAULT_MIN);
+            int max = myInput.inputNumber($"Максимальный элемент [по умолчанию {DEFAULT_MAX}]: ", 0, MAX, DEFAULT_MAX);
+            int periodPrint = myInput.inputNumber($"Количество элементов в одной строке (для вывода на экран) [по умолчанию {DEFAULT_PERIOD_PRINT}]: ", MIN_PERIOD_PRINT, MAX_PERIOD_PRINT, DEFAULT_PERIOD_PRINT);
+
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Исходные данные:");
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printString("Количество элементов:", COUNT_NUMBERS.ToString());
-            myPrint.printString("Минимальный элемент:", MIN.ToString());
-            myPrint.printString("Максимальный элемент:", MAX.ToString(), "\n");
+            myPrint.printString("Количество элементов:", count.ToString());
+            myPrint.printString("Минимальный элемент:", min.ToString());
+            myPrint.printString("Максимальный элемент:", max.ToString());
+            myPrint.printString("Количество элементов в одной строке (для вывода на экран)", periodPrint.ToString(), "\n");
 
-            MyFiles myFiles = new MyFiles();
-            bool isOk = myFiles.createRandomBinFile(originalFile, COUNT_NUMBERS, MIN, MAX, PERIOD_PRINT);
+            string originalFile = myFiles.createRandomBinFile(defaultReadFile, count, min, max, periodPrint);
+
+            bool isOk = originalFile != "";
 
             if (isOk)
             {
@@ -608,9 +676,11 @@ namespace larionov_lab___5_files_and_strings_part1
 
             myPrint.printFinalInformation(isOk);
 
-            return isOk;
+            return originalFile;
         }
     }
+
+
 
     public class Part_1_Task_6_1
     {
@@ -1247,15 +1317,16 @@ namespace larionov_lab___5_files_and_strings_part1
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_6_3);
 
-            const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_6_3;
-            const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
+            const string DEFAULT_FILE = MyFiles.FILE_PART_2_TASK_6_3;
+            const string TMP_FILE = DEFAULT_FILE + MyFiles.EXP_TMP;
 
             Generation generation = new Generation();
+            string originalFile = generation.createBin(DEFAULT_FILE);
 
-            if (!generation.createBin(ORIGINAL_FILE))
+            if (originalFile == "")
                 return;
 
-            MinMax interval = scanBin(ORIGINAL_FILE);
+            MinMax interval = scanBin(originalFile);
 
             MyFiles myFiles = new MyFiles();
 
@@ -1265,7 +1336,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 return;
             }
 
-            CountMinMax count = printMinMaxFormBin(ORIGINAL_FILE, interval, Generation.PERIOD_PRINT);
+            CountMinMax count = printMinMaxFormBin(originalFile, interval, Generation.PERIOD_PRINT);
 
             if (!count.isCorrect)
             {
