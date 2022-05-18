@@ -400,7 +400,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 if (isOk)
                 {
-                    File.Delete(tmpFile);
+                    File.Delete(tmpFile); //ok
                     return true;
                 }
 
@@ -1390,16 +1390,8 @@ namespace larionov_lab___5_files_and_strings_part1
             return result;
         }
 
-        private void printInfoBin(string file, int min, int countMin, int max, int countMax)
+        private void printInfoBin(int min, int countMin, int max, int countMax)
         {
-            Console.WriteLine("\n");
-
-            MyFiles myFiles = new MyFiles();
-            myFiles.printFileInfo(file);
-
-            MyPrint myPrint = new MyPrint();
-            myPrint.printFinalInformation(true);
-
             Console.ResetColor();
 
             Console.Write("\n\nМинимальный элемент бинарного файла: ");
@@ -1421,7 +1413,6 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine(TasksInfo.PART_2_TASK_6_3);
 
             const string DEFAULT_FILE = MyFiles.FILE_PART_2_TASK_6_3;
-            const string TMP_FILE = DEFAULT_FILE + MyFiles.EXP_TMP;
 
             Generation generation = new Generation();
             string originalFile = generation.createBin(DEFAULT_FILE);
@@ -1440,6 +1431,8 @@ namespace larionov_lab___5_files_and_strings_part1
             }
 
             Console.WriteLine("\n");
+            myFiles.printFileInfo(originalFile);
+            
             bool isOk = myFiles.getBin(originalFile, new Func<BinaryWriter, int, bool, int>(deleteMinMaxFormBin), Generation.PERIOD_PRINT);
 
             if (!isOk || !countMinMax.isCorrect) {
@@ -1447,7 +1440,10 @@ namespace larionov_lab___5_files_and_strings_part1
                 return;
             }
 
-            printInfoBin(originalFile, interval.min, countMinMax.countMin, interval.max, countMinMax.countMax);
+            MyPrint myPrint = new MyPrint();
+            myPrint.printFinalInformation(true);
+
+            printInfoBin(interval.min, countMinMax.countMin, interval.max, countMinMax.countMax);
 
            
             MyQuestion myQuestion = new MyQuestion();
@@ -1472,7 +1468,9 @@ namespace larionov_lab___5_files_and_strings_part1
                 return;
             }
 
-            printInfoBin(originalFile, interval.min, finalCount.countMin, interval.max, finalCount.countMax);
+            Console.WriteLine("\n\n");
+            myFiles.printFileInfo(originalFile);
+            printInfoBin(interval.min, finalCount.countMin, interval.max, finalCount.countMax);
         }
     }
 
@@ -1665,6 +1663,53 @@ namespace larionov_lab___5_files_and_strings_part1
         }
     }
 
+
+    public class Part_2_Task_16_3
+    {
+        private void printBin(string pathFile, int periodPrint)
+        { 
+
+            try
+            {
+                int i = 0;
+
+                using (BinaryReader bin = new BinaryReader(File.Open(pathFile, FileMode.Open)))
+                {
+
+                    while (bin.BaseStream.Position != bin.BaseStream.Length)
+                    {
+                        Console.Write(bin.ReadInt32() + " ");
+
+                        if (i != 0 && i % periodPrint == 0)
+                            Console.Write("\n");
+
+                        ++i;
+                    }
+
+                }
+            }
+            catch (Exception e)
+            {
+                MyFiles myFiles = new MyFiles();
+                myFiles.printError(e.Message);
+            }
+        }
+
+        public void init()
+        {
+            Console.WriteLine(TasksInfo.PART_2_TASK_16_3);
+
+            const string DEFAULT_FILE = MyFiles.FILE_PART_2_TASK_16_3;
+
+            Generation generation = new Generation();
+            string originalFile = generation.createBin(DEFAULT_FILE);
+
+            if (originalFile == "")
+                return;
+
+            printBin(originalFile, Generation.PERIOD_PRINT);
+        }
+    }
     class Class1
     {
         static void Main(string[] args)
@@ -1692,6 +1737,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 Console.WriteLine("\n8) " + TasksInfo.PART_2_TASK_16_1);
                 Console.WriteLine("\n9) " + TasksInfo.PART_2_TASK_16_2);
+                Console.WriteLine("\n10) " + TasksInfo.PART_2_TASK_16_3);
 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
@@ -1744,6 +1790,11 @@ namespace larionov_lab___5_files_and_strings_part1
                 else if (selectStr == "9")
                 {
                     Part_2_Task_16_2 task = new Part_2_Task_16_2();
+                    task.init();
+                }
+                else if (selectStr == "10")
+                {
+                    Part_2_Task_16_3 task = new Part_2_Task_16_3();
                     task.init();
                 }
                 else if (selectStr == "s") {
