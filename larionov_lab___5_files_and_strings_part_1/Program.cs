@@ -366,9 +366,13 @@ namespace larionov_lab___5_files_and_strings_part1
 
             try
             {
-
                 tmpFile = path + EXP_TMP;
                 File.Move(path, tmpFile);
+
+                Stream read = File.OpenRead(tmpFile);
+
+                if(read == null)
+                    return false;
 
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
                 {
@@ -376,11 +380,11 @@ namespace larionov_lab___5_files_and_strings_part1
                     bool isPrintNewString;
 
                     using (BinaryWriter fWriter = new BinaryWriter(fs))
-                        using (BinaryReader fReader = new BinaryReader(fs))
+                        using (BinaryReader fReader = new BinaryReader(read))
                             while (fReader.BaseStream.Position != fReader.BaseStream.Length)
                             {
 
-                            isPrintNewString = i % periodPrint == 0;
+                            isPrintNewString = i != 0 && i % periodPrint == 0;
 
                                 if ((int)method.DynamicInvoke(fWriter, fReader.ReadInt32(), isPrintNewString) == -1)
                                 {
@@ -684,8 +688,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public const int PERIOD_PRINT = 25;
 
-        public const int DEFAULT_COUNT_NUMBERS = 1024;
-        public const int MIN_COUNT_NUMBERS = 512;
+        public const int DEFAULT_COUNT_NUMBERS = 256;
+        public const int MIN_COUNT_NUMBERS = 256;
         public const int MAX_COUNT_NUMBERS = 1024 * 6;
 
         public string createBin(string defaultReadFile)
@@ -1366,8 +1370,10 @@ namespace larionov_lab___5_files_and_strings_part1
 
                         Console.Write(item + " ");
 
-                        if(i % periodPrint == 0)
+                        if(i != 0 && i % periodPrint == 0)
                             Console.Write("\n");
+
+                        ++i;
                     }
                 }
 
@@ -1436,13 +1442,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.WriteLine("\n");
             bool isOk = myFiles.getBin(originalFile, new Func<BinaryWriter, int, bool, int>(deleteMinMaxFormBin), Generation.PERIOD_PRINT);
 
-            if (!countMinMax.isCorrect)
-            {
-                myFiles.printError("Ошибка сканирования бинарного файла!");
-                return;
-            }
-
-            if (!isOk) {
+            if (!isOk || !countMinMax.isCorrect) {
                 myFiles.printError("Ошибка изменения бинарного файла!");
                 return;
             }
@@ -1451,6 +1451,8 @@ namespace larionov_lab___5_files_and_strings_part1
 
            
             MyQuestion myQuestion = new MyQuestion();
+
+            Console.ResetColor();
             if (!myQuestion.isQuestion(MyQuestion.QUESTION_PRINT_FINAL_RESULT))
                 return;
 
