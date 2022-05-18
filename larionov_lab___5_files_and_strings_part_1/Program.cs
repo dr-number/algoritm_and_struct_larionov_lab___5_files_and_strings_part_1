@@ -1325,6 +1325,29 @@ namespace larionov_lab___5_files_and_strings_part1
             countMinMax.isCorrect = false;
             return -1;
         }
+
+        private void printInfoBin(string file, int min, int countMin, int max, int countMax)
+        {
+            Console.WriteLine("\n");
+
+            MyFiles myFiles = new MyFiles();
+            myFiles.printFileInfo(file);
+
+            MyPrint myPrint = new MyPrint();
+            myPrint.printFinalInformation(true);
+
+            Console.ResetColor();
+
+            Console.Write("\n\nМинимальный элемент бинарного файла: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(min + " [" + countMin + " элемент(ов)]");
+
+            Console.ResetColor();
+
+            Console.Write("Максимальный элемент бинарного файла: ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(max + " [" + countMax + " элемент(ов)]");
+        }
         public void init()
         {
             countMinMax.countMin = 0;
@@ -1366,22 +1389,12 @@ namespace larionov_lab___5_files_and_strings_part1
                 return;
             }
 
-            Console.WriteLine("\n");
-            myFiles.printFileInfo(originalFile);
+            printInfoBin(originalFile, interval.min, countMinMax.countMin, interval.max, countMinMax.countMax);
 
-            MyPrint myPrint = new MyPrint();
-            myPrint.printFinalInformation(true);
 
-            Console.ResetColor();
 
-            Console.Write("\n\nМинимальный элемент бинарного файла: ");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(interval.min + " [" + countMinMax.countMin + " элемент(ов)]");
-
-            Console.ResetColor();
-
-            Console.Write("Максимальный элемент бинарного файла: ");
-            Console.ForegroundColor = ConsoleColor.Green;
+            //конечный результат
+            Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(interval.max + " [" + countMinMax.countMax + " элемент(ов)]");
 
         }
