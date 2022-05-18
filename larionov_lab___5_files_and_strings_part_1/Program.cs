@@ -48,7 +48,9 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         public const string QUESTION_READ_FILE = "Прочитать данные из файла [y/n]? ";
         public const string QUESTION_SHOW_CALC = "Показывать ход вычислений [y/n]? ";
+
         public const string QUESTION_CREATE_RANDOM_NUMBER_BIN = "Создать бинарный файл со случайными числовыми данными [y/n]? ";
+        public const string QUESTION_PRINT_FINAL_RESULT = "Вывести на экран конечный результат [y/n]? ";
 
         public bool isQuestion(string textQuestion)
         {
@@ -1326,6 +1328,62 @@ namespace larionov_lab___5_files_and_strings_part1
             return -1;
         }
 
+        private CountMinMax printBin(string pathFile, MinMax interval, int periodPrint)
+        {
+            CountMinMax result;
+            result.countMin = 0;
+            result.countMax = 0;
+            result.isCorrect = false;
+
+            if (!interval.isCorrect)
+                return result;
+
+            try
+            {
+
+                using (BinaryReader bin = new BinaryReader(File.Open(pathFile, FileMode.Open)))
+                {
+                    int i = 0, item;
+                    int min = interval.min;
+                    int max = interval.max;
+
+                    while (bin.BaseStream.Position != bin.BaseStream.Length)
+                    {
+                        item = bin.ReadInt32();
+
+                        if (item == min)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            ++result.countMin;
+                        }
+                        else if (item == max)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            ++result.countMax;
+                        }
+                        else
+                            Console.ForegroundColor = ConsoleColor.White;
+
+                        Console.Write(item + " ");
+
+                        if(i % periodPrint == 0)
+                            Console.Write("\n");
+                    }
+                }
+
+                result.isCorrect = true;
+                return result;
+            }
+            catch (Exception e)
+            {
+                MyFiles myFiles = new MyFiles();
+                myFiles.printError(e.Message);
+            }
+
+            result.isCorrect = false;
+            return result;
+        }
+
         private void printInfoBin(string file, int min, int countMin, int max, int countMax)
         {
             Console.WriteLine("\n");
@@ -1391,12 +1449,28 @@ namespace larionov_lab___5_files_and_strings_part1
 
             printInfoBin(originalFile, interval.min, countMinMax.countMin, interval.max, countMinMax.countMax);
 
+           
+            MyQuestion myQuestion = new MyQuestion();
+            if (!myQuestion.isQuestion(MyQuestion.QUESTION_PRINT_FINAL_RESULT))
+                return;
 
+            interval = scanBin(originalFile);
 
-            //конечный результат
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine(interval.max + " [" + countMinMax.countMax + " элемент(ов)]");
+            if (!interval.isCorrect)
+            {
+                myFiles.printError("Ошибка повторного сканирования бинарного файла!");
+                return;
+            }
 
+            CountMinMax finalCount = printBin(originalFile, interval, Generation.PERIOD_PRINT);
+
+            if (!finalCount.isCorrect)
+            {
+                myFiles.printError("Ошибка чтения измененного бинарного файла!");
+                return;
+            }
+
+            printInfoBin(originalFile, interval.min, finalCount.countMin, interval.max, finalCount.countMax);
         }
     }
 
