@@ -358,7 +358,7 @@ namespace larionov_lab___5_files_and_strings_part1
         }
 
 
-        public bool getBin(string path, Delegate method, int periodPrint)
+        public bool getBin(string path, Delegate method, int periodPrint, bool isReadFromEnd = false)
         {
 
             bool isOk = true;
@@ -376,25 +376,42 @@ namespace larionov_lab___5_files_and_strings_part1
 
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
                 {
-                    int i = 0;
-                    bool isPrintNewString;
-
                     using (BinaryWriter fWriter = new BinaryWriter(fs))
-                        using (BinaryReader fReader = new BinaryReader(read))
-                            while (fReader.BaseStream.Position != fReader.BaseStream.Length)
+                    using (BinaryReader fReader = new BinaryReader(read))
+                    {
+                        long setSeek;
+                        bool isPrintNewString;
+
+
+                        int i = 0;
+                        long size = fReader.BaseStream.Length;
+
+                        while (true)
+                        {
+                            if (isReadFromEnd)
                             {
+                                setSeek = size - (i + 1) * sizeof(int);
+
+                                if (setSeek < 0)
+                                    break;
+
+                                fReader.BaseStream.Seek(setSeek, SeekOrigin.Begin);
+                            }
+                            else if (fReader.BaseStream.Position == size)
+                                break;
 
                             isPrintNewString = i != 0 && i % periodPrint == 0;
 
-                                if ((int)method.DynamicInvoke(fWriter, fReader.ReadInt32(), isPrintNewString) == -1)
-                                {
-                                    isOk = false;
-                                    break;
-                                }
-
-                                ++i;
-
+                            if ((int)method.DynamicInvoke(fWriter, fReader.ReadInt32(), isPrintNewString) == -1)
+                            {
+                                isOk = false;
+                                break;
                             }
+
+                            ++i;
+
+                        }
+                    }
 
                 }
 
@@ -1695,23 +1712,15 @@ namespace larionov_lab___5_files_and_strings_part1
             }
         }
 
-        private int reverseBin(BinaryWriter fWriter, int read, bool ignore)
+        private int reverseBin(BinaryWriter fWriter, int read, bool isNewStr)
         {
-            try
-            {
+            fWriter.Write(read);
+            Console.Write(read + " ");
 
-                fWriter.Seek(0, SeekOrigin.Begin);
-                fWriter.Write(read);
+            if (isNewStr)
+                Console.Write("\n");
 
-                return 1;
-            }
-            catch (Exception e)
-            {
-                MyFiles myFiles = new MyFiles();
-                myFiles.printError(e.Message);
-            }
-
-            return -1;
+            return 1;
         }
 
         public void init()
@@ -1733,15 +1742,10 @@ namespace larionov_lab___5_files_and_strings_part1
             MyFiles myFiles = new MyFiles();
             myFiles.printFileInfo(originalFile);
 
-            bool isOk = myFiles.getBin(originalFile, new Func<BinaryWriter, int, bool, int>(reverseBin), Generation.PERIOD_PRINT);
+            bool isOk = myFiles.getBin(originalFile, new Func<BinaryWriter, int, bool, int>(reverseBin), Generation.PERIOD_PRINT, true);
 
-            if (!isOk)
-            {
-                myFiles.printError("Ошибка изменения бинарного файла!");
-                return;
-            }
-
-            printBin(originalFile, Generation.PERIOD_PRINT);
+            MyPrint myPrint = new MyPrint();
+            myPrint.printFinalInformation(isOk);
         }
     }
     class Class1
