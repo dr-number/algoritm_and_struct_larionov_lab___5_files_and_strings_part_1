@@ -624,9 +624,7 @@ namespace larionov_lab___5_files_and_strings_part1
         public const int MAX = 1000;
         public const int DEFAULT_MAX = 100;
 
-        public const int DEFAULT_PERIOD_PRINT = 25;
-        public const int MIN_PERIOD_PRINT = 10;
-        public const int MAX_PERIOD_PRINT = 50;
+        public const int PERIOD_PRINT = 25;
 
         public const int DEFAULT_COUNT_NUMBERS = 1024;
         public const int MIN_COUNT_NUMBERS = 512;
@@ -653,7 +651,6 @@ namespace larionov_lab___5_files_and_strings_part1
             int count = myInput.inputNumber($"Введите колличество элементов в файле [по умолчанию {DEFAULT_COUNT_NUMBERS}]: ", MIN_COUNT_NUMBERS, MAX_COUNT_NUMBERS, DEFAULT_COUNT_NUMBERS);
             int min = myInput.inputNumber($"Минимальный элемент [по умолчанию {DEFAULT_MIN}]: ", 0, MIN, DEFAULT_MIN);
             int max = myInput.inputNumber($"Максимальный элемент [по умолчанию {DEFAULT_MAX}]: ", 0, MAX, DEFAULT_MAX);
-            int periodPrint = myInput.inputNumber($"Количество элементов в одной строке (для вывода на экран) [по умолчанию {DEFAULT_PERIOD_PRINT}]: ", MIN_PERIOD_PRINT, MAX_PERIOD_PRINT, DEFAULT_PERIOD_PRINT);
 
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("Исходные данные:");
@@ -661,10 +658,9 @@ namespace larionov_lab___5_files_and_strings_part1
             MyPrint myPrint = new MyPrint();
             myPrint.printString("Количество элементов:", count.ToString());
             myPrint.printString("Минимальный элемент:", min.ToString());
-            myPrint.printString("Максимальный элемент:", max.ToString());
-            myPrint.printString("Количество элементов в одной строке (для вывода на экран)", periodPrint.ToString(), "\n");
+            myPrint.printString("Максимальный элемент:", max.ToString(), "\n");
 
-            string originalFile = myFiles.createRandomBinFile(defaultReadFile, count, min, max, periodPrint);
+            string originalFile = myFiles.createRandomBinFile(defaultReadFile, count, min, max, PERIOD_PRINT);
 
             bool isOk = originalFile != "";
 
