@@ -219,7 +219,7 @@ namespace larionov_lab___5_files_and_strings_part1
         public void printError(string message = MESSAGE_ERROR_PROCESSING_FILE)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine(message);
+            Console.WriteLine("\n" + message);
             Console.ResetColor();
         }
 
@@ -1735,14 +1735,16 @@ namespace larionov_lab___5_files_and_strings_part1
             if (originalFile == "")
                 return;
 
+            Console.WriteLine(MyPrint.INITIAL_DATA);
             printBin(originalFile, Generation.PERIOD_PRINT);
 
             Console.WriteLine("\n");
 
             MyFiles myFiles = new MyFiles();
-            myFiles.printFileInfo(originalFile);
-
             bool isOk = myFiles.getBin(originalFile, new Func<BinaryWriter, int, bool, int>(reverseBin), Generation.PERIOD_PRINT, true);
+
+            Console.WriteLine("\n");
+            myFiles.printFileInfo(originalFile);
 
             MyPrint myPrint = new MyPrint();
             myPrint.printFinalInformation(isOk);
