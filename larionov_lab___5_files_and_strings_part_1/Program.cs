@@ -231,7 +231,7 @@ namespace larionov_lab___5_files_and_strings_part1
             return Console.ReadLine()?.ToLower() != "n";
         }
 
-        public bool getText(string defaultReadFile, Delegate method, string param) //params object[] parameters)
+        public bool getText(string defaultReadFile, Delegate method, string param) 
         {
 
             string path = setReadFile(DIR_FILE + "\\" + defaultReadFile);
@@ -317,9 +317,8 @@ namespace larionov_lab___5_files_and_strings_part1
             }
         }
 
-        public string createRandomBinFile(string defaultReadFile, int countNumbers, int min, int max, int periodPrint)
+        public string createRandomBinFile(string defaultReadFile, int countNumbers, int min, int max)
         {
-            string fileName = "";
 
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("* - если путь не будет указан программа создаст бинарный файл в директории: \n" + DIR_FILE + "\\");
@@ -331,7 +330,7 @@ namespace larionov_lab___5_files_and_strings_part1
             Console.ResetColor();
             Console.Write("]: ");
 
-            fileName = Console.ReadLine();
+            string fileName = Console.ReadLine();
 
             if (fileName == "")
                 fileName = defaultReadFile;
@@ -551,8 +550,6 @@ namespace larionov_lab___5_files_and_strings_part1
             string inputString = "";
             SelectData.data inputData;
 
-            bool isGo = true;
-
             while (true)
             {
                 inputData = selectData.selectInputData(defaultReadFile);
@@ -711,7 +708,6 @@ namespace larionov_lab___5_files_and_strings_part1
 
         public string createBin(string defaultReadFile)
         {
-            string resultPath = "";
 
             MyFiles myFiles = new MyFiles();
             MyQuestion myQuestion = new MyQuestion();
@@ -734,7 +730,7 @@ namespace larionov_lab___5_files_and_strings_part1
             myPrint.printString("Минимальный элемент:", min.ToString());
             myPrint.printString("Максимальный элемент:", max.ToString(), "\n");
 
-            return myFiles.createRandomBinFile(defaultReadFile, count, min, max, PERIOD_PRINT);
+            return myFiles.createRandomBinFile(defaultReadFile, count, min, max);
         }
     }
 
