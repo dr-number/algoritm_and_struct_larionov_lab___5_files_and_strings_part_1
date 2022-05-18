@@ -1609,7 +1609,7 @@ namespace larionov_lab___5_files_and_strings_part1
             str = reg.Replace(str, "");
 
             if(str != "")
-                str.Remove(str.Length - 1);
+                str = str.Remove(str.Length - 1);
 
             return str;
         }
@@ -1784,6 +1784,7 @@ namespace larionov_lab___5_files_and_strings_part1
                 Console.Write("\nДля выхода введите \"0\": ");
 
                 string selectStr = Console.ReadLine().ToLower();
+
 
                 if (selectStr == "1") {
                     Part_1_Task_6_1 task = new Part_1_Task_6_1();
