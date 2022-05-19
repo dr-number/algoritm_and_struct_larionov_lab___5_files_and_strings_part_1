@@ -40,17 +40,19 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public bool initConfig()
         {
-            if (!File.Exists(settings[KEY_DIR_FILE])) 
-                setKey(KEY_DIR_FILE, Environment.CurrentDirectory);
+            if (!File.Exists(settings[KEY_DIR_FILE]))
+            {
+                settings[KEY_DIR_FILE] = Environment.CurrentDirectory;
+                setKeys();
+            }
 
             if (File.Exists(FILE_CONFIG))
                 return false;
 
-            return setKeys(settings);
+            return setKeys();
         }
 
-
-        private bool setKeys(Dictionary<string, string> data)
+        private bool setKey(string key, string value)
         {
             try
             {
@@ -59,7 +61,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 
                 writer.WriteStartObject();
 
-                foreach (var item in data)
+                foreach (var item in settings)
                     writer.WriteString(item.Key, item.Value);
 
                 writer.WriteEndObject();
@@ -73,7 +75,7 @@ namespace larionov_lab___5_files_and_strings_part_1
             }
         }
 
-        private bool setKey(string key, string value)
+        private bool setKeys()
         {
             try
             {
@@ -81,7 +83,9 @@ namespace larionov_lab___5_files_and_strings_part_1
                 using var writer = new Utf8JsonWriter(ms);
 
                 writer.WriteStartObject();
-                writer.WriteString(key, value);
+
+                foreach (var item in settings)
+                    writer.WriteString(item.Key, item.Value);
 
                 writer.WriteEndObject();
                 writer.Flush();
@@ -93,6 +97,7 @@ namespace larionov_lab___5_files_and_strings_part_1
                 return false;
             }
         }
+
         public void setDidectoryFile()
         {
             bool isGo = true;
@@ -103,13 +108,13 @@ namespace larionov_lab___5_files_and_strings_part_1
             Console.WriteLine(getDirFile());
             Console.ResetColor();
 
-            Console.WriteLine("\nВведите директорию в которой лежат файлы с данными ");
-            Console.Write("Для выхода из настройки введите \"0\": ");
-
             string result;
 
             while (isGo)
             {
+                Console.WriteLine("\nВведите директорию в которой лежат файлы с данными ");
+                Console.Write("Для выхода из настройки введите \"0\": ");
+
                 result = Console.ReadLine();
 
                 if (result != "0")
