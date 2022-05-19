@@ -36,8 +36,7 @@ namespace larionov_lab___5_files_and_strings_part1
 
 
                 Console.ForegroundColor = ConsoleColor.Blue;
-                Console.WriteLine("\ns) Настройка директории с исходными файлами\n" +
-                    "(значение сохраняется только на текущий сеанс работы программы)\n");
+                Console.WriteLine("\ns) Настройка директории с исходными файлами\n");
                 
                 Console.ResetColor();
                 Console.Write("\nДля выхода введите \"0\": ");
