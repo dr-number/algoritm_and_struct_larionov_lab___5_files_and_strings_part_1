@@ -49,12 +49,9 @@ namespace larionov_lab___5_files_and_strings_part_1
 
                 foreach (var line in lines)
                     if (line.Split(',')[0] == key)
-                    {
                         settings[key] = value;
-                        return saveSettings(settings);
-                    }
 
-                return false;
+                return saveSettings(settings);
             }
             catch (Exception e)
             {
@@ -67,13 +64,19 @@ namespace larionov_lab___5_files_and_strings_part_1
             if(settings == null)
                 return false;
 
+            const string TMP_EXP = ".tmp";
+
             try
             {
-                File.WriteAllLines(FILE_CONFIG, settings.Select(x => $"{x.Key},{x.Value}"));
+                File.WriteAllLines(FILE_CONFIG + TMP_EXP, settings.Select(x => $"{x.Key},{x.Value}"));
+                
+                File.Delete(FILE_CONFIG);
+                File.Move(FILE_CONFIG + TMP_EXP, FILE_CONFIG);
                 return true;
             }
             catch (Exception e)
             {
+                File.Delete(FILE_CONFIG + TMP_EXP);
                 return false;
             }
         }
