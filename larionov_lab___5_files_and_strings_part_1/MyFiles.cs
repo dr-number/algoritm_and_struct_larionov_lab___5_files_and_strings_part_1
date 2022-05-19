@@ -121,7 +121,7 @@ namespace larionov_lab___5_files_and_strings_part_1
                 return false;
 
             bool isOk = true;
-            string line = "", tmpFile = "";
+            string tmpFile = "";
 
             try
             {
@@ -136,16 +136,12 @@ namespace larionov_lab___5_files_and_strings_part_1
                     using (StreamReader fReader = new StreamReader(tmpFile))
                         while (!fReader.EndOfStream)
                         {
-                            line = fReader.ReadLine();
-
-                            if ((int)method.DynamicInvoke(fWriter, line, param) == -1)
+                            if ((int)method.DynamicInvoke(fWriter, fReader.ReadLine(), param) == -1)
                             {
                                 isOk = false;
                                 break;
                             }
-
                         }
-
                 }
 
                 if (isOk)
@@ -170,9 +166,14 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public void recoverOriginalFile(string pathOriginal, string pathTmp)
         {
-            File.Move(pathTmp, pathTmp + EXP_TMP);
-            File.Delete(pathOriginal);
-            File.Move(pathTmp + EXP_TMP, pathOriginal);
+            try
+            {
+                File.Move(pathTmp, pathTmp + EXP_TMP);
+                File.Delete(pathOriginal);
+                File.Move(pathTmp + EXP_TMP, pathOriginal);
+            }
+            catch (Exception e) {}
+
         }
 
         public bool writeStrings(string pathOut, string strings)
