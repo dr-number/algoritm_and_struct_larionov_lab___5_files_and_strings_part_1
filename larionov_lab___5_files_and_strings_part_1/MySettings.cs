@@ -3,7 +3,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 {
     internal class MySettings
     {
-        private const string FILE_CONFIG = "config.ini";
+        private const string FILE_CONFIG = "config.110z.ini";
 
         private const string KEY_DIR_FILE = "DIR_FILE";
 
@@ -93,7 +93,9 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public void initConfig()
         {
-            setDefaultSettings();
+
+            if(!File.Exists(FILE_CONFIG))
+                setDefaultSettings();
 
             if (!Directory.Exists(getDirFile()))
                 UpdateSettings(KEY_DIR_FILE, Environment.CurrentDirectory);
