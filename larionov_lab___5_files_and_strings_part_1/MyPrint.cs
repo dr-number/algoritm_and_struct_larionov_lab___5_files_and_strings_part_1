@@ -103,7 +103,7 @@
             Console.Write(mySettings.getDirFile() + "\n");
 
             Console.ResetColor();
-            Console.Write("\nВведите имя файла с учетом регистра и расширением\n[файл по умолчанию ");
+            Console.Write("\nВведите имя файла с учетом регистра\n[файл по умолчанию ");
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(defaultReadFile);
             Console.ResetColor();

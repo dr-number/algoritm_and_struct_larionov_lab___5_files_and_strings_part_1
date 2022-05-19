@@ -27,6 +27,9 @@
 
             if (fileName == "")
                 fileName = defaultReadFile;
+            else
+                fileName = mySettings.getDirFile() + "\\" + fileName + MyFiles.EXP_BIN;
+
 
             try
             {
