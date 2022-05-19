@@ -1,5 +1,6 @@
-﻿using System.Text.Json;
-using System.Text;
+﻿using System;
+using System.Configuration;
+
 
 namespace larionov_lab___5_files_and_strings_part_1
 {
@@ -9,26 +10,51 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         private const string KEY_DIR_FILE = "DIR_FILE";
 
-        private Dictionary<string, string> settings = new Dictionary<string, string>()
+        private void setDefaultSettings()
         {
-            { KEY_DIR_FILE, Environment.CurrentDirectory }
-        };
+            Dictionary<string, string> settings = new Dictionary<string, string>();
+            settings.Add(KEY_DIR_FILE, "");
 
-        public string getDirFile()
-        {
-            return settings[KEY_DIR_FILE];
+            File.WriteAllLines(FILE_CONFIG, settings.Select(x => $"{x.Key},{x.Value}"));
         }
 
-
-        private bool updateJson(string fileName, string jsonData)
+        private string ReadSetting(string key)
         {
             try
             {
-                JsonDocument jdoc = JsonDocument.Parse(jsonData);
-                using FileStream fs = File.OpenWrite(fileName);
+                string[] arr;
+                var lines = File.ReadLines(FILE_CONFIG);
 
-                using var writer = new Utf8JsonWriter(fs, new JsonWriterOptions { Indented = true });
-                jdoc.WriteTo(writer);
+                foreach (var line in lines)
+                {
+                    arr = line.Split(',');
+
+                    if(arr[0] == key)
+                        return String.Join(",", arr.Skip(1));
+                }
+
+                return "";
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+        }
+
+        bool UpdateSettings(string key, string value)
+        {
+            try
+            {
+                var lines = File.ReadLines(FILE_CONFIG);
+
+                Dictionary<string, string> settings = new Dictionary<string, string>();
+                string[] arr;
+
+                foreach (var line in lines)
+                {
+                    arr = line.Split(',');
+                    names.Add(arr[0], String.Join(",", arr.Skip(1)));
+                }
 
                 return true;
             }
@@ -38,9 +64,14 @@ namespace larionov_lab___5_files_and_strings_part_1
             }
         }
 
+        public string getDirFile()
+        {
+            return ReadSetting("Setting1");
+        }
+
         public bool initConfig()
         {
-            if (!File.Exists(settings[KEY_DIR_FILE]))
+            if (!Directory.Exists(settings[KEY_DIR_FILE]))
             {
                 settings[KEY_DIR_FILE] = Environment.CurrentDirectory;
                 setKeys();
@@ -52,51 +83,6 @@ namespace larionov_lab___5_files_and_strings_part_1
             return setKeys();
         }
 
-        private bool setKey(string key, string value)
-        {
-            try
-            {
-                using var ms = new MemoryStream();
-                using var writer = new Utf8JsonWriter(ms);
-
-                writer.WriteStartObject();
-
-                foreach (var item in settings)
-                    writer.WriteString(item.Key, item.Value);
-
-                writer.WriteEndObject();
-                writer.Flush();
-
-                return updateJson(FILE_CONFIG, Encoding.UTF8.GetString(ms.ToArray()));
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
-
-        private bool setKeys()
-        {
-            try
-            {
-                using var ms = new MemoryStream();
-                using var writer = new Utf8JsonWriter(ms);
-
-                writer.WriteStartObject();
-
-                foreach (var item in settings)
-                    writer.WriteString(item.Key, item.Value);
-
-                writer.WriteEndObject();
-                writer.Flush();
-
-                return updateJson(FILE_CONFIG, Encoding.UTF8.GetString(ms.ToArray()));
-            }
-            catch (Exception e)
-            {
-                return false;
-            }
-        }
 
         public void setDidectoryFile()
         {
@@ -126,13 +112,12 @@ namespace larionov_lab___5_files_and_strings_part_1
                     }
                     else
                     {
-                        settings[KEY_DIR_FILE] = result;
-                        isGo = !setKey(KEY_DIR_FILE, result);
 
-                        if (!isGo)
+                        if (UpdateSettings(KEY_DIR_FILE, result))
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
                             Console.WriteLine("Папка успешно изменена!");
+                            isGo = false;
                         }
                         else
                         {
