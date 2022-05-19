@@ -14,6 +14,41 @@
         public const int MIN_COUNT_NUMBERS = 10;
         public const int MAX_COUNT_NUMBERS = 1024 * 6;
 
+        private string createRandomBinFile(string defaultReadFile, int countNumbers, int min, int max)
+        {
+            MyPrint myPrint = new MyPrint();
+            myPrint.printInfoAboutWorkDir(defaultReadFile);
+
+            string fileName = Console.ReadLine();
+
+            if (fileName == "")
+                fileName = defaultReadFile;
+
+            MySettings mySettings = new MySettings();
+            fileName = mySettings.getDirFile() + "\\" + fileName;
+
+            try
+            {
+                using (BinaryWriter bin = new BinaryWriter(File.Open(fileName, FileMode.Create)))
+                {
+                    Random random = new Random();
+
+                    for (int i = 0; i < countNumbers; i++)
+                        bin.Write(random.Next(min, max));
+                }
+
+                return fileName;
+            }
+            catch (Exception e)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(e.Message + "\n");
+                Console.ResetColor();
+
+                return "";
+            }
+        }
+
         public string createBin(string defaultReadFile)
         {
 
@@ -38,7 +73,7 @@
             myPrint.printString("Минимальный элемент:", min.ToString());
             myPrint.printString("Максимальный элемент:", max.ToString(), "\n");
 
-            return myFiles.createRandomBinFile(defaultReadFile, count, min, max);
+            return createRandomBinFile(defaultReadFile, count, min, max);
         }
     }
 }

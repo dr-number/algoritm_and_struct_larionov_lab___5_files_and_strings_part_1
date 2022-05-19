@@ -92,5 +92,21 @@
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(textError);
         }
+
+        public void printInfoAboutWorkDir(String defaultReadFile)
+        {
+            MySettings mySettings = new MySettings();
+            string dirFile = mySettings.getDirFile();
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"* - если путь не будет указан, то рабочей директорией будет: \n{dirFile}\\");
+            Console.ResetColor();
+
+            Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write(defaultReadFile);
+            Console.ResetColor();
+            Console.Write("]: ");
+        }
     }
 }

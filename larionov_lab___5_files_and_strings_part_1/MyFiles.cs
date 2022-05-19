@@ -24,67 +24,20 @@ namespace larionov_lab___5_files_and_strings_part_1
         public const string FILE_PART_2_TASK_16_2 = "Part_2_Task_16_2" + EXP;
         public const string FILE_PART_2_TASK_16_3 = "Part_2_Task_16_3" + EXP_BIN;
 
-
-        public static string DIR_FILE = Environment.CurrentDirectory;
-
         public const string MESSAGE_ERROR_PROCESSING_FILE = "Ошибка обработки файла!";
-
-        public void setDidectoryFile()
-        {
-            string result = DIR_FILE;
-            bool isGo = true;
-
-            Console.WriteLine("\nТекущие параметры папки:");
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine(DIR_FILE);
-            Console.ResetColor();
-
-            Console.WriteLine("\nВведите директорию в которой лежат файлы с данными ");
-            Console.Write("Для завершения настройки введите \"0\": ");
-
-            while (isGo)
-            {
-                result = Console.ReadLine();
-
-                if (result != "0")
-                {
-                    if (!Directory.Exists(result))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine($"Папка: {result} - не существует!");
-                    }
-                    else
-                    {
-                        DIR_FILE = result;
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Папка успешно изменена!");
-                        isGo = false;
-                    }
-
-                    Console.ResetColor();
-                }
-                else
-                    isGo = false;
-            }
-        }
 
         public string setReadFile(string defaultReadFile)
         {
-
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("* - если путь не будет указан программа будет искать файл в директории: \n" + DIR_FILE + "\\");
-            Console.ResetColor();
-
-            Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(defaultReadFile);
-            Console.ResetColor();
-            Console.Write("]: ");
+            MyPrint myPrint = new MyPrint();
+            myPrint.printInfoAboutWorkDir(defaultReadFile);
 
             string fileName = Console.ReadLine();
 
             if (fileName == "")
                 fileName = defaultReadFile;
+
+            MySettings mySettings = new MySettings();
+            fileName = mySettings.getDirFile() + "\\" + fileName;
 
             if (!File.Exists(fileName))
             {
@@ -164,8 +117,8 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public bool getText(string defaultReadFile, Delegate method, string param)
         {
-
-            string path = setReadFile(DIR_FILE + "\\" + defaultReadFile);
+            MySettings mySettings = new MySettings();
+            string path = setReadFile(mySettings.getDirFile() + "\\" + defaultReadFile);
 
             if (path == "")
                 return false;
@@ -247,46 +200,6 @@ namespace larionov_lab___5_files_and_strings_part_1
                 return false;
             }
         }
-
-        public string createRandomBinFile(string defaultReadFile, int countNumbers, int min, int max)
-        {
-
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("* - если путь не будет указан программа создаст бинарный файл в директории: \n" + DIR_FILE + "\\");
-            Console.ResetColor();
-
-            Console.Write("\nВведите (путь и) имя файла с учетом регистра (расширение не обязательно) [файл по умолчанию ");
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write(defaultReadFile);
-            Console.ResetColor();
-            Console.Write("]: ");
-
-            string fileName = Console.ReadLine();
-
-            if (fileName == "")
-                fileName = defaultReadFile;
-
-            fileName = DIR_FILE + "\\" + fileName;
-
-            try
-            {
-                using (BinaryWriter bin = new BinaryWriter(File.Open(fileName, FileMode.Create)))
-                {
-                    Random random = new Random();
-
-                    for (int i = 0; i < countNumbers; i++)
-                        bin.Write(random.Next(min, max));
-                }
-
-                return fileName;
-            }
-            catch (Exception e)
-            {
-                printError(e.Message + "\n");
-                return "";
-            }
-        }
-
 
         public bool getBin(string path, Delegate method, int periodPrint, bool isReadFromEnd = false)
         {

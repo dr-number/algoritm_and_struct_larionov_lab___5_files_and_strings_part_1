@@ -6,6 +6,9 @@ namespace larionov_lab___5_files_and_strings_part1
     {
         static void Main(string[] args)
         {
+            MySettings mySettings = new MySettings();
+            mySettings.initConfig();
+
             MyPrint myPrint = new MyPrint();
 
             Console.WriteLine("Ларионов Никита Юрьевич. гр. 110з\n");
@@ -91,8 +94,7 @@ namespace larionov_lab___5_files_and_strings_part1
                     task.init();
                 }
                 else if (selectStr == "s") {
-                    MyFiles myFiles = new MyFiles();
-                    myFiles.setDidectoryFile();
+                    mySettings.setDidectoryFile();
                 }
                 else if (selectStr == "0")
                 {
