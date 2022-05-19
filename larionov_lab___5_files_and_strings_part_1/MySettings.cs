@@ -123,13 +123,19 @@ namespace larionov_lab___5_files_and_strings_part_1
 
                 if (result != "0")
                 {
-                    if (!Directory.Exists(result))
+                    if (!Directory.Exists(result) && result != "")
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine($"Папка: {result} - не существует!");
                     }
                     else
                     {
+
+                        if(result == "")
+                        {
+                            result = Environment.CurrentDirectory;
+                            Console.WriteLine("Выбрана директория по умолчанию");
+                        }
 
                         if (UpdateSettings(KEY_DIR_FILE, result))
                         {
