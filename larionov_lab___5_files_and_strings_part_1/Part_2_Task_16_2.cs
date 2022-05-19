@@ -72,10 +72,16 @@ namespace larionov_lab___5_files_and_strings_part_1
             MyFiles myFiles = new MyFiles();
             MyFiles.PathsForTask paths = myFiles.getPathsForTask(MyFiles.FILE_PART_2_TASK_16_2);
 
-            bool isResult = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(scanTable), "");
+            string path = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(scanTable), "");
+            paths.originalFile = path;
+
+            bool isOk = path != "";
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printFinalInformation(isResult);
+            myPrint.printFinalInformation(isOk);
+
+            if (!isOk)
+                myFiles.recoverOriginalFile(paths.originalFile, paths.tmpFile);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace larionov_lab___5_files_and_strings_part_1
             
             PathsForTask result;
             result.originalFile = settings.getDirFile() + "\\" + nameFilePartTask;
-            result.tmpFile = Path.GetTempPath() + nameFilePartTask + MyFiles.EXP_TMP;
+            result.tmpFile = Path.GetTempPath() + nameFilePartTask + EXP_TMP;
 
             return result;
         }
@@ -149,12 +149,12 @@ namespace larionov_lab___5_files_and_strings_part_1
             return Console.ReadLine()?.ToLower() != "n";
         }
 
-        public bool getText(string defaultReadFile, Delegate method, string param)
+        public string getText(string defaultReadFile, Delegate method, string param)
         {
             string path = setReadFile(defaultReadFile, EXP);
 
             if (path == "")
-                return false;
+                return "";
 
             bool isOk = true;
             string tmpFile = "";
@@ -182,20 +182,20 @@ namespace larionov_lab___5_files_and_strings_part_1
                 if (isOk)
                 {
                     File.Delete(tmpFile);
-                    return true;
+                    return path;
                 }
 
             }
             catch (Exception e)
             {
                 printError(e.Message);
-                isOk = false;
+                path = "";
             }
 
-            if (!isOk)
+            if (path != "")
                 recoverOriginalFile(path, tmpFile);
 
-            return isOk;
+            return path;
 
         }
 

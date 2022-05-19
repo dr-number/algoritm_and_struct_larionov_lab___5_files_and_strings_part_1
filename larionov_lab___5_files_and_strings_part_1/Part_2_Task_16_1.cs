@@ -78,7 +78,10 @@ namespace larionov_lab___5_files_and_strings_part_1
             MyFiles myFiles = new MyFiles();
             MyFiles.PathsForTask paths = myFiles.getPathsForTask(MyFiles.FILE_PART_2_TASK_16_1);
 
-            bool isResult = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
+            string path = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
+            paths.originalFile = path;
+
+            bool isResult = path != "";
 
             if (!isResult)
             {

@@ -93,13 +93,14 @@
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_6_2);
 
-            const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_6_2;
-            const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
-
             MyFiles myFiles = new MyFiles();
-            bool isResult = myFiles.getText(ORIGINAL_FILE, new Func<StreamWriter, string, string, int>(readMatrix), "");
+            MyFiles.PathsForTask paths = myFiles.getPathsForTask(MyFiles.FILE_PART_2_TASK_6_2);
 
-            if (!isResult)
+            string path = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(readMatrix), "");
+
+            paths.originalFile = path;
+
+            if (path == "")
             {
                 myFiles.printError("Ошибка чтения матрицы либо матрица не корректна!");
                 return;
@@ -144,11 +145,11 @@
 
             string write = matrixToStr(size);
 
-            bool isOk = myFiles.writeStrings(MyFiles.FILE_PART_2_TASK_6_2, matrixToStr(size));
+            bool isOk = myFiles.writeStrings(paths.originalFile, matrixToStr(size));
             myPrint.printFinalInformation(isOk);
 
             if (!isOk)
-                myFiles.recoverOriginalFile(ORIGINAL_FILE, TMP_FILE);
+                myFiles.recoverOriginalFile(paths.originalFile, paths.tmpFile);
         }
     }
 }
