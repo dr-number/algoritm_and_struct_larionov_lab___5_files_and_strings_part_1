@@ -57,7 +57,7 @@
             MyQuestion myQuestion = new MyQuestion();
 
             if (!myQuestion.isQuestion(MyQuestion.QUESTION_CREATE_RANDOM_NUMBER_BIN))
-                return myFiles.setReadFile(defaultReadFile);
+                return myFiles.setReadFile(defaultReadFile, MyFiles.EXP_BIN);
 
             Random random = new Random();
             MyInput myInput = new MyInput();

@@ -41,7 +41,21 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             return result;
         }
-        public string setReadFile(string defaultReadFile)
+
+        string existFile(string fileName, string exp)
+        {
+            if(File.Exists(fileName))
+                return fileName;
+
+            fileName += exp;
+
+            if (File.Exists(fileName))
+                return fileName;
+
+            return "";
+        }
+
+        public string setReadFile(string defaultReadFile, string exp)
         {
 
             MyPrint myPrint = new MyPrint();
@@ -51,11 +65,13 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             if (fileName == "")
                 fileName = defaultReadFile;
+            else
+            {
+                MySettings mySettings = new MySettings();
+                fileName = mySettings.getDirFile() + "\\" + fileName;
+            }
 
-            MySettings mySettings = new MySettings();
-            fileName = mySettings.getDirFile() + "\\" + fileName;
-
-            if (!File.Exists(fileName))
+            if (existFile(fileName, exp) == "")
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Файла: {fileName} - не существует!");
@@ -63,6 +79,8 @@ namespace larionov_lab___5_files_and_strings_part_1
 
                 return "";
             }
+
+            fileName = existFile(fileName, exp);
 
             FileInfo fileInfo = new FileInfo(fileName);
 
@@ -123,17 +141,17 @@ namespace larionov_lab___5_files_and_strings_part_1
             Console.ResetColor();
         }
 
-        public bool isReadDataFileUpSymbol(string symbol)
+        public bool isReadDataUpSymbol(string symbol)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\nПрочитать данные из файла до первого символа \"{symbol}\" [y/n]?: ");
+            Console.WriteLine($"\nПрочитать данные до первого символа \"{symbol}\" [y/n]?: ");
             Console.ResetColor();
             return Console.ReadLine()?.ToLower() != "n";
         }
 
         public bool getText(string defaultReadFile, Delegate method, string param)
         {
-            string path = setReadFile(defaultReadFile);
+            string path = setReadFile(defaultReadFile, EXP);
 
             if (path == "")
                 return false;

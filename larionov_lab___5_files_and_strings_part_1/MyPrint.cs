@@ -95,6 +95,14 @@
 
         public void printInfoAboutWorkDir(String defaultReadFile)
         {
+            Console.ResetColor();
+            Console.Write("Текущая рабочая директория: ");
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            MySettings mySettings = new MySettings();
+            Console.Write(mySettings.getDirFile() + "\n");
+
+            Console.ResetColor();
             Console.Write("\nВведите имя файла с учетом регистра и расширением\n[файл по умолчанию ");
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write(defaultReadFile);

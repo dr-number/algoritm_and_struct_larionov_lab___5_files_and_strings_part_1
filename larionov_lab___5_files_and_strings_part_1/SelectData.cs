@@ -31,7 +31,7 @@
 
                 defaultReadFile = mySettings.getDirFile() + "\\" + defaultReadFile;
 
-                fileName = myFiles.setReadFile(defaultReadFile);
+                fileName = myFiles.setReadFile(defaultReadFile, MyFiles.EXP);
 
                 if (fileName != "")
                 {
