@@ -116,7 +116,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             while (isGo)
             {
-                Console.WriteLine("\nВведите директорию в которой лежат файлы с данными ");
+                Console.WriteLine("\nВведите директорию в которой лежат файлы с данными [Enter в папке с исполняемым файлом]");
                 Console.Write("Для выхода из настройки введите \"0\": ");
 
                 result = Console.ReadLine();
