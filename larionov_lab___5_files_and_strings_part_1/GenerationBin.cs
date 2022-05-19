@@ -16,6 +16,10 @@
 
         private string createRandomBinFile(string defaultReadFile, int countNumbers, int min, int max)
         {
+
+            MySettings mySettings = new MySettings();
+            defaultReadFile = mySettings.getDirFile() + "\\" + defaultReadFile;
+
             MyPrint myPrint = new MyPrint();
             myPrint.printInfoAboutWorkDir(defaultReadFile);
 
@@ -23,9 +27,6 @@
 
             if (fileName == "")
                 fileName = defaultReadFile;
-
-            MySettings mySettings = new MySettings();
-            fileName = mySettings.getDirFile() + "\\" + fileName;
 
             try
             {

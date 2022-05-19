@@ -26,8 +26,24 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public const string MESSAGE_ERROR_PROCESSING_FILE = "Ошибка обработки файла!";
 
+        public struct PathsForTask
+        {
+            public string originalFile;
+            public string tmpFile;
+        }
+        public PathsForTask getPathsForTask(string nameFilePartTask)
+        {
+            MySettings settings = new MySettings();
+            
+            PathsForTask result;
+            result.originalFile = settings.getDirFile() + "\\" + nameFilePartTask;
+            result.tmpFile = Path.GetTempPath() + nameFilePartTask + MyFiles.EXP_TMP;
+
+            return result;
+        }
         public string setReadFile(string defaultReadFile)
         {
+
             MyPrint myPrint = new MyPrint();
             myPrint.printInfoAboutWorkDir(defaultReadFile);
 
@@ -35,6 +51,9 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             if (fileName == "")
                 fileName = defaultReadFile;
+
+            MySettings mySettings = new MySettings();
+            fileName = mySettings.getDirFile() + "\\" + fileName;
 
             if (!File.Exists(fileName))
             {
@@ -114,8 +133,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public bool getText(string defaultReadFile, Delegate method, string param)
         {
-            MySettings mySettings = new MySettings();
-            string path = setReadFile(mySettings.getDirFile() + "\\" + defaultReadFile);
+            string path = setReadFile(defaultReadFile);
 
             if (path == "")
                 return false;
@@ -125,8 +143,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             try
             {
-
-                tmpFile = path + EXP_TMP;
+                tmpFile = Path.GetTempPath() + Path.GetFileName(path) + EXP_TMP;
                 File.Move(path, tmpFile);
 
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
@@ -136,7 +153,7 @@ namespace larionov_lab___5_files_and_strings_part_1
                     using (StreamReader fReader = new StreamReader(tmpFile))
                         while (!fReader.EndOfStream)
                         {
-                            if ((int)method.DynamicInvoke(fWriter, fReader.ReadLine(), param) == -1)
+                            if ((int) method.DynamicInvoke(fWriter, fReader.ReadLine(), param) == -1)
                             {
                                 isOk = false;
                                 break;
@@ -166,14 +183,9 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public void recoverOriginalFile(string pathOriginal, string pathTmp)
         {
-            try
-            {
-                File.Move(pathTmp, pathTmp + EXP_TMP);
-                File.Delete(pathOriginal);
-                File.Move(pathTmp + EXP_TMP, pathOriginal);
-            }
-            catch (Exception e) {}
-
+            File.Move(pathTmp, pathTmp + EXP_TMP);
+            File.Delete(pathOriginal);
+            File.Move(pathTmp + EXP_TMP, pathOriginal);
         }
 
         public bool writeStrings(string pathOut, string strings)
@@ -207,7 +219,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             try
             {
-                tmpFile = path + EXP_TMP;
+                tmpFile = Path.GetTempPath() + Path.GetFileName(path) + EXP_TMP;
                 File.Move(path, tmpFile);
 
                 Stream read = File.OpenRead(tmpFile);

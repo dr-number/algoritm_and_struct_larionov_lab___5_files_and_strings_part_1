@@ -75,11 +75,10 @@ namespace larionov_lab___5_files_and_strings_part_1
         {
             Console.WriteLine(TasksInfo.PART_2_TASK_16_1);
 
-            const string ORIGINAL_FILE = MyFiles.FILE_PART_2_TASK_16_1;
-            const string TMP_FILE = ORIGINAL_FILE + MyFiles.EXP_TMP;
-
             MyFiles myFiles = new MyFiles();
-            bool isResult = myFiles.getText(ORIGINAL_FILE, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
+            MyFiles.PathsForTask paths = myFiles.getPathsForTask(MyFiles.FILE_PART_2_TASK_16_1);
+
+            bool isResult = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
 
             if (!isResult)
             {
@@ -102,11 +101,11 @@ namespace larionov_lab___5_files_and_strings_part_1
             myPrint.printString("\nКоличество фраз-полинтропов:", count.ToString(), "\n");
 
 
-            bool isOk = myFiles.writeStrings(ORIGINAL_FILE, arrayToWrite());
+            bool isOk = myFiles.writeStrings(paths.originalFile, arrayToWrite());
             myPrint.printFinalInformation(isOk);
 
             if (!isOk)
-                myFiles.recoverOriginalFile(ORIGINAL_FILE, TMP_FILE);
+                myFiles.recoverOriginalFile(paths.originalFile, paths.tmpFile);
 
         }
     }
