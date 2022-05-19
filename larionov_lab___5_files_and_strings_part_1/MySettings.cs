@@ -134,7 +134,8 @@ namespace larionov_lab___5_files_and_strings_part_1
                         if(result == "")
                         {
                             result = Environment.CurrentDirectory;
-                            Console.WriteLine("Выбрана директория по умолчанию");
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("\nВыбрана директория по умолчанию");
                         }
 
                         if (UpdateSettings(KEY_DIR_FILE, result))
