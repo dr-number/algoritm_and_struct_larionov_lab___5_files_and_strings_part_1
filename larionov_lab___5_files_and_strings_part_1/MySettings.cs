@@ -1,7 +1,4 @@
-﻿using System;
-using System.Configuration;
-
-
+﻿
 namespace larionov_lab___5_files_and_strings_part_1
 {
     internal class MySettings
@@ -10,12 +7,14 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         private const string KEY_DIR_FILE = "DIR_FILE";
 
-        private void setDefaultSettings()
+        private bool setDefaultSettings()
         {
             Dictionary<string, string> settings = new Dictionary<string, string>();
+
+            //При  необходимости добавить сюда новые параметры
             settings.Add(KEY_DIR_FILE, "");
 
-            File.WriteAllLines(FILE_CONFIG, settings.Select(x => $"{x.Key},{x.Value}"));
+            return saveSettings(settings);
         }
 
         private string ReadSetting(string key)
@@ -46,16 +45,31 @@ namespace larionov_lab___5_files_and_strings_part_1
             try
             {
                 var lines = File.ReadLines(FILE_CONFIG);
-
                 Dictionary<string, string> settings = new Dictionary<string, string>();
-                string[] arr;
 
                 foreach (var line in lines)
-                {
-                    arr = line.Split(',');
-                    names.Add(arr[0], String.Join(",", arr.Skip(1)));
-                }
+                    if (line.Split(',')[0] == key)
+                    {
+                        settings[key] = value;
+                        return saveSettings(settings);
+                    }
 
+                return false;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
+
+        private bool saveSettings(Dictionary<string, string> settings)
+        {
+            if(settings == null)
+                return false;
+
+            try
+            {
+                File.WriteAllLines(FILE_CONFIG, settings.Select(x => $"{x.Key},{x.Value}"));
                 return true;
             }
             catch (Exception e)
@@ -66,21 +80,20 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public string getDirFile()
         {
-            return ReadSetting("Setting1");
+            string dir = ReadSetting(KEY_DIR_FILE);
+            
+            if(dir == "")
+                return Environment.CurrentDirectory;
+
+            return dir;
         }
 
-        public bool initConfig()
+        public void initConfig()
         {
-            if (!Directory.Exists(settings[KEY_DIR_FILE]))
-            {
-                settings[KEY_DIR_FILE] = Environment.CurrentDirectory;
-                setKeys();
-            }
+            setDefaultSettings();
 
-            if (File.Exists(FILE_CONFIG))
-                return false;
-
-            return setKeys();
+            if (!Directory.Exists(getDirFile()))
+                UpdateSettings(KEY_DIR_FILE, Environment.CurrentDirectory);
         }
 
 
