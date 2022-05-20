@@ -12,9 +12,6 @@
 
             bool isRegistr, isNoRegistr;
 
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.Write("\nДанные после обработки: ");
-
             Console.ForegroundColor = ConsoleColor.Green;
 
             foreach (var item in array)
@@ -29,6 +26,18 @@
                 }
             }
 
+            if(result == "")
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Слов по заданным параметрам не найдено!");
+                Console.ResetColor();
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("\nДанные после обработки: ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
             MyPrint myPrint = new MyPrint();
             Console.WriteLine(result);
 
