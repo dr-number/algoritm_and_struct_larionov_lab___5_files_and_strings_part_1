@@ -20,11 +20,11 @@
             return result;
         }
 
-        string deleteRepeat(string str)
+        private string deleteRepeat(string str)
         {
             return new string(str.ToCharArray().Distinct().ToArray());
         }
-        private void PrintSplint(string str, string delimiterChars)
+        private int PrintSplint(string str, string delimiterChars)
         {
             string[] array = str.Split(delimiterChars.ToCharArray());
 
@@ -42,8 +42,8 @@
                     ++count;
                 }
 
-            MyPrint myPrint = new MyPrint();
-            myPrint.printString("\nКоличество слов:", count.ToString());
+            
+            return count;
         }
 
         public void init()
@@ -73,7 +73,18 @@
                 myPrint.printString("\nОбновленные разделители:", getDelimitersInfo(delimiters), "\n");
             }
 
-            PrintSplint(str, delimiters);
+            int count = PrintSplint(str, delimiters);
+
+            if (count != 0)
+            {
+                myPrint.printString("\nКоличество слов:", count.ToString());
+                return;
+            }
+                
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Слов не обнаружено!");
+            Console.ResetColor();
+            
         }
     }
 }
