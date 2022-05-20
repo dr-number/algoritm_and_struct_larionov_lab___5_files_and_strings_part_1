@@ -17,6 +17,8 @@
             data result;
 
             MySettings mySettings = new MySettings();
+            defaultReadFile = mySettings.getDirFile() + "\\" + defaultReadFile;
+
             MyQuestion myQuestion = new MyQuestion();
             MyFiles myFiles = new MyFiles();
 
@@ -28,8 +30,6 @@
                     result.fileName = "";
                     return result;
                 }
-
-                defaultReadFile = mySettings.getDirFile() + "\\" + defaultReadFile;
 
                 fileName = myFiles.setReadFile(defaultReadFile, MyFiles.EXP);
 

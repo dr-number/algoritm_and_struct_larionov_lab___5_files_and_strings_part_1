@@ -71,7 +71,9 @@ namespace larionov_lab___5_files_and_strings_part_1
                 fileName = mySettings.getDirFile() + "\\" + fileName;
             }
 
-            if (existFile(fileName, exp) == "")
+            string tmpFileName = existFile(fileName, exp);
+
+            if (tmpFileName == "")
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Файла: {fileName} - не существует!");
@@ -80,7 +82,7 @@ namespace larionov_lab___5_files_and_strings_part_1
                 return "";
             }
 
-            fileName = existFile(fileName, exp);
+            fileName = tmpFileName;
 
             FileInfo fileInfo = new FileInfo(fileName);
 
