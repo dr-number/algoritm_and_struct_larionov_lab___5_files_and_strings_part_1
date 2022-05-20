@@ -141,14 +141,6 @@ namespace larionov_lab___5_files_and_strings_part_1
             Console.ResetColor();
         }
 
-        public bool isReadDataUpSymbol(string symbol)
-        {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.WriteLine($"\nПрочитать данные до первого символа \"{symbol}\" [y/n]?: ");
-            Console.ResetColor();
-            return Console.ReadLine()?.ToLower() != "n";
-        }
-
         public string getText(string defaultReadFile, Delegate method, string param)
         {
             string path = setReadFile(defaultReadFile, EXP);

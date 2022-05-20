@@ -14,6 +14,14 @@
             return Console.ReadLine()?.ToLower() != "n";
         }
 
+        public bool isReadDataUpSymbol(string symbol)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine($"\nПрочитать данные до первого символа \"{symbol}\" [y/n]?: ");
+            Console.ResetColor();
+            return Console.ReadLine()?.ToLower() != "n";
+        }
+
         public bool isProbably(string option)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;

@@ -56,7 +56,9 @@
 
                 if (endSymbol != "")
                 {
-                    if (myFiles.isReadDataUpSymbol(endSymbol))
+                    MyQuestion myQuestion = new MyQuestion();
+
+                    if (myQuestion.isReadDataUpSymbol(endSymbol))
                     {
                         int index = inputString.IndexOf(endSymbol);
 
