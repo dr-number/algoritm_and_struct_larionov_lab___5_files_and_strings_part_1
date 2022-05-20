@@ -29,8 +29,18 @@ namespace larionov_lab___5_files_and_strings_part_1
             MyQuestion myQuestion = new MyQuestion();
             bool isSaveSpace = myQuestion.isQuestion("Оставить пробелы в строке? [y/n]: ");
 
+            string result = correctingStr(str, isSaveSpace);
 
-            myPrint.printString("\n" + MyPrint.FINAL_RESULT, correctingStr(str, isSaveSpace), "\n");
+            if (result != "")
+            {
+                myPrint.printString("\n" + MyPrint.FINAL_RESULT, result, "\n");
+                return;
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("После обработки строка стала пустой!");
+            Console.ResetColor();
+            
         }
     }
 }
