@@ -54,7 +54,7 @@ namespace larionov_lab___5_files_and_strings_part_1
             return Filter(str).Split("|").Length == COUNT_COL;
         }
 
-        private int scanTable(StreamWriter file, string str, string endSymbols)
+        private int scanTable(StreamWriter file, string str, string ignore)
         {
 
             if (count == 0)
