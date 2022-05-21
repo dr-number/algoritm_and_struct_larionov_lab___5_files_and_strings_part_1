@@ -51,7 +51,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         bool isCorrectTable(string str)
         {
-            return Filter(str).Split("|").Length == COUNT_COL;
+            return Filter(str).Split("|").Length == COUNT_COL; //
         }
 
         private int scanTable(StreamWriter file, string str, string ignore)
