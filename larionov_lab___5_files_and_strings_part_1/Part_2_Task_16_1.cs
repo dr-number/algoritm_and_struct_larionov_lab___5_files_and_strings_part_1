@@ -30,10 +30,10 @@ namespace larionov_lab___5_files_and_strings_part_1
             return true;
         }
 
-        private int scanPalindrom(StreamWriter file, string str, string endSymbols)
+        private int scanPalindrom(string str, string endSymbols)
         {
 
-            string[] array = str.Split(".");
+            string[] array = str.Split(endSymbols);
             string word;
 
             foreach (string item in array)
@@ -42,7 +42,7 @@ namespace larionov_lab___5_files_and_strings_part_1
                     continue;
 
                 ++countAllPhrases;
-                word = item.Trim() + ".";
+                word = item.Trim() + endSymbols;
 
                 if (isPalindrom(item))
                 {
@@ -86,7 +86,7 @@ namespace larionov_lab___5_files_and_strings_part_1
                 return;
             }
 
-            string path = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
+            string path = myFiles.getTextReadOnly(paths.originalFile, new Func<string, string, int>(scanPalindrom), ".");
             paths.originalFile = path;
 
             bool isResult = path != "";
@@ -113,6 +113,11 @@ namespace larionov_lab___5_files_and_strings_part_1
 
 
             bool isOk = myFiles.writeStrings(paths.originalFile, arrayToWrite(), fileOut);
+
+            if (isOk)
+                myFiles.printFileInfo(fileOut);
+            
+
             myPrint.printFinalInformation(isOk);
 
         }

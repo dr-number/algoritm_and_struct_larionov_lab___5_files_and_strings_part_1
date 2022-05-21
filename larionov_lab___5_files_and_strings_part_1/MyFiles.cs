@@ -6,7 +6,7 @@ namespace larionov_lab___5_files_and_strings_part_1
     {
         public const string EXP_TMP = ".tmp";
         public const string EXP = ".txt";
-        public const string EXP_OUT = ".out" + EXP;
+        public const string EXP_OUT = "_out" + EXP;
         public const string EXP_BIN = ".lar_110z";
 
         public const string FILE_PART_1_TASK_6_1 = "Part_1_Task_6_1" + EXP;
@@ -150,6 +150,39 @@ namespace larionov_lab___5_files_and_strings_part_1
             Console.ResetColor();
         }
 
+        public string getTextReadOnly(string defaultReadFile, Delegate method, string param)
+        {
+            string path = setReadFile(defaultReadFile, EXP);
+
+            if (path == "")
+                return "";
+
+            bool isOk = true;
+
+            try
+            {
+                using (StreamReader fReader = new StreamReader(path))
+                    while (!fReader.EndOfStream)
+                        if ((int)method.DynamicInvoke(fReader.ReadLine(), param) == -1)
+                        {
+                            isOk = false;
+                            break;
+                        }
+                
+                if (isOk)
+                    return path;
+
+            }
+            catch (Exception e)
+            {
+                printError(e.Message);
+                path = "";
+            }
+
+            return path;
+
+        }
+
         public string getText(string defaultReadFile, Delegate method, string param)
         {
             string path = setReadFile(defaultReadFile, EXP);
@@ -270,6 +303,10 @@ namespace larionov_lab___5_files_and_strings_part_1
             catch (Exception e)
             {
                 printError(e.Message);
+
+                if (fileOut != "")
+                    File.Delete(pathOut);
+
                 return false;
             }
         }
