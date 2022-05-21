@@ -172,6 +172,8 @@ namespace larionov_lab___5_files_and_strings_part_1
                 if (isOk)
                     return path;
 
+                return "";
+
             }
             catch (Exception e)
             {
@@ -218,6 +220,9 @@ namespace larionov_lab___5_files_and_strings_part_1
                     File.Delete(tmpFile);
                     return path;
                 }
+                else
+                    path = "";
+
 
             }
             catch (Exception e)
@@ -235,9 +240,15 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         public void recoverOriginalFile(string pathOriginal, string pathTmp)
         {
-            File.Move(pathTmp, pathTmp + EXP_TMP);
-            File.Delete(pathOriginal);
-            File.Move(pathTmp + EXP_TMP, pathOriginal);
+
+            if(pathTmp != "" && File.Exists(pathTmp))
+                File.Move(pathTmp, pathTmp + EXP_TMP);
+
+            if(pathOriginal != "" && File.Exists(pathOriginal))
+                File.Delete(pathOriginal);
+
+            if (pathOriginal != "" && pathTmp != "" && File.Exists(pathTmp + EXP_TMP))
+                File.Move(pathTmp + EXP_TMP, pathOriginal);
         }
 
         public string setFileForOut(string defaultFile)

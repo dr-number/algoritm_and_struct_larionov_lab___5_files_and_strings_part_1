@@ -4,8 +4,13 @@ namespace larionov_lab___5_files_and_strings_part_1
 {
     internal class Part_2_Task_16_2
     {
-        private int count = 0;
+        
+        const int COUNT_COL = 6;
+
         const string TITLE_GPA = "Cредний балл";
+        const string MESSAGE_ERROR = "Ошибка обработки данных\nВозможно структура таблицы не соответствует условию задачи!";
+
+        private int count = 0;
 
         public string Filter(string str)
         {
@@ -20,6 +25,7 @@ namespace larionov_lab___5_files_and_strings_part_1
 
         private double getGPA(string str)
         {
+
             int n5 = 0, n4 = 0, n3 = 0, n2 = 0, n1 = 0;
 
             string[] marks = Filter(str).Split("|");
@@ -43,13 +49,23 @@ namespace larionov_lab___5_files_and_strings_part_1
             return Math.Round(sum / divider, 2);
         }
 
+        bool isCorrectTable(string str)
+        {
+            return Filter(str).Split("|").Length == COUNT_COL;
+        }
+
         private int scanTable(StreamWriter file, string str, string endSymbols)
         {
 
             if (count == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                str += "  " + TITLE_GPA + " |";
+                if (isCorrectTable(str))
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    str += "  " + TITLE_GPA + " |";
+                }
+                else
+                    return -1;
             }
             else
             {
@@ -78,7 +94,7 @@ namespace larionov_lab___5_files_and_strings_part_1
             bool isOk = path != "";
 
             MyPrint myPrint = new MyPrint();
-            myPrint.printFinalInformation(isOk);
+            myPrint.printFinalInformation(isOk, MyPrint.WRITE_OK, MESSAGE_ERROR);
 
             if (!isOk)
                 myFiles.recoverOriginalFile(paths.originalFile, paths.tmpFile);
