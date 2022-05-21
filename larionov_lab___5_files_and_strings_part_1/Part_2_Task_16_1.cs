@@ -78,6 +78,14 @@ namespace larionov_lab___5_files_and_strings_part_1
             MyFiles myFiles = new MyFiles();
             MyFiles.PathsForTask paths = myFiles.getPathsForTask(MyFiles.FILE_PART_2_TASK_16_1);
 
+            string fileOut = myFiles.setFileForOut(paths.outFile);
+
+            if (fileOut == "")
+            {
+                myFiles.printError(MyFiles.MESSAGE_ERROR_CREATE_FILE);
+                return;
+            }
+
             string path = myFiles.getText(paths.originalFile, new Func<StreamWriter, string, string, int>(scanPalindrom), "");
             paths.originalFile = path;
 
@@ -104,11 +112,8 @@ namespace larionov_lab___5_files_and_strings_part_1
             myPrint.printString("\nКоличество фраз-полинтропов:", count.ToString(), "\n");
 
 
-            bool isOk = myFiles.writeStrings(paths.originalFile, arrayToWrite());
+            bool isOk = myFiles.writeStrings(paths.originalFile, arrayToWrite(), fileOut);
             myPrint.printFinalInformation(isOk);
-
-            if (!isOk)
-                myFiles.recoverOriginalFile(paths.originalFile, paths.tmpFile);
 
         }
     }

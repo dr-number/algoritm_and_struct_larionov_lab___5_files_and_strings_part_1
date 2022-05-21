@@ -15,7 +15,7 @@
             public bool isCorrect;
         };
 
-        private int readMatrix(StreamWriter file, string str, string endSymbols)
+        private int readMatrix(StreamWriter file, string str, string ignore)
         {
             string[] array = str.Split(separator);
             int countCol = array.Length;

@@ -6,6 +6,7 @@ namespace larionov_lab___5_files_and_strings_part_1
     {
         public const string EXP_TMP = ".tmp";
         public const string EXP = ".txt";
+        public const string EXP_OUT = ".out" + EXP;
         public const string EXP_BIN = ".lar_110z";
 
         public const string FILE_PART_1_TASK_6_1 = "Part_1_Task_6_1" + EXP;
@@ -25,19 +26,24 @@ namespace larionov_lab___5_files_and_strings_part_1
         public const string FILE_PART_2_TASK_16_3 = "Part_2_Task_16_3" + EXP_BIN;
 
         public const string MESSAGE_ERROR_PROCESSING_FILE = "Ошибка обработки файла!";
+        public const string MESSAGE_ERROR_CREATE_FILE = "Ошибка создания файла для записи конечных результатов!";
 
         public struct PathsForTask
         {
             public string originalFile;
             public string tmpFile;
+            public string outFile;
         }
         public PathsForTask getPathsForTask(string nameFilePartTask)
         {
             MySettings settings = new MySettings();
-            
+            string dirFile = settings.getDirFile();
+
             PathsForTask result;
-            result.originalFile = settings.getDirFile() + "\\" + nameFilePartTask;
+            result.originalFile = dirFile + "\\" + nameFilePartTask;
             result.tmpFile = Path.GetTempPath() + nameFilePartTask + EXP_TMP;
+
+            result.outFile = dirFile + "\\" + Path.GetFileNameWithoutExtension(nameFilePartTask) + EXP_OUT;
 
             return result;
         }
@@ -65,9 +71,12 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             if (fileName == "")
                 fileName = defaultReadFile;
-           
-            MySettings mySettings = new MySettings();
-            fileName = mySettings.getDirFile() + "\\" + fileName;
+            else
+            {
+                // Ошибка ??
+                MySettings mySettings = new MySettings();
+                fileName = mySettings.getDirFile() + "\\" + fileName;
+            }
             
             string tmpFileName = existFile(fileName, exp);
 
@@ -198,7 +207,43 @@ namespace larionov_lab___5_files_and_strings_part_1
             File.Move(pathTmp + EXP_TMP, pathOriginal);
         }
 
-        public bool writeStrings(string pathOut, string strings)
+        public string setFileForOut(string defaultFile)
+        {
+            string pathOut = "";
+            bool isGo = true;
+
+            while (isGo)
+            {
+                Console.ResetColor();
+                Console.Write("Введите имя файла для сохранения результатов [по умолчанию ");
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(defaultFile);
+
+                Console.ResetColor();
+                Console.Write("]: ");
+
+                pathOut = Console.ReadLine();
+
+                if(pathOut == "")
+                    pathOut = defaultFile;
+
+                if (File.Exists(pathOut))
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.WriteLine("Файл с таким именем уже существует. Заменить его? [y/n]?: ");
+
+                    if (Console.ReadLine()?.ToLower() != "n")
+                        return pathOut;
+                }
+                else
+                    isGo = false;
+            }
+
+            return pathOut;
+        }
+
+        public bool writeStrings(string pathOriginal, string strings, string fileOut = "")
         {
             string[] array = strings.Split("\n");
             int size = array.Length;
@@ -206,8 +251,16 @@ namespace larionov_lab___5_files_and_strings_part_1
             if (size == 0)
                 return false;
 
+            string pathOut = pathOriginal;
+
             try
             {
+                if (fileOut != "")
+                {
+                    pathOut = fileOut;
+                    using (File.Create(pathOut));
+                }
+
                 using (StreamWriter fWrite = new StreamWriter(pathOut, false, Encoding.UTF8))
                     for (int i = 0; i < size; i++)
                         fWrite.Write(array[i] + "\n");
