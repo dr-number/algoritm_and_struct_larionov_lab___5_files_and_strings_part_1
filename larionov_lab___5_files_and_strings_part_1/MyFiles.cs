@@ -198,6 +198,10 @@ namespace larionov_lab___5_files_and_strings_part_1
             try
             {
                 tmpFile = Path.GetTempPath() + Path.GetFileName(path) + EXP_TMP;
+
+                if(File.Exists(tmpFile))
+                    File.Delete(tmpFile);
+
                 File.Move(path, tmpFile);
 
                 using (FileStream fs = new FileStream(path, FileMode.OpenOrCreate))
@@ -331,6 +335,10 @@ namespace larionov_lab___5_files_and_strings_part_1
             try
             {
                 tmpFile = Path.GetTempPath() + Path.GetFileName(path) + EXP_TMP;
+
+                if (File.Exists(tmpFile))
+                    File.Delete(tmpFile);
+
                 File.Move(path, tmpFile);
 
                 Stream read = File.OpenRead(tmpFile);
