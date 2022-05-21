@@ -64,9 +64,17 @@ namespace larionov_lab___5_files_and_strings_part_1
         string arrayToWrite()
         {
             string writeStr = "";
+            int size = result.Count;
 
-            foreach (string item in result)
-                writeStr += item + "\n";
+            for (int i = 0; i < size; ++i)
+            {
+                if(result[i] != "")
+                    writeStr += result[i];
+
+                if (i != size)
+                    writeStr += "\n";
+
+            }
 
             return writeStr;
         }
