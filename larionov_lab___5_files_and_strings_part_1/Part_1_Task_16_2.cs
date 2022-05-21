@@ -26,7 +26,21 @@
         }
         private int PrintSplint(string str, string delimiterChars)
         {
-            string[] array = str.Split(delimiterChars.ToCharArray());
+            char[] delimiters = delimiterChars.ToCharArray();
+
+            bool isEmpty = true;
+
+            foreach (var item in delimiters)
+                if (str.IndexOf(item) != -1)
+                {
+                    isEmpty = false;
+                    break;
+                }
+
+            if (isEmpty)
+                return 0;
+
+            string[] array = str.Split(delimiters);
 
             int count = 0;
 

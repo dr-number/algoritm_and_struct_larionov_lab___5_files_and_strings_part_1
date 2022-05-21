@@ -65,12 +65,10 @@ namespace larionov_lab___5_files_and_strings_part_1
 
             if (fileName == "")
                 fileName = defaultReadFile;
-            else
-            {
-                MySettings mySettings = new MySettings();
-                fileName = mySettings.getDirFile() + "\\" + fileName;
-            }
-
+           
+            MySettings mySettings = new MySettings();
+            fileName = mySettings.getDirFile() + "\\" + fileName;
+            
             string tmpFileName = existFile(fileName, exp);
 
             if (tmpFileName == "")

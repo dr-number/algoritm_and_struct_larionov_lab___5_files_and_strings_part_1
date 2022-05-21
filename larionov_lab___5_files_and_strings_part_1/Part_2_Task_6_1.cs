@@ -4,7 +4,6 @@ namespace larionov_lab___5_files_and_strings_part_1
 {
     internal class Part_2_Task_6_1
     {
-        private const string DEFAULT_ENDS = ".!?";
         private const string DEFAULT_DELIMITERS = ",-:;";
 
         private string deleteFromStr(string str, string deleteSymbols)
