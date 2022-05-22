@@ -241,6 +241,13 @@
 
             Console.WriteLine("\n\n");
             myFiles.printFileInfo(originalFile);
+
+            if(File.Exists(originalFile) && (new FileInfo(originalFile)).Length == 0)
+            {
+                myFiles.printError("После обработки файл стал пустым!");
+                return;
+            }
+
             printInfoBin(interval.min, finalCount.countMin, interval.max, finalCount.countMax);
         }
     }
